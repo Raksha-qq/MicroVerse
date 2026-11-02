@@ -18,52 +18,66 @@ model User {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   progress         UserProgress[]
+  lessonProgress   LessonProgress[]
   attempts         QuizAttempt[]
   bookmarks        Bookmark[]
   savedExperiments SavedExperiment[]
+  researchNotes    ResearchNote[]
   badges           UserBadge[]
+
+  @@index([email])
+  @@index([role])
 }
 
 model Controller {
-  id                  String     @id @default(uuid())
-  name                String     @unique
+  id                  String         @id @default(uuid())
+  name                String         @unique
   commonName          String
-  family              String     // 8051 | AVR | PIC | ARM Cortex-M | STM32 | ESP32 | RP2040
-  architecture        String     // e.g. ARMv7E-M, AVR 8-bit RISC, Xtensa LX6, etc.
-  core                String     // Cortex-M4, AVR, Xtensa LX6, Cortex-M0+, etc.
-  manufacturer        String     // STMicroelectronics, Microchip, Espressif, Raspberry Pi, etc.
-  bitWidth            Int        // 8, 16, 32
+  family              String         // 8051 | AVR | PIC | ARM Cortex-M | STM32 | ESP32 | RP2040
+  architecture        String         // e.g. ARMv7E-M, AVR 8-bit RISC, Xtensa LX6, etc.
+  core                String         // Cortex-M4, AVR, Xtensa LX6, Cortex-M0+, etc.
+  manufacturer        String         // STMicroelectronics, Microchip, Espressif, Raspberry Pi, etc.
+  bitWidth            Int            // 8, 16, 32
   maxClockSpeedMHz    Float
   flashKb             Float
   sramKb              Float
   eepromKb            Float?
   operatingVoltageMin Float
   operatingVoltageMax Float
-  logicLevel          String     // "3.3V", "5V", etc.
+  logicLevel          String         // "3.3V", "5V", etc.
   gpioCount           Int
   adcChannels         Int
   adcResolutionBits   Int
-  dacChannels         Int        @default(0)
+  dacChannels         Int            @default(0)
   timers              Int
   uartCount           Int
   spiCount            Int
   i2cCount            Int
-  canCount            Int        @default(0)
-  usbSupport          Boolean    @default(false)
+  canCount            Int            @default(0)
+  usbSupport          Boolean        @default(false)
   wireless            String?
-  fpu                 Boolean    @default(false)
-  dsp                 Boolean    @default(false)
-  dmaChannels         Int        @default(0)
+  fpu                 Boolean        @default(false)
+  dsp                 Boolean        @default(false)
+  dmaChannels         Int            @default(0)
   deepSleepCurrentUa  Float?
   packageTypes        String
   description         String
   architecturalNotes  String
   datasheetUrl        String
   pinoutDiagram       String?
-  isFeatured          Boolean    @default(false)
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
+  specifications      Json?          // Flexible register maps, clock trees & hardware registers
+  pinoutConfig        Json?          // Interactive pin mapping metadata (multiplexing, modes)
+  isFeatured          Boolean        @default(false)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
   bookmarks           Bookmark[]
+  researchNotes       ResearchNote[]
+
+  @@index([family])
+  @@index([architecture])
+  @@index([manufacturer])
+  @@index([bitWidth])
+  @@index([isFeatured])
 }
 
 model Chapter {
@@ -75,12 +89,55 @@ model Chapter {
   level            String         // BEGINNER | INTERMEDIATE | ADVANCED
   estimatedMinutes Int
   content          String
-  keyTakeaways     String         // JSON array of strings
+  keyTakeaways     String         // JSON array of strings or serialized takeaways
   isPublished      Boolean        @default(true)
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
+  lessons          Lesson[]
   quiz             Quiz?
   userProgress     UserProgress[]
+  researchNotes    ResearchNote[]
+
+  @@index([level])
+  @@index([isPublished])
+}
+
+model Lesson {
+  id               String           @id @default(uuid())
+  chapterId        String
+  chapter          Chapter          @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  lessonNumber     Int
+  title            String
+  slug             String           @unique
+  summary          String
+  content          String
+  estimatedMinutes Int              @default(15)
+  order            Int              @default(1)
+  isPublished      Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  userProgress     LessonProgress[]
+  researchNotes    ResearchNote[]
+
+  @@index([chapterId])
+  @@index([slug])
+  @@index([isPublished])
+}
+
+model LessonProgress {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId       String
+  lesson         Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  isCompleted    Boolean   @default(false)
+  completedAt    DateTime?
+  lastAccessedAt DateTime  @default(now())
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@index([isCompleted])
 }
 
 model Quiz {
@@ -94,6 +151,8 @@ model Quiz {
   attempts     QuizAttempt[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+
+  @@index([chapterId])
 }
 
 model QuizQuestion {
@@ -107,6 +166,8 @@ model QuizQuestion {
   explanation        String
   points             Int      @default(10)
   createdAt          DateTime @default(now())
+
+  @@index([quizId])
 }
 
 model UserProgress {
@@ -120,6 +181,9 @@ model UserProgress {
   lastAccessedAt DateTime  @default(now())
 
   @@unique([userId, chapterId])
+  @@index([userId])
+  @@index([chapterId])
+  @@index([isCompleted])
 }
 
 model QuizAttempt {
@@ -133,18 +197,25 @@ model QuizAttempt {
   passed      Boolean
   answers     String   // JSON object of chosen options
   attemptedAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([quizId])
+  @@index([attemptedAt])
 }
 
 model Bookmark {
-  id           String      @id @default(uuid())
-  userId       String
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  itemType     String      // CONTROLLER | CHAPTER | ROBOTICS
-  itemId       String
-  controller   Controller? @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  createdAt    DateTime    @default(now())
+  id         String      @id @default(uuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemType   String      // CONTROLLER | CHAPTER | LESSON | EXPERIMENT | ROBOTICS
+  itemId     String
+  controller Controller? @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  createdAt  DateTime    @default(now())
 
   @@unique([userId, itemType, itemId])
+  @@index([userId])
+  @@index([itemType])
+  @@index([itemId])
 }
 
 model SavedExperiment {
@@ -154,9 +225,40 @@ model SavedExperiment {
   title          String
   description    String?
   experimentType String   // GPIO | PWM | PROTOCOL | PID | BREADBOARD
-  configState    String   // JSON string of simulation state
+  configState    String   // JSON string or serialized simulation state
+  schematicData  Json?    // Breadboard wiring and simulator component layout
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  @@index([userId])
+  @@index([experimentType])
+  @@index([createdAt])
+}
+
+model ResearchNote {
+  id           String      @id @default(uuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  content      String
+  category     String      @default("GENERAL") // ARCHITECTURE | PERIPHERAL | PROTOCOL | EXPERIMENT | ROBOTICS | GENERAL
+  tags         String?     // Comma separated tags e.g. "STM32,GPIO,Interrupts"
+  controllerId String?
+  controller   Controller? @relation(fields: [controllerId], references: [id], onDelete: SetNull)
+  chapterId    String?
+  chapter      Chapter?    @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+  lessonId     String?
+  lesson       Lesson?     @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  isPublic     Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([category])
+  @@index([controllerId])
+  @@index([chapterId])
+  @@index([lessonId])
+  @@index([createdAt])
 }
 
 model Badge {
@@ -167,6 +269,8 @@ model Badge {
   icon        String
   category    String
   userBadges  UserBadge[]
+
+  @@index([category])
 }
 
 model UserBadge {
@@ -178,5 +282,6 @@ model UserBadge {
   unlockedAt DateTime @default(now())
 
   @@unique([userId, badgeId])
+  @@index([userId])
+  @@index([badgeId])
 }
-
