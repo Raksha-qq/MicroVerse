@@ -1,30 +1,41 @@
 const jwt = require("jsonwebtoken");
 const prisma = require("../lib/prisma");
-
-const JWT_SECRET = process.env.JWT_SECRET || "microverse_default_fallback_secret";
+const config = require("../config");
 
 async function authenticate(req, res, next) {
   try {
+    let token = null;
+
+    // 1. Check Bearer Authorization Header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
+    // 2. Check HTTP-Only Cookie
+    else if (req.cookies && req.cookies[config.cookie.name]) {
+      token = req.cookies[config.cookie.name];
+    }
+
+    if (!token) {
       return res.status(401).json({
         success: false,
-        error: "Authentication token missing or invalid format (Bearer token expected).",
+        error: "Authentication required. Please provide a valid session token or sign in.",
       });
     }
 
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, config.jwt.secret);
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
       select: {
         id: true,
         email: true,
+        username: true,
         name: true,
         role: true,
         avatar: true,
         bio: true,
+        createdAt: true,
       },
     });
 
@@ -46,28 +57,41 @@ async function authenticate(req, res, next) {
     }
     return res.status(401).json({
       success: false,
-      error: "Invalid security token.",
+      error: "Invalid or malformed authentication token.",
     });
   }
 }
 
-// Optional authentication - doesn't fail if no token, but attaches req.user if valid token provided
+// Optional authentication - doesn't reject if unauthenticated, but attaches req.user if valid token provided
 async function optionalAuth(req, res, next) {
   try {
+    let token = null;
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer ")) {
-      const token = authHeader.split(" ")[1];
-      const decoded = jwt.verify(token, JWT_SECRET);
+      token = authHeader.split(" ")[1];
+    } else if (req.cookies && req.cookies[config.cookie.name]) {
+      token = req.cookies[config.cookie.name];
+    }
+
+    if (token) {
+      const decoded = jwt.verify(token, config.jwt.secret);
       const user = await prisma.user.findUnique({
         where: { id: decoded.userId },
-        select: { id: true, email: true, name: true, role: true, avatar: true },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          name: true,
+          role: true,
+          avatar: true,
+        },
       });
       if (user) {
         req.user = user;
       }
     }
   } catch (e) {
-    // Ignore invalid optional tokens
+    // Silently continue without user
   }
   next();
 }
@@ -87,4 +111,3 @@ module.exports = {
   optionalAuth,
   requireAdmin,
 };
-

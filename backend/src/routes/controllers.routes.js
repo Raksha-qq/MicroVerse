@@ -2,14 +2,18 @@ const express = require("express");
 const controllersController = require("../controllers/controllers.controller");
 const validate = require("../middleware/validate");
 const { authenticate, requireAdmin } = require("../middleware/auth");
-const { controllerSchema, controllerQuerySchema } = require("../validators/controllers.validator");
+const {
+  controllerSchema,
+  controllerQuerySchema,
+} = require("../validators/controllers.validator");
 
 const router = express.Router();
 
 router.get("/", validate(controllerQuerySchema, "query"), controllersController.list);
 router.get("/featured", controllersController.featured);
 router.get("/compare", controllersController.compare);
-router.get("/:id", controllersController.getById);
+router.get("/:idOrSlug", controllersController.getByIdOrSlug);
+router.get("/:idOrSlug/related", controllersController.getRelated);
 
 // Admin-only mutations
 router.post("/", authenticate, requireAdmin, validate(controllerSchema), controllersController.create);

@@ -4,7 +4,13 @@ const { successResponse } = require("../utilities/apiResponse");
 async function list(req, res, next) {
   try {
     const result = await controllersService.listControllers(req.query);
-    return successResponse(res, result.controllers, "Microcontrollers retrieved successfully.", 200, result.meta);
+    return successResponse(
+      res,
+      result.controllers,
+      "Microcontrollers retrieved successfully.",
+      200,
+      result.meta
+    );
   } catch (error) {
     next(error);
   }
@@ -19,10 +25,19 @@ async function featured(req, res, next) {
   }
 }
 
-async function getById(req, res, next) {
+async function getByIdOrSlug(req, res, next) {
   try {
-    const controller = await controllersService.getControllerById(req.params.id);
+    const controller = await controllersService.getControllerByIdOrSlug(req.params.idOrSlug);
     return successResponse(res, controller, "Microcontroller specification retrieved.");
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function getRelated(req, res, next) {
+  try {
+    const related = await controllersService.getRelatedControllers(req.params.idOrSlug);
+    return successResponse(res, related, "Related microcontrollers retrieved.");
   } catch (error) {
     next(error);
   }
@@ -68,10 +83,10 @@ async function remove(req, res, next) {
 module.exports = {
   list,
   featured,
-  getById,
+  getByIdOrSlug,
+  getRelated,
   compare,
   create,
   update,
   remove,
 };
-

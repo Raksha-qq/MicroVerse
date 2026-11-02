@@ -5,7 +5,8 @@ const { successResponse } = require("../utilities/apiResponse");
 async function listLessons(req, res, next) {
   try {
     const userId = req.user?.id || null;
-    const lessons = await lessonsService.listLessons(userId);
+    const isAdmin = req.user?.role === "ADMIN";
+    const lessons = await lessonsService.listLessons(userId, req.query, isAdmin);
     return successResponse(res, lessons, "Curriculum lessons retrieved successfully.");
   } catch (error) {
     next(error);
@@ -15,8 +16,18 @@ async function listLessons(req, res, next) {
 async function getLesson(req, res, next) {
   try {
     const userId = req.user?.id || null;
-    const lesson = await lessonsService.getLessonBySlugOrId(req.params.slugOrId, userId);
+    const isAdmin = req.user?.role === "ADMIN";
+    const lesson = await lessonsService.getLessonBySlugOrId(req.params.slugOrId, userId, isAdmin);
     return successResponse(res, lesson, "Curriculum lesson retrieved.");
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function getRelated(req, res, next) {
+  try {
+    const related = await lessonsService.getRelatedLessons(req.params.slugOrId);
+    return successResponse(res, related, "Related curriculum lessons retrieved.");
   } catch (error) {
     next(error);
   }
@@ -34,7 +45,8 @@ async function completeLesson(req, res, next) {
 async function listChapters(req, res, next) {
   try {
     const userId = req.user?.id || null;
-    const chapters = await lessonsService.listChapters(userId);
+    const isAdmin = req.user?.role === "ADMIN";
+    const chapters = await lessonsService.listChapters(userId, isAdmin);
     return successResponse(res, chapters, "Curriculum chapters retrieved successfully.");
   } catch (error) {
     next(error);
@@ -44,7 +56,8 @@ async function listChapters(req, res, next) {
 async function getChapter(req, res, next) {
   try {
     const userId = req.user?.id || null;
-    const chapter = await lessonsService.getChapterBySlugOrId(req.params.slugOrId, userId);
+    const isAdmin = req.user?.role === "ADMIN";
+    const chapter = await lessonsService.getChapterBySlugOrId(req.params.slugOrId, userId, isAdmin);
     return successResponse(res, chapter, "Curriculum chapter retrieved.");
   } catch (error) {
     next(error);
@@ -117,6 +130,7 @@ async function deleteChapter(req, res, next) {
 module.exports = {
   listLessons,
   getLesson,
+  getRelated,
   completeLesson,
   listChapters,
   getChapter,
@@ -128,4 +142,3 @@ module.exports = {
   updateChapter,
   deleteChapter,
 };
-

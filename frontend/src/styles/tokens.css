@@ -4,39 +4,106 @@
  */
 
 :root {
-  /* Core Colour Palette */
-  --mv-color-midnight: #0B1220;
-  --mv-color-deep-blue: #111E30;
-  --mv-color-slate-blue: #192B40;
-  --mv-color-cyan-glow: #55C7FF;
-  --mv-color-ice-blue: #A5E3FF;
-  --mv-color-cool-white: #EAF5FF;
-  --mv-color-muted-blue: #8FA6BC;
+  /* =========================================================================
+     1. COLOR SYSTEM (Official Palette)
+     ========================================================================= */
+  --mv-color-bg-primary: #0B1220;     /* Primary Canvas Background */
+  --mv-color-bg-secondary: #111E30;   /* Secondary Panels & Cards */
+  --mv-color-surface-elevated: #192B40;/* Elevated Surfaces & Dividers */
+  --mv-color-accent-primary: #55C7FF;  /* Primary Accent & Signal Cyan */
+  --mv-color-accent-secondary: #A5E3FF;/* Secondary Accent & Ice Blue */
+  --mv-color-text-primary: #EAF5FF;    /* Primary Text & High Contrast */
+  --mv-color-text-secondary: #8FA6BC;  /* Secondary Text & Registers */
 
-  /* Accent & Semantic */
-  --mv-color-accent-amber: #FBBF24;
-  --mv-color-accent-emerald: #10B981;
-  --mv-color-accent-crimson: #EF4444;
-  --mv-color-accent-violet: #8B5CF6;
+  /* Semantic State Colors */
+  --mv-color-status-online: #10B981;   /* Live / Transmitting */
+  --mv-color-status-warning: #FBBF24;  /* Clock Drift / Caution */
+  --mv-color-status-danger: #EF4444;   /* Fault / Bus Collision */
+  --mv-color-status-info: #55C7FF;     /* Architectural State */
 
-  /* Typography Stacks */
+  /* =========================================================================
+     2. TYPOGRAPHY SYSTEM
+     ========================================================================= */
   --mv-font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --mv-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --mv-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Elevations & Glows */
-  --mv-glow-cyan-sm: 0 0 10px rgba(85, 199, 255, 0.2);
-  --mv-glow-cyan-md: 0 0 20px rgba(85, 199, 255, 0.35);
-  --mv-glow-cyan-lg: 0 0 35px rgba(85, 199, 255, 0.5);
+  /* Typography Scale */
+  --mv-text-xs: 0.75rem;     /* 12px - Registers, footnotes, pin numbers */
+  --mv-text-sm: 0.875rem;    /* 14px - Interface metadata, badges */
+  --mv-text-base: 1rem;      /* 16px - Body text */
+  --mv-text-lg: 1.125rem;    /* 18px - Sub-section titles, lead text */
+  --mv-text-xl: 1.25rem;     /* 20px - Card titles, module headers */
+  --mv-text-2xl: 1.5rem;     /* 24px - Section headers */
+  --mv-text-3xl: 1.875rem;   /* 30px - Major feature titles */
+  --mv-text-4xl: 2.25rem;    /* 36px - Page titles */
+  --mv-text-5xl: 3rem;       /* 48px - Primary Hero display */
+  --mv-text-6xl: 3.75rem;    /* 60px - Display banner */
 
-  /* Border Radii */
+  /* Line Heights */
+  --mv-leading-tight: 1.15;
+  --mv-leading-snug: 1.35;
+  --mv-leading-normal: 1.55;
+  --mv-leading-relaxed: 1.75;
+
+  /* Letter Spacing */
+  --mv-tracking-tight: -0.025em;
+  --mv-tracking-normal: 0em;
+  --mv-tracking-wide: 0.04em;
+  --mv-tracking-widest: 0.12em;
+
+  /* =========================================================================
+     3. SPACING & GRID SYSTEM (4px Base Grid)
+     ========================================================================= */
+  --mv-space-1: 0.25rem;  /* 4px */
+  --mv-space-2: 0.5rem;   /* 8px */
+  --mv-space-3: 0.75rem;  /* 12px */
+  --mv-space-4: 1rem;     /* 16px */
+  --mv-space-5: 1.25rem;  /* 20px */
+  --mv-space-6: 1.5rem;   /* 24px */
+  --mv-space-8: 2rem;     /* 32px */
+  --mv-space-10: 2.5rem;  /* 40px */
+  --mv-space-12: 3rem;    /* 48px */
+  --mv-space-16: 4rem;    /* 64px */
+  --mv-space-20: 5rem;    /* 80px */
+  --mv-space-24: 6rem;    /* 96px */
+
+  /* =========================================================================
+     4. BORDERS, RADII & ELEVATIONS
+     ========================================================================= */
+  --mv-border-subtle: 1px solid rgba(25, 43, 64, 0.8);
+  --mv-border-hairline: 1px solid #192B40;
+  --mv-border-accent: 1px solid rgba(85, 199, 255, 0.35);
+  --mv-border-accent-strong: 1px solid #55C7FF;
+
+  --mv-radius-xs: 4px;
   --mv-radius-sm: 6px;
   --mv-radius-md: 10px;
   --mv-radius-lg: 16px;
+  --mv-radius-xl: 24px;
   --mv-radius-full: 9999px;
+
+  /* Calibrated Atmospheric Glows (Controlled & Non-Distracting) */
+  --mv-glow-cyan-sm: 0 0 10px rgba(85, 199, 255, 0.18);
+  --mv-glow-cyan-md: 0 0 20px rgba(85, 199, 255, 0.28);
+  --mv-glow-cyan-lg: 0 0 35px rgba(85, 199, 255, 0.38);
+  --mv-glow-text: 0 0 12px rgba(85, 199, 255, 0.5);
+
+  /* Shadows */
+  --mv-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --mv-shadow-modal: 0 16px 40px rgba(0, 0, 0, 0.7);
+
+  /* =========================================================================
+     5. ANIMATION CONVENTIONS
+     ========================================================================= */
+  --mv-transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --mv-transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --mv-transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Background Grids */
+/* =========================================================================
+   6. CIRCUIT BACKGROUND & GRAPHIC TEXTURES
+   ========================================================================= */
 .bg-circuit-grid {
   background-image: 
     linear-gradient(to right, rgba(85, 199, 255, 0.04) 1px, transparent 1px),
@@ -49,33 +116,45 @@
   background-size: 20px 20px;
 }
 
-/* Glassmorphism & Panel Surfaces */
-.glass-panel {
-  background: rgba(17, 30, 48, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(85, 199, 255, 0.15);
+/* Laboratory Panel Glass Surface */
+.lab-panel {
+  background: rgba(17, 30, 48, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid #192B40;
 }
 
-.glass-panel-hover:hover {
-  border-color: rgba(85, 199, 255, 0.4);
-  box-shadow: 0 0 20px rgba(85, 199, 255, 0.15);
+.lab-panel-interactive {
+  background: rgba(17, 30, 48, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid #192B40;
+  transition: all var(--mv-transition-normal);
 }
 
-/* Glow Utilities */
-.glow-cyan {
-  box-shadow: 0 0 15px rgba(85, 199, 255, 0.25);
+.lab-panel-interactive:hover {
+  border-color: rgba(85, 199, 255, 0.45);
+  box-shadow: 0 0 25px rgba(85, 199, 255, 0.15);
+  transform: translateY(-2px);
 }
 
-.glow-cyan-lg {
-  box-shadow: 0 0 30px rgba(85, 199, 255, 0.4);
+/* Technical Hairline Accent Line */
+.tech-hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(85, 199, 255, 0.4), transparent);
 }
 
-.glow-text {
-  text-shadow: 0 0 12px rgba(85, 199, 255, 0.6);
+/* Silicon Chip Die Texture */
+.die-texture {
+  background: 
+    linear-gradient(135deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%);
+  background-size: 8px 8px;
 }
 
-/* Hardware Oscilloscope Effect */
+/* Hardware Oscilloscope CRT Screen */
 .oscilloscope-screen {
   background: radial-gradient(circle at 50% 50%, #0d2238 0%, #07101b 100%);
   position: relative;
@@ -94,3 +173,16 @@
   pointer-events: none;
 }
 
+/* =========================================================================
+   7. ACCESSIBILITY & REDUCED MOTION PREFERENCES
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

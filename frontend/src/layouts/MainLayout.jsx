@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar } from '../components/common/Navbar';
 import { Footer } from '../components/common/Footer';
+import { AuthModal } from '../components/common/AuthModal';
 
 export function MainLayout({ children }) {
   return (
@@ -19,7 +20,9 @@ export function MainLayout({ children }) {
 
       {/* Global Footer */}
       <Footer />
+
+      {/* Authentication Security Modal */}
+      <AuthModal />
     </div>
   );
 }
-

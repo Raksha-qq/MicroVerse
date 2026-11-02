@@ -10,6 +10,7 @@ generator client {
 model User {
   id               String            @id @default(uuid())
   email            String            @unique
+  username         String?           @unique
   passwordHash     String
   name             String
   role             String            @default("USER") // USER | ADMIN
@@ -26,6 +27,7 @@ model User {
   badges           UserBadge[]
 
   @@index([email])
+  @@index([username])
   @@index([role])
 }
 
@@ -33,6 +35,7 @@ model Controller {
   id                  String         @id @default(uuid())
   name                String         @unique
   commonName          String
+  slug                String?        @unique
   family              String         // 8051 | AVR | PIC | ARM Cortex-M | STM32 | ESP32 | RP2040
   architecture        String         // e.g. ARMv7E-M, AVR 8-bit RISC, Xtensa LX6, etc.
   core                String         // Cortex-M4, AVR, Xtensa LX6, Cortex-M0+, etc.
@@ -63,6 +66,7 @@ model Controller {
   packageTypes        String
   description         String
   architecturalNotes  String
+  applications        String?        // Comma-separated or descriptive applications: Robotics, IoT, Motor Control, TinyML
   datasheetUrl        String
   pinoutDiagram       String?
   specifications      Json?          // Flexible register maps, clock trees & hardware registers
@@ -77,6 +81,7 @@ model Controller {
   @@index([architecture])
   @@index([manufacturer])
   @@index([bitWidth])
+  @@index([slug])
   @@index([isFeatured])
 }
 
@@ -111,6 +116,7 @@ model Lesson {
   slug             String           @unique
   summary          String
   content          String
+  difficulty       String           @default("BEGINNER") // BEGINNER | INTERMEDIATE | ADVANCED
   estimatedMinutes Int              @default(15)
   order            Int              @default(1)
   isPublished      Boolean          @default(true)
@@ -121,6 +127,7 @@ model Lesson {
 
   @@index([chapterId])
   @@index([slug])
+  @@index([difficulty])
   @@index([isPublished])
 }
 

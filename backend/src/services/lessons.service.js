@@ -1,8 +1,32 @@
 const prisma = require("../lib/prisma");
 
-async function listLessons(userId = null) {
+async function listLessons(userId = null, filters = {}, isAdmin = false) {
+  const { difficulty, chapterId, search, includeDrafts } = filters;
+
+  const where = {};
+
+  // Draft vs Published content state
+  if (!isAdmin || includeDrafts !== "true") {
+    where.isPublished = true;
+  }
+
+  if (difficulty) {
+    where.difficulty = difficulty;
+  }
+
+  if (chapterId) {
+    where.chapterId = chapterId;
+  }
+
+  if (search) {
+    where.OR = [
+      { title: { contains: search, mode: "insensitive" } },
+      { summary: { contains: search, mode: "insensitive" } },
+    ];
+  }
+
   const lessons = await prisma.lesson.findMany({
-    where: { isPublished: true },
+    where,
     orderBy: [{ chapter: { chapterNumber: "asc" } }, { order: "asc" }],
     include: {
       chapter: {
@@ -32,7 +56,7 @@ async function listLessons(userId = null) {
   }));
 }
 
-async function getLessonBySlugOrId(identifier, userId = null) {
+async function getLessonBySlugOrId(identifier, userId = null, isAdmin = false) {
   const lesson = await prisma.lesson.findFirst({
     where: {
       OR: [{ slug: identifier }, { id: identifier }],
@@ -53,7 +77,7 @@ async function getLessonBySlugOrId(identifier, userId = null) {
           id: true,
           title: true,
           category: true,
-          user: { select: { name: true } },
+          user: { select: { id: true, name: true, username: true } },
         },
       },
     },
@@ -61,6 +85,13 @@ async function getLessonBySlugOrId(identifier, userId = null) {
 
   if (!lesson) {
     const error = new Error("Lesson not found in curriculum.");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Prevent non-admins from accessing unreleased drafts
+  if (!lesson.isPublished && !isAdmin) {
+    const error = new Error("Lesson content is currently in draft review state.");
     error.statusCode = 404;
     throw error;
   }
@@ -78,9 +109,49 @@ async function getLessonBySlugOrId(identifier, userId = null) {
   return { ...lesson, isCompleted };
 }
 
-async function listChapters(userId = null) {
+async function getRelatedLessons(identifier) {
+  const current = await prisma.lesson.findFirst({
+    where: {
+      OR: [{ slug: identifier }, { id: identifier }],
+    },
+  });
+
+  if (!current) {
+    const error = new Error("Source lesson not found.");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Sibling lessons in the same chapter or sharing difficulty
+  return await prisma.lesson.findMany({
+    where: {
+      NOT: { id: current.id },
+      isPublished: true,
+      OR: [
+        { chapterId: current.chapterId },
+        { difficulty: current.difficulty },
+      ],
+    },
+    take: 4,
+    orderBy: { order: "asc" },
+    include: {
+      chapter: {
+        select: {
+          id: true,
+          chapterNumber: true,
+          title: true,
+        },
+      },
+    },
+  });
+}
+
+async function listChapters(userId = null, isAdmin = false) {
+  const chapterWhere = isAdmin ? {} : { isPublished: true };
+  const lessonWhere = isAdmin ? {} : { isPublished: true };
+
   const chapters = await prisma.chapter.findMany({
-    where: { isPublished: true },
+    where: chapterWhere,
     orderBy: { chapterNumber: "asc" },
     select: {
       id: true,
@@ -92,14 +163,16 @@ async function listChapters(userId = null) {
       estimatedMinutes: true,
       keyTakeaways: true,
       lessons: {
-        where: { isPublished: true },
+        where: lessonWhere,
         select: {
           id: true,
           lessonNumber: true,
           title: true,
           slug: true,
+          difficulty: true,
           estimatedMinutes: true,
           order: true,
+          isPublished: true,
         },
         orderBy: { order: "asc" },
       },
@@ -125,21 +198,25 @@ async function listChapters(userId = null) {
 
   return chapters.map((ch) => ({
     ...ch,
-    keyTakeaways: typeof ch.keyTakeaways === "string" ? JSON.parse(ch.keyTakeaways) : ch.keyTakeaways,
+    keyTakeaways:
+      typeof ch.keyTakeaways === "string" ? JSON.parse(ch.keyTakeaways) : ch.keyTakeaways,
     isCompleted: completedChapterIds.has(ch.id),
     hasQuiz: !!ch.quiz,
     questionCount: ch.quiz ? ch.quiz._count.questions : 0,
   }));
 }
 
-async function getChapterBySlugOrId(identifier, userId = null) {
+async function getChapterBySlugOrId(identifier, userId = null, isAdmin = false) {
+  const lessonWhere = isAdmin ? {} : { isPublished: true };
+
   const chapter = await prisma.chapter.findFirst({
     where: {
       OR: [{ slug: identifier }, { id: identifier }],
+      ...(isAdmin ? {} : { isPublished: true }),
     },
     include: {
       lessons: {
-        where: { isPublished: true },
+        where: lessonWhere,
         orderBy: { order: "asc" },
       },
       quiz: {
@@ -172,7 +249,10 @@ async function getChapterBySlugOrId(identifier, userId = null) {
 
   return {
     ...chapter,
-    keyTakeaways: typeof chapter.keyTakeaways === "string" ? JSON.parse(chapter.keyTakeaways) : chapter.keyTakeaways,
+    keyTakeaways:
+      typeof chapter.keyTakeaways === "string"
+        ? JSON.parse(chapter.keyTakeaways)
+        : chapter.keyTakeaways,
     isCompleted,
   };
 }
@@ -220,6 +300,7 @@ async function deleteChapter(id) {
 module.exports = {
   listLessons,
   getLessonBySlugOrId,
+  getRelatedLessons,
   listChapters,
   getChapterBySlugOrId,
   createLesson,
@@ -229,4 +310,3 @@ module.exports = {
   updateChapter,
   deleteChapter,
 };
-

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 const config = require("./config");
 const prisma = require("./lib/prisma");
@@ -21,9 +22,10 @@ app.use(
 app.use(
   cors({
     origin: config.cors.origin,
-    credentials: config.cors.credentials,
+    credentials: true,
   })
 );
+app.use(cookieParser());
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,8 +33,8 @@ if (config.env !== "test") {
   app.use(morgan("dev"));
 }
 
-// Health check endpoint (Deliverable 8)
-app.get("/api/health", async (req, res) => {
+// Health Check Endpoint (Accessible at both /api/health and /api/v1/health)
+const healthHandler = async (req, res) => {
   let dbStatus = "DISCONNECTED";
   let dbLatencyMs = null;
 
@@ -67,13 +69,17 @@ app.get("/api/health", async (req, res) => {
       researchNotebook: "OPERATIONAL",
     },
   });
-});
+};
+
+app.get("/api/health", healthHandler);
+app.get("/api/v1/health", healthHandler);
 
 // Apply rate limiting to all API routes
 app.use("/api", apiLimiter);
 
-// Mount central API router
+// Mount central API router under both /api and /api/v1 (API versioning)
 app.use("/api", routes);
+app.use("/api/v1", routes);
 
 // 404 Route Handler
 app.use((req, res) => {
@@ -92,6 +98,7 @@ if (process.env.NODE_ENV !== "test") {
     logger.info(`=======================================================`);
     logger.info(`  MICROVERSE: Embedded Laboratory Engine ONLINE`);
     logger.info(`  URL: http://localhost:${config.port}`);
+    logger.info(`  API: http://localhost:${config.port}/api`);
     logger.info(`  Environment: ${config.env}`);
     logger.info(`=======================================================`);
   });

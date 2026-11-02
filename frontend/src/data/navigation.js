@@ -1,11 +1,42 @@
 export const NAV_LINKS = [
-  { name: "Laboratory", path: "/", icon: "Cpu" },
-  { name: "Controllers", path: "/controllers", icon: "Layers" },
-  { name: "Curriculum", path: "/lessons", icon: "BookOpen" },
-  { name: "Simulation Lab", path: "/lab", icon: "Terminal" },
-  { name: "Assessments", path: "/quizzes", icon: "CheckSquare" },
-  { name: "Research Notes", path: "/research", icon: "FileText" },
-  { name: "Telemetry", path: "/dashboard", icon: "Activity" },
+  {
+    name: "Discover",
+    path: "/#discover",
+    anchor: "discover",
+    icon: "Compass",
+    desc: "Overview & embedded feedback loops",
+  },
+  {
+    name: "Anatomy",
+    path: "/anatomy",
+    anchor: "anatomy",
+    icon: "Cpu",
+    desc: "Internal silicon execution engine",
+  },
+  {
+    name: "Archive",
+    path: "/archive",
+    icon: "Layers",
+    desc: "Microcontroller silicon registry",
+  },
+  {
+    name: "Compare",
+    path: "/compare",
+    icon: "Sliders",
+    desc: "Side-by-side architecture benchmarks",
+  },
+  {
+    name: "Robotics",
+    path: "/robotics",
+    icon: "Bot",
+    desc: "Physical AI, kinematics & motor control",
+  },
+  {
+    name: "Experiment",
+    path: "/experiment",
+    icon: "Terminal",
+    desc: "Interactive simulation bench",
+  },
 ];
 
 export const CONTROLLER_FAMILIES = [
@@ -18,4 +49,3 @@ export const CONTROLLER_FAMILIES = [
   { id: "PIC", label: "Microchip PIC" },
   { id: "8051", label: "Intel 8051" },
 ];
-

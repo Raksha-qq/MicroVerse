@@ -1,13 +1,18 @@
 const { z } = require("zod");
 
 const controllerSchema = z.object({
-  name: z.string().min(2, "Controller model name is required"),
-  commonName: z.string().min(2, "Friendly designation is required"),
+  name: z.string().min(2, "Controller model designation is required"),
+  commonName: z.string().min(2, "Friendly name is required"),
+  slug: z
+    .string()
+    .min(2)
+    .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens")
+    .optional(),
   family: z.string().min(2),
   architecture: z.string().min(2),
   core: z.string().min(2),
   manufacturer: z.string().min(2),
-  bitWidth: z.coerce.number().int().oneOf ? z.coerce.number().int() : z.coerce.number().int(),
+  bitWidth: z.coerce.number().int(),
   maxClockSpeedMHz: z.coerce.number().positive(),
   flashKb: z.coerce.number().nonnegative(),
   sramKb: z.coerce.number().nonnegative(),
@@ -33,6 +38,7 @@ const controllerSchema = z.object({
   packageTypes: z.string().min(2),
   description: z.string().min(10),
   architecturalNotes: z.string().min(10),
+  applications: z.string().optional().nullable(),
   datasheetUrl: z.string().url("Valid datasheet URL is required"),
   pinoutDiagram: z.string().url().optional().nullable().or(z.literal("")),
   specifications: z.record(z.any()).optional().nullable(),
@@ -45,14 +51,15 @@ const controllerQuerySchema = z.object({
   family: z.string().optional(),
   architecture: z.string().optional(),
   manufacturer: z.string().optional(),
+  application: z.string().optional(),
   bitWidth: z.coerce.number().int().optional(),
   wirelessOnly: z.enum(["true", "false"]).optional(),
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(20),
+  sort: z.enum(["clock_desc", "clock_asc", "flash_desc", "name_asc"]).optional(),
 });
 
 module.exports = {
   controllerSchema,
   controllerQuerySchema,
 };
-
