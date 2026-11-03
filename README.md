@@ -1,358 +1,301 @@
-# MICROVERSE: Interactive Laboratory of Embedded Intelligence
+# MICROVERSE — Interactive Laboratory of Embedded Intelligence
 
-> A full-stack educational platform and simulation engine for microcontrollers, embedded systems, robotics, and Physical AI.
+An interactive engineering learning platform for exploring **microcontrollers, embedded systems, robotics, and Physical AI** through structured lessons, controller reference data, and browser-based simulations.
 
-![System Status](https://img.shields.io/badge/System-ONLINE-55C7FF?style=for-the-badge&logo=cpu)
-![Database](https://img.shields.io/badge/PostgreSQL-Prisma%20ORM-10B981?style=for-the-badge&logo=postgresql)
-![Frontend](https://img.shields.io/badge/React%2019-Vite%208-55C7FF?style=for-the-badge&logo=react)
-![Backend](https://img.shields.io/badge/Node.js-Express%204-A5E3FF?style=for-the-badge&logo=node.js)
-![Tests](https://img.shields.io/badge/Tests-66%20Passed-10B981?style=for-the-badge&logo=checkmarx)
+> MICROVERSE is designed as a digital engineering laboratory: learn the concepts, inspect controller architectures, experiment with simulated signals and systems, and track your progress.
 
----
+<!-- Add your actual application screenshot at docs/images/microverse-homepage.png -->
+<p align="center">
+  <img src="docs/images/microverse-homepage.png" alt="MICROVERSE homepage" width="100%">
+</p>
 
-## 1. Project Overview
+## What you can explore
 
-**MICROVERSE** is an interactive engineering platform dedicated to bridging the gap between theoretical computer architecture and real-world embedded robotics. It delivers deep architectural reference data, interactive register and pinout diagnostics, browser-based hardware simulations (signals, PWM, ultrasonic sensors, autonomous kinematics), structured curriculum progression, interactive quizzes with answer leak protection, silicon target bookmarks, an engineering research logbook, and administrative governance.
+- **Controller archive and comparison** — browse controller specifications and compare device capabilities.
+- **Embedded systems curriculum** — study chapters and lessons covering foundational hardware and embedded concepts.
+- **Interactive anatomy and visualizers** — explore chip architecture, signals, pinouts, and related concepts.
+- **Browser-based virtual labs** — experiment with signal behavior, PWM, sensor readings, robot behavior, and controller selection.
+- **Quizzes and learning progress** — assess understanding and track completed learning content.
+- **Personal engineering workspace** — save bookmarks, experiment configurations, and research notes.
+- **Dashboard and administration** — view learning activity and manage platform content through role-restricted features.
 
-The platform distinguishes itself through high-density technical accuracy, real-time telemetry from PostgreSQL, responsive cyber-physical styling, and code-split performance.
+The simulations are browser-based educational models. They do not execute firmware on a physical microcontroller or replace hardware measurements.
 
----
+## Technology
 
-## 2. Main Features
+| Area | Technologies |
+|---|---|
+| Frontend | React 19, Vite 8, React Router 7 |
+| Styling and interaction | Tailwind CSS 4, Framer Motion, Lucide React |
+| 3D / visualization | Three.js |
+| Backend | Node.js, Express 4 |
+| Database | PostgreSQL, Prisma ORM 5 |
+| Validation and security | Zod, Helmet, CORS, express-rate-limit |
+| Authentication | JSON Web Tokens, bcryptjs, HTTP-only cookies |
 
-- **Microcontroller Silicon Registry (`/archive`):** Searchable reference archive of 19 verified chips across 7 families (ARM Cortex-M, STM32, ESP32, RP2040, PIC, AVR, 8051) with complete electrical matrices, interactive pinouts, and datasheet links.
-- **Microcontroller Comparison Matrix (`/compare`):** Multi-device comparison tool aligning clock speeds, flash, SRAM, timers, peripherals, and robotics capability ratings side-by-side.
-- **Embedded Curriculum Master Syllabus (`/lessons`):** 14 structured chapters with 30 in-depth lessons covering transistors, ALUs, registers, memory organization, GPIO, interrupts, communication buses (UART/SPI/I2C), RTOS, TinyML, and Physical AI.
-- **Interactive Hardware Labs (`/lab`):** Five real-time browser simulations:
-  1. *Signal Lab:* Digital logic levels, square waves, and timing diagrams.
-  2. *PWM Lab:* Duty cycle, average voltage, and motor speed control.
-  3. *Sensor Lab:* Ultrasonic HC-SR04 sonar with noise and distance filtering.
-  4. *Robot Kinematics Lab:* 2D autonomous obstacle-avoiding mobile robot simulation.
-  5. *Controller Selection Lab:* Hardware trade-off matrix for mission engineering.
-- **Interactive Assessment & Quiz Engine (`/quizzes`):** Chapter knowledge-check quizzes with code snippets, backend grading, answer-leak protection, score calculations, and post-submission explanations.
-- **Personalized Engineer Dashboard (`/dashboard`):** Real-time telemetry hub featuring progress percentage, completed modules, recently visited lessons with resume capability, assessment scorecards, saved circuits, and bookmarked silicon targets.
-- **Engineering Research Logbook (`/research`):** Personal engineering notebook for recording firmware findings, register errata, and benchmark observations with tag indexing and silicon target linking.
-- **Silicon Target Bookmarks:** One-click bookmarking on archive cards and spec modals, seamlessly persisted to PostgreSQL.
-- **Laboratory Administration Panel (`/admin`):** Role-guarded governance interface for user role promotion/demotion, account management, silicon target authoring, curriculum management, and platform metric counters.
-
----
-
-## 3. Technology Stack
-
-### Frontend
-- **Framework:** React 19 + Vite 8
-- **Routing:** React Router v7 (with `React.lazy` route code-splitting)
-- **Styling:** Tailwind CSS v4 + Space Grotesk / Inter / JetBrains Mono typography
-- **Visuals & Icons:** Lucide React, Framer Motion, Three.js 3D Silicon visualizers
-- **State & Context:** React Context (`AuthContext`) + LocalStorage fallback
-
-### Backend
-- **Runtime:** Node.js v20+
-- **Framework:** Express 4.x
-- **Database & ORM:** PostgreSQL + Prisma ORM 5.x
-- **Authentication:** JWT Bearer tokens + `httpOnly` secure cookies + Bcrypt password hashing
-- **Validation:** Zod 3.x schema validation on all incoming payloads
-- **Security:** Helmet, CORS, Express Rate Limit, Parameterized SQL queries
-
----
-
-## 4. Architecture Diagram
+## Architecture
 
 ```mermaid
 flowchart TD
-    subgraph Client["Client Tier (React 19 + Vite 8 SPA)"]
-        UI["Cyber-Physical UI & Interactive Visualizers"]
-        Router["React Router v7 (Lazy Loaded Chunks)"]
-        AuthCtx["Auth Context & Token Interceptor"]
-        Labs["Browser Hardware Simulators (Signals, PWM, Robot Kinematics)"]
-    end
-
-    subgraph Gateway["API Gateway Tier (Express 4)"]
-        SecHeaders["Helmet & CORS Security Headers"]
-        RateLimiter["Rate Limiter (Brute-Force & DoS Guard)"]
-        RouterAPI["REST API Router (/api)"]
-        AuthMW["JWT & Cookie Authentication Middleware"]
-        AdminMW["Role Guard (requireAdmin)"]
-        ZodVal["Zod Input Validation Engine"]
-    end
-
-    subgraph ServiceTier["Service Logic Tier"]
-        AuthSvc["Auth & Session Service"]
-        CtrlSvc["Silicon Controller Registry"]
-        CurricSvc["Curriculum & Progress Service"]
-        QuizSvc["Quiz & Evaluation Engine"]
-        ExpSvc["Experiment Configuration Service"]
-        NoteSvc["Research Logbook Service"]
-        AdminSvc["Admin Governance Service"]
-    end
-
-    subgraph Storage["Data Tier (PostgreSQL + Prisma ORM)"]
-        DB[(PostgreSQL Database)]
-        UserTbl["User & Session Records"]
-        CtrlTbl["Silicon Controllers & Pinouts"]
-        CurricTbl["Chapters, Lessons & Progress"]
-        QuizTbl["Quizzes, Questions & Attempts"]
-        ArtifactTbl["Bookmarks, Notes & Experiments"]
-    end
-
-    Client -->|HTTPS / REST API| Gateway
-    Gateway --> ServiceTier
-    ServiceTier -->|Parameterized Prisma Queries| Storage
+    A[React + Vite frontend] -->|HTTP / JSON| B[Express API]
+    B --> C[Routes]
+    C --> D[Middleware and validation]
+    D --> E[Controllers]
+    E --> F[Services]
+    F --> G[Prisma Client]
+    G --> H[(PostgreSQL)]
+    A --> I[Browser-based interactive labs]
 ```
 
----
+The backend is organized into separate layers:
 
-## 5. Database Overview
+- `routes/` — API route definitions.
+- `middleware/` — authentication, validation, rate limiting, and error handling.
+- `controllers/` — request and response handling.
+- `services/` — application and data-access logic.
+- `validators/` — request schemas.
+- `utilities/` — shared response and logging helpers.
+- `prisma/` — database schema and seed scripts.
 
-The relational PostgreSQL database is managed via Prisma ORM and contains 10 primary models:
+The frontend separates pages, reusable feature components, layouts, context, hooks, API clients, and service modules.
 
-```mermaid
-erDiagram
-    USER ||--o{ USER_PROGRESS : tracks
-    USER ||--o{ LESSON_PROGRESS : tracks
-    USER ||--o{ QUIZ_ATTEMPT : attempts
-    USER ||--o{ BOOKMARK : saves
-    USER ||--o{ SAVED_EXPERIMENT : configures
-    USER ||--o{ RESEARCH_NOTE : authors
-    USER ||--o{ USER_BADGE : earns
+## Database model
 
-    CHAPTER ||--|{ LESSON : contains
-    CHAPTER ||--o| QUIZ : has
-    QUIZ ||--|{ QUIZ_QUESTION : contains
-    QUIZ ||--o{ QUIZ_ATTEMPT : receives
+The Prisma schema defines **14 models**:
 
-    CONTROLLER ||--o{ BOOKMARK : referenced_in
-    CONTROLLER ||--o{ RESEARCH_NOTE : tagged_in
+`User`, `Controller`, `Chapter`, `Lesson`, `LessonProgress`, `Quiz`, `QuizQuestion`, `UserProgress`, `QuizAttempt`, `Bookmark`, `SavedExperiment`, `ResearchNote`, `Badge`, and `UserBadge`.
+
+Together, these models represent user accounts, controller reference data, curriculum, assessments, progress, bookmarks, saved simulations, research notes, and achievements.
+
+## Repository layout
+
+```text
+MICROVERSE/
+├── backend/
+│   ├── prisma/
+│   │   └── schema.prisma
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── lib/
+│   │   ├── middleware/
+│   │   ├── prisma/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utilities/
+│   │   └── validators/
+│   └── tests/
+├── frontend/
+│   └── src/
+│       ├── api/
+│       ├── assets/
+│       ├── components/
+│       ├── context/
+│       ├── data/
+│       ├── hooks/
+│       ├── layouts/
+│       ├── pages/
+│       ├── services/
+│       └── styles/
+├── docs/
+├── .env.example
+├── .gitignore
+├── render.yaml
+└── README.md
 ```
 
-### Key Models & Constraints
-- **`User`:** Identity, bcrypt hashed password, role (`USER` | `ADMIN`), bio, avatar.
-- **`Controller`:** 35+ verified electrical attributes, pinouts, clock frequencies, bus counts, and datasheet links.
-- **`Chapter` & `Lesson`:** Hierarchical curriculum records with markdown content and takeaway points.
-- **`UserProgress` & `LessonProgress`:** Unique progress records guarded by `@@unique([userId, chapterId])` and `@@unique([userId, lessonId])`.
-- **`Quiz`, `QuizQuestion`, `QuizAttempt`:** Assessment definitions with answer masking and historical scoring.
-- **`Bookmark`:** Relational save state guarded by `@@unique([userId, itemType, itemId])`.
-- **`ResearchNote`:** Engineering logbook records with category classification, tags, and controller linkage.
-- **`SavedExperiment`:** Persisted circuit simulation states (PWM, sensor filters, robot parameters).
-
----
-
-## 6. API Overview
-
-All API endpoints are versioned under `/api`:
-
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/health` | Public | Subsystem status and PostgreSQL ping latency |
-| `POST` | `/api/auth/register` | Public | Register new engineer account |
-| `POST` | `/api/auth/login` | Public | Authenticate session and receive JWT token |
-| `POST` | `/api/auth/logout` | Authenticated | Disconnect engineer session |
-| `GET` | `/api/auth/me` | Authenticated | Get current authenticated profile |
-| `GET` | `/api/controllers` | Public | Search and filter silicon registry |
-| `GET` | `/api/controllers/:slugOrId`| Public | Get controller specifications and pinout |
-| `GET` | `/api/controllers/compare` | Public | Compare 2 to 4 microcontrollers |
-| `POST` | `/api/controllers` | Admin Only | Create new silicon controller record |
-| `PUT` | `/api/controllers/:id` | Admin Only | Update controller specifications |
-| `DELETE`| `/api/controllers/:id` | Admin Only | Delete silicon controller record |
-| `GET` | `/api/chapters` | Public | List all 14 curriculum chapters |
-| `GET` | `/api/chapters/:slugOrId`| Public | Get chapter details and lessons |
-| `GET` | `/api/lessons` | Public | List curriculum lessons |
-| `POST` | `/api/lessons/:id/complete`| Authenticated | Mark lesson as completed |
-| `GET` | `/api/quizzes` | Public | List quizzes (answers & explanations stripped) |
-| `GET` | `/api/quizzes/attempts` | Authenticated | Get user's quiz attempt history |
-| `POST` | `/api/quizzes/:id/submit`| Authenticated | Grade assessment answers and return scorecard |
-| `GET` | `/api/bookmarks` | Authenticated | List user's bookmarked controllers |
-| `POST` | `/api/bookmarks/toggle` | Authenticated | Toggle controller bookmark |
-| `GET` | `/api/experiments` | Authenticated | List saved virtual lab circuits |
-| `POST` | `/api/experiments` | Authenticated | Save virtual lab circuit configuration |
-| `GET` | `/api/research-notes` | Authenticated | List personal engineering log notes |
-| `POST` | `/api/research-notes` | Authenticated | Create research note with tags |
-| `GET` | `/api/dashboard/stats` | Authenticated | Real-time user learning metrics & progress |
-| `GET` | `/api/admin/metrics` | Admin Only | Platform-wide operational counts |
-| `GET` | `/api/admin/users` | Admin Only | List registered users with search |
-| `PUT` | `/api/admin/users/:id/role`| Admin Only | Elevate/demote role (self-demotion guarded) |
-| `DELETE`| `/api/admin/users/:id` | Admin Only | Delete user account (self-deletion guarded) |
-
----
-
-## 7. Local Setup
+## Getting started
 
 ### Prerequisites
-- **Node.js:** v18.0.0 or later (v20+ recommended)
-- **PostgreSQL:** v14.0 or later running on port `5432`
-- **npm:** v9.0.0 or later
 
-### Step 1: Clone Repository
+- Node.js (use a currently supported LTS release compatible with the installed Vite version).
+- npm.
+- PostgreSQL.
+- Git.
+
+### 1. Clone the repository
+
 ```bash
-git clone https://github.com/Raksha-qq/microverse.git
-cd microverse
+git clone https://github.com/Raksha-qq/MicroVerse.git
+cd MicroVerse
 ```
 
-### Step 2: Configure Environment Files
-```bash
-# In backend
-cp backend/.env.example backend/.env
+### 2. Configure the backend
 
-# In frontend
-cp frontend/.env.example frontend/.env
-```
-
-### Step 3: Setup Backend & Database
 ```bash
 cd backend
 npm install
-
-# Push Prisma schema to PostgreSQL
-npx prisma db push
-
-# Seed 19 controllers, 14 chapters, 30 lessons, and assessments
-npm run prisma:seed
 ```
 
-### Step 4: Run Application
-In terminal 1 (Backend):
-```bash
-cd backend
-npm run dev
+Create `backend/.env` by copying `backend/.env.example`, then set your local PostgreSQL connection string and a unique JWT secret.
+
+PowerShell:
+
+```powershell
+Copy-Item .env.example .env
 ```
 
-In terminal 2 (Frontend):
-```bash
-cd frontend
-npm install
-npm run dev
-```
+Example backend environment:
 
-- Frontend: `http://localhost:5173`
-- Backend API: `http://localhost:5000`
-- Health Check: `http://localhost:5000/api/health`
-
----
-
-## 8. Environment Configuration
-
-### Backend (`backend/.env`)
 ```env
 PORT=5000
-DATABASE_URL="postgresql://postgres:your_password@localhost:5432/microverse?schema=public"
-JWT_SECRET="your_strong_jwt_secret_key_minimum_32_chars"
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/microverse?schema=public"
+JWT_SECRET="replace_with_a_unique_random_secret_of_at_least_32_characters"
 JWT_EXPIRES_IN="7d"
 CORS_ORIGIN="http://localhost:5173"
 NODE_ENV="development"
 RATE_LIMIT_MAX=300
 ```
 
-### Frontend (`frontend/.env`)
+Create the `microverse` database in PostgreSQL before continuing.
+
+Generate the Prisma client and apply the schema to your development database:
+
+```bash
+npm run prisma:generate
+npm run prisma:push
+```
+
+Seed the database:
+
+```bash
+npm run prisma:seed
+```
+
+The repository also contains additional seed scripts. Run those only if the project setup or seed script instructs you to do so; avoid blindly running multiple seed scripts against an existing database.
+
+### 3. Configure the frontend
+
+Open a second terminal at the repository root:
+
+```bash
+cd frontend
+npm install
+```
+
+Create `frontend/.env` from its example:
+
+PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+For local development, the frontend environment variable is:
+
 ```env
 VITE_API_URL="/api"
 ```
 
----
+The Vite development server proxies `/api` requests to `http://localhost:5000`.
 
-## 9. Database Migration Instructions
+### 4. Start the application
 
-When updating schema definitions in `backend/prisma/schema.prisma`:
-
-1. **Development Migrations:**
-   ```bash
-   cd backend
-   npx prisma migrate dev --name <migration_name>
-   ```
-2. **Production Migration Deployment:**
-   ```bash
-   cd backend
-   npx prisma migrate deploy
-   ```
-3. **Re-generating Prisma Client:**
-   ```bash
-   npx prisma generate
-   ```
-
----
-
-## 10. Testing Instructions
-
-MICROVERSE includes automated unit, integration, and full end-to-end user journey tests:
+Terminal 1 — backend:
 
 ```bash
 cd backend
-
-# Run API integration test suite (38 tests)
-npm test
-
-# Run End-to-End User Journey test suite (28 tests)
-npm run test:e2e
-
-# Run complete test suite (66 tests)
-npm run test:all
+npm run dev
 ```
 
-To test the frontend production build and bundle chunks:
+Terminal 2 — frontend:
+
 ```bash
 cd frontend
-npm run build
+npm run dev
 ```
 
----
+Open:
 
-## 11. Deployment Instructions
+- Frontend: `http://localhost:5173`
+- Backend health endpoint: `http://localhost:5000/api/health`
 
-### Frontend Deployment on Vercel
-1. Link repository to Vercel.
-2. Root directory: `frontend`.
-3. Framework Preset: `Vite`.
-4. Build Command: `npm run build`.
-5. Output Directory: `dist`.
-6. Environment Variables:
-   - `VITE_API_URL`: `https://your-backend-domain.onrender.com/api`
-7. `vercel.json` handles SPA fallback rewrites and security headers automatically.
+## Available scripts
 
-### Backend Deployment on Render
-1. Create a **Blueprint** or **Web Service** linking the repository.
-2. Select `render.yaml` at repository root or set:
-   - Root Directory: `backend`
-   - Build Command: `npm install && npx prisma generate && npx prisma migrate deploy`
-   - Start Command: `node src/server.js`
-   - Health Check Path: `/api/health`
-3. Environment Variables:
-   - `NODE_ENV`: `production`
-   - `DATABASE_URL`: Hosted PostgreSQL connection string
-   - `JWT_SECRET`: Random 32+ character cryptographic secret
-   - `CORS_ORIGIN`: Your Vercel frontend URL (`https://your-app.vercel.app`)
+### Backend
 
-### Hosted PostgreSQL
-- Supported providers: Supabase, Neon, Render PostgreSQL, AWS RDS, or Railway.
-- Ensure SSL is enabled: append `?sslmode=require` to `DATABASE_URL` in production.
+Run these from `backend/`:
 
----
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the API with Node's watch mode |
+| `npm start` | Start the API |
+| `npm test` | Run the API test script |
+| `npm run test:e2e` | Run the end-to-end journey test script |
+| `npm run test:all` | Run both test scripts sequentially |
+| `npm run prisma:generate` | Generate Prisma Client |
+| `npm run prisma:push` | Push the Prisma schema to the configured database |
+| `npm run prisma:migrate` | Run Prisma development migrations |
+| `npm run prisma:seed` | Run the primary seed script |
 
-## 12. UI & Experience Preview
+### Frontend
 
-- **Silicon Archive Grid:** Glassmorphism cards with bit-width badges, clock frequencies, flash/SRAM stats, pinouts, and one-click bookmarking.
-- **Hardware Simulation Console:** Interactive oscilloscope display with duty cycle sliders, real-time waveform canvas, ultrasonic echo timing, and 2D kinematics avoidance arena.
-- **Engineering Assessment Suite:** Step-by-step multiple-choice quiz engine with syntax-highlighted code blocks, question selectors, and detailed post-submission technical explanations.
-- **Laboratory Dashboard:** Cyber-physical telemetry cards, progress ring visualizations, recently visited lessons with resume buttons, and research logs.
-- **Admin Governance Console:** System counters, user role toggles, security protections preventing self-demotion, and silicon target forms.
+Run these from `frontend/`:
 
----
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Create a production build |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run Oxlint |
 
-## 13. Known Limitations
+Test totals are intentionally not stated here. The scripts are present, but their exact test-case counts have not been independently verified.
 
-- **Browser Audio:** Signal frequency generation uses Web Audio API; audio playback is subject to browser user-gesture policies on initial page load.
-- **Offline Mode:** Initial page visits require an active internet connection to load 3D visualizer assets and WebGL fonts.
-- **Cookie Cross-Origin Restrictions:** For decoupled frontends and backends on separate top-level domains, cookie sessions require HTTPS with `SameSite=None; Secure`; Bearer tokens are provided as the default cross-origin fallback.
+## Environment variables
 
----
+### Backend
 
-## 14. Future Improvements
+| Variable | Purpose |
+|---|---|
+| `PORT` | Express server port (default: `5000`) |
+| `DATABASE_URL` | PostgreSQL connection URL |
+| `JWT_SECRET` | Secret used to sign and verify JWTs |
+| `JWT_EXPIRES_IN` | JWT lifetime (default: `7d`) |
+| `CORS_ORIGIN` | Allowed frontend origin(s) |
+| `NODE_ENV` | Runtime environment |
+| `RATE_LIMIT_MAX` | General rate-limit maximum |
 
-- **WebAssembly AVR / ARM Emulators:** In-browser compilation and execution of C/C++ firmware using GCC WebAssembly ports.
-- **Collaborative Hardware Benches:** Multi-user real-time virtual breadboard editing via WebSockets.
-- **Hardware In The Loop (HIL) Bridge:** WebSerial API integration to connect physical microcontrollers (STM32, ESP32, Arduino) directly to MICROVERSE for hardware telemetry streaming.
-- **Expanded Physical AI Simulators:** Visualizing TinyML tensor operations, quantized neural network inference, and motor feedback loops in 3D.
+### Frontend
 
----
+| Variable | Purpose |
+|---|---|
+| `VITE_API_URL` | API base URL; `/api` is proxied by Vite during local development |
 
-## 15. License
+Do not commit `.env` files or put secrets in frontend variables. Variables prefixed with `VITE_` are exposed to the browser bundle and must never contain credentials.
 
-MIT License. Designed and engineered for the **MICROVERSE Interactive Laboratory of Embedded Intelligence**.
+## Database workflow
+
+For local schema iteration, the project provides `npm run prisma:push` (`prisma db push`). For migration-based deployment, use Prisma migrations and ensure migration files have been created and committed before running `prisma migrate deploy`.
+
+Do not assume `prisma migrate deploy` can deploy a schema that has never had migration files generated.
+
+## Deployment notes
+
+The repository includes a root `render.yaml`, which can be used as the starting point for backend deployment configuration. Review its service and environment settings before deploying.
+
+For a separately hosted frontend and backend:
+
+- Set the frontend's `VITE_API_URL` to the deployed API base URL, including `/api` if that is the API prefix expected by the frontend client.
+- Set the backend's `CORS_ORIGIN` to the deployed frontend origin.
+- Configure `DATABASE_URL` with the hosted PostgreSQL connection string.
+- Set `NODE_ENV=production`.
+- Set a strong, unique `JWT_SECRET` in the hosting provider's secret manager.
+- Use HTTPS for production traffic.
+
+The local Vite proxy applies only to the development server; it does not proxy requests in a deployed frontend build.
+
+## Security notes
+
+- Keep real environment files out of version control.
+- Use a unique, randomly generated JWT secret outside local development.
+- Do not expose database credentials or signing secrets in frontend code.
+- Restrict CORS to the intended frontend origin(s).
+- Review dependency advisories before applying automatic or forceful dependency upgrades.
+
+## Current scope and possible extensions
+
+Potential future directions include firmware execution through an emulator, collaborative virtual benches, hardware-in-the-loop connectivity, and expanded Physical AI visualizations. These are future possibilities, not claims about currently implemented functionality.
+
+## License
+
+This repository declares the MIT License in its package metadata. See [`LICENSE`](LICENSE) for the license text.
