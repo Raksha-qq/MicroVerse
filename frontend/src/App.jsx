@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { MainLayout } from './layouts/MainLayout';
 
 import { HomePage } from './pages/HomePage';
+import { DiscoverPage } from './pages/DiscoverPage';
 import { ControllersPage } from './pages/ControllersPage';
 import { LessonsPage } from './pages/LessonsPage';
 import { LabPage } from './pages/LabPage';
@@ -22,7 +23,7 @@ function App() {
         <MainLayout>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/discover" element={<HomePage />} />
+            <Route path="/discover" element={<DiscoverPage />} />
             <Route path="/anatomy" element={<AnatomyPage />} />
             <Route path="/archive" element={<ControllersPage />} />
             <Route path="/controllers" element={<ControllersPage />} />

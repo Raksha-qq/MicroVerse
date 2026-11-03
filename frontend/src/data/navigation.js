@@ -1,10 +1,9 @@
 export const NAV_LINKS = [
   {
     name: "Discover",
-    path: "/#discover",
-    anchor: "discover",
+    path: "/discover",
     icon: "Compass",
-    desc: "Overview & embedded feedback loops",
+    desc: "14-module silicon curriculum",
   },
   {
     name: "Anatomy",

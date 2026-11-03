@@ -315,11 +315,75 @@ test('Logout clears session cookie', async () => {
 });
 
 // ==========================================
+// Milestone 4: Discover & Curriculum Tests
+// ==========================================
+test('Chapter listing returns all 14 curriculum chapters', async () => {
+  const res = await request('/chapters');
+  assert(res.status === 200, `Expected status 200, got ${res.status}`);
+  assert(Array.isArray(res.data.data), 'Expected array of chapters');
+  assert(res.data.data.length === 14, `Expected 14 chapters, got ${res.data.data.length}`);
+});
+
+test('Chapter retrieval by slug returns rich markdown content and lessons', async () => {
+  const res = await request('/chapters/what-is-a-microcontroller');
+  assert(res.status === 200, `Expected status 200, got ${res.status}`);
+  assert(res.data.data.chapterNumber === 1, 'Expected chapter 1');
+  assert(res.data.data.content.includes('## Beginner-Friendly Overview'), 'Expected structured sections');
+  assert(Array.isArray(res.data.data.lessons), 'Expected lessons array');
+  assert(res.data.data.quiz, 'Expected quiz attached');
+});
+
+test('Quiz retrieval by chapterId returns questions without answer leaks', async () => {
+  const chRes = await request('/chapters/what-is-a-microcontroller');
+  const chapterId = chRes.data.data.id;
+  const res = await request(`/quizzes/chapter/${chapterId}`);
+  assert(res.status === 200, `Expected status 200, got ${res.status}`);
+  assert(Array.isArray(res.data.data.questions), 'Expected questions');
+  assert(res.data.data.questions.length > 0, 'Expected at least 1 question');
+  // Security verification: ensure correct answers are withheld before submission
+  assert(res.data.data.questions[0].correctOptionIndex === undefined, 'Security violation: correctOptionIndex leaked in quiz fetch');
+});
+
+test('Quiz submission grades assessment and returns pass/fail state', async () => {
+  const chRes = await request('/chapters/what-is-a-microcontroller');
+  const quizId = chRes.data.data.quiz.id;
+  const qRes = await request(`/quizzes/chapter/${chRes.data.data.id}`);
+  const firstQuestion = qRes.data.data.questions[0];
+
+  // Submit answer for first question
+  const answers = { [firstQuestion.id]: 0 }; // Option 0 is correct
+  const res = await request(`/quizzes/${quizId}/submit`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: { answers },
+  });
+
+  assert(res.status === 200, `Expected status 200, got ${res.status}`);
+  assert(res.data.data.totalPoints > 0, 'Expected totalPoints > 0');
+  assert(typeof res.data.data.percentage === 'number', 'Expected score percentage');
+  assert(typeof res.data.data.passed === 'boolean', 'Expected passed flag');
+  assert(Array.isArray(res.data.data.review), 'Expected answer review array');
+});
+
+test('Authenticated progress marks chapter completed', async () => {
+  const chRes = await request('/chapters/what-is-a-microcontroller');
+  const chapterId = chRes.data.data.id;
+
+  const res = await request(`/progress/chapter/${chapterId}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+
+  assert(res.status === 200, `Expected status 200, got ${res.status}`);
+  assert(res.data.data.isCompleted === true, 'Expected isCompleted to be true');
+});
+
+// ==========================================
 // Runner
 // ==========================================
 async function runAll() {
   console.log('\n=======================================================');
-  console.log('  MICROVERSE BACKEND TEST SUITE (MILESTONE 3)');
+  console.log('  MICROVERSE BACKEND TEST SUITE (MILESTONES 3 & 4)');
   console.log('=======================================================\n');
 
   let passed = 0;
