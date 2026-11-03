@@ -470,6 +470,71 @@ test('Admin controller creation and deletion lifecycle', async () => {
 });
 
 // ==========================================
+// Milestone 6: Saved Experiments API Lifecycle
+// ==========================================
+test('Authenticated experiment persistence lifecycle (save, list, retrieve, update, delete)', async () => {
+  const newExperiment = {
+    title: "High-Frequency PWM Motor Drive Calibration",
+    description: "Configured for 25kHz ultrasonic BLDC gate driving with 65% duty cycle.",
+    experimentType: "PWM",
+    configState: {
+      frequencyHz: 25000,
+      dutyCyclePercent: 65.0,
+      supplyVoltage: 3.3,
+      loadType: "BLDC_PHASE"
+    }
+  };
+
+  // 1. Create experiment
+  const saveRes = await request('/experiments', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: newExperiment,
+  });
+  assert(saveRes.status === 201, `Expected 201 Created, got ${saveRes.status}`);
+  const experimentId = saveRes.data.data.id;
+  assert(saveRes.data.data.title === newExperiment.title, 'Expected matching experiment title');
+
+  // 2. List experiments
+  const listRes = await request('/experiments', {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(listRes.status === 200, `Expected 200 OK, got ${listRes.status}`);
+  assert(Array.isArray(listRes.data.data), 'Expected array of saved experiments');
+  assert(listRes.data.data.some(e => e.id === experimentId), 'Expected saved experiment in list');
+
+  // 3. Retrieve single experiment
+  const getRes = await request(`/experiments/${experimentId}`, {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(getRes.status === 200, `Expected 200 OK, got ${getRes.status}`);
+  assert(getRes.data.data.configState.frequencyHz === 25000, 'Expected parsed configState object');
+
+  // 4. Update / Rename experiment
+  const updateRes = await request(`/experiments/${experimentId}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: {
+      title: "Optimized 25kHz Ultrasonic PWM Drive",
+      configState: {
+        frequencyHz: 25000,
+        dutyCyclePercent: 72.5,
+        supplyVoltage: 3.3,
+      }
+    },
+  });
+  assert(updateRes.status === 200, `Expected 200 OK on update, got ${updateRes.status}`);
+  assert(updateRes.data.data.title === "Optimized 25kHz Ultrasonic PWM Drive", 'Expected updated title');
+
+  // 5. Delete experiment
+  const delRes = await request(`/experiments/${experimentId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(delRes.status === 200, `Expected 200 OK on delete, got ${delRes.status}`);
+});
+
+// ==========================================
 // Runner
 // ==========================================
 async function runAll() {
