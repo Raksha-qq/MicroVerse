@@ -17,7 +17,11 @@ const config = {
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
   },
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.includes(",")
+        ? process.env.CORS_ORIGIN.split(",").map((s) => s.trim())
+        : process.env.CORS_ORIGIN
+      : "http://localhost:5173",
     credentials: true,
   },
   rateLimit: {
