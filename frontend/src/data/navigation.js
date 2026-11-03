@@ -36,6 +36,18 @@ export const NAV_LINKS = [
     icon: "Terminal",
     desc: "Interactive simulation bench",
   },
+  {
+    name: "Quizzes",
+    path: "/quizzes",
+    icon: "CheckSquare",
+    desc: "Curriculum competency assessments",
+  },
+  {
+    name: "Research",
+    path: "/research",
+    icon: "FileText",
+    desc: "Personal engineering research logbook",
+  },
 ];
 
 export const CONTROLLER_FAMILIES = [

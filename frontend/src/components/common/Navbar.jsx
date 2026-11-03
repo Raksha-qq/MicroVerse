@@ -13,6 +13,10 @@ import {
   User,
   LogOut,
   ChevronRight,
+  CheckSquare,
+  FileText,
+  Shield,
+  LayoutDashboard,
 } from 'lucide-react';
 import { NAV_LINKS } from '../../data/navigation';
 import { StatusPill } from './StatusPill';
@@ -26,6 +30,8 @@ const ICON_MAP = {
   Sliders,
   Bot,
   Terminal,
+  CheckSquare,
+  FileText,
 };
 
 export function Navbar() {
@@ -144,10 +150,26 @@ export function Navbar() {
 
             {user ? (
               <div className="flex items-center gap-2 pl-2 border-l border-[#192B40]">
-                <div className="flex items-center gap-2 text-xs font-mono text-[#EAF5FF] bg-[#111E30] px-2.5 py-1 rounded-md border border-[#192B40]">
+                {user.role === 'ADMIN' && (
+                  <Link
+                    to="/admin"
+                    className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30 hover:bg-[#F59E0B]/20 text-[11px] font-mono font-bold transition-all"
+                    title="Administrative Command Console"
+                  >
+                    <Shield className="w-3 h-3" />
+                    Admin
+                  </Link>
+                )}
+
+                <Link
+                  to="/dashboard"
+                  className="flex items-center gap-2 text-xs font-mono text-[#EAF5FF] bg-[#111E30] hover:border-[#55C7FF] px-2.5 py-1 rounded-md border border-[#192B40] transition-colors"
+                  title="View Personal Engineer Dashboard"
+                >
                   <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
                   <span className="max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
-                </div>
+                </Link>
+
                 <button
                   onClick={logout}
                   title="Disconnect session"

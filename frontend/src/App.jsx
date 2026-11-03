@@ -14,6 +14,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { AnatomyPage } from './pages/AnatomyPage';
 import { ComparePage } from './pages/ComparePage';
 import { RoboticsPage } from './pages/RoboticsPage';
+import { AdminPage } from './pages/AdminPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 function App() {
@@ -26,15 +27,20 @@ function App() {
             <Route path="/discover" element={<DiscoverPage />} />
             <Route path="/anatomy" element={<AnatomyPage />} />
             <Route path="/archive" element={<ControllersPage />} />
+            <Route path="/archive/:slug" element={<ControllersPage />} />
             <Route path="/controllers" element={<ControllersPage />} />
+            <Route path="/controllers/:slug" element={<ControllersPage />} />
             <Route path="/compare" element={<ComparePage />} />
             <Route path="/robotics" element={<RoboticsPage />} />
             <Route path="/experiment" element={<LabPage />} />
             <Route path="/lab" element={<LabPage />} />
             <Route path="/lessons" element={<LessonsPage />} />
+            <Route path="/lessons/:slug" element={<LessonsPage />} />
             <Route path="/quizzes" element={<QuizzesPage />} />
+            <Route path="/quizzes/:chapterId" element={<QuizzesPage />} />
             <Route path="/research" element={<ResearchNotesPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </MainLayout>

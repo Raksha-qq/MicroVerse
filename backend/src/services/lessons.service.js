@@ -98,9 +98,18 @@ async function getLessonBySlugOrId(identifier, userId = null, isAdmin = false) {
 
   let isCompleted = false;
   if (userId) {
-    const progress = await prisma.lessonProgress.findUnique({
+    const progress = await prisma.lessonProgress.upsert({
       where: {
         userId_lessonId: { userId, lessonId: lesson.id },
+      },
+      update: {
+        lastAccessedAt: new Date(),
+      },
+      create: {
+        userId,
+        lessonId: lesson.id,
+        isCompleted: false,
+        lastAccessedAt: new Date(),
       },
     });
     isCompleted = !!progress?.isCompleted;

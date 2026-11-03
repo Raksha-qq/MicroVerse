@@ -10,35 +10,101 @@ router.get("/stats", authenticate, async (req, res, next) => {
     const userId = req.user.id;
 
     const [
+      user,
       totalChapters,
+      totalLessons,
       userProgress,
+      lessonProgress,
       quizAttempts,
       bookmarks,
       savedExperiments,
+      researchNotes,
       userBadges,
       allBadges,
     ] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true, name: true, email: true, role: true, avatar: true, bio: true, createdAt: true },
+      }),
       prisma.chapter.count({ where: { isPublished: true } }),
+      prisma.lesson.count({ where: { isPublished: true } }),
       prisma.userProgress.findMany({
         where: { userId },
-        include: { chapter: { select: { id: true, title: true, chapterNumber: true, slug: true } } },
+        include: {
+          chapter: {
+            select: { id: true, title: true, chapterNumber: true, slug: true, summary: true, level: true },
+          },
+        },
+        orderBy: { chapter: { chapterNumber: "asc" } },
+      }),
+      prisma.lessonProgress.findMany({
+        where: { userId },
+        include: {
+          lesson: {
+            select: {
+              id: true,
+              lessonNumber: true,
+              title: true,
+              slug: true,
+              estimatedMinutes: true,
+              difficulty: true,
+              chapter: { select: { id: true, title: true, slug: true, chapterNumber: true } },
+            },
+          },
+        },
+        orderBy: { lastAccessedAt: "desc" },
       }),
       prisma.quizAttempt.findMany({
         where: { userId },
-        include: { quiz: { select: { title: true, chapter: { select: { title: true, slug: true } } } } },
+        include: {
+          quiz: {
+            select: {
+              id: true,
+              title: true,
+              passingScore: true,
+              chapter: { select: { title: true, slug: true, chapterNumber: true } },
+            },
+          },
+        },
         orderBy: { attemptedAt: "desc" },
-        take: 10,
+        take: 15,
       }),
       prisma.bookmark.findMany({
         where: { userId },
-        include: { controller: true },
+        include: {
+          controller: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              commonName: true,
+              family: true,
+              architecture: true,
+              bitWidth: true,
+              maxClockSpeedMHz: true,
+              flashKb: true,
+              sramKb: true,
+              manufacturer: true,
+            },
+          },
+        },
         orderBy: { createdAt: "desc" },
-        take: 6,
+        take: 10,
       }),
       prisma.savedExperiment.findMany({
         where: { userId },
         orderBy: { updatedAt: "desc" },
-        take: 6,
+        take: 10,
+      }),
+      prisma.researchNote.findMany({
+        where: { userId },
+        include: {
+          controller: { select: { id: true, name: true, slug: true } },
+          chapter: { select: { id: true, title: true, slug: true } },
+          lesson: { select: { id: true, title: true, slug: true } },
+        },
+        orderBy: { updatedAt: "desc" },
+        take: 10,
       }),
       prisma.userBadge.findMany({
         where: { userId },
@@ -48,8 +114,12 @@ router.get("/stats", authenticate, async (req, res, next) => {
     ]);
 
     const completedChapters = userProgress.filter((p) => p.isCompleted);
+    const completedLessons = lessonProgress.filter((p) => p.isCompleted);
+
     const progressPercentage =
       totalChapters > 0 ? Math.round((completedChapters.length / totalChapters) * 100) : 0;
+    const lessonPercentage =
+      totalLessons > 0 ? Math.round((completedLessons.length / totalLessons) * 100) : 0;
 
     const totalQuizzesPassed = quizAttempts.filter((a) => a.passed).length;
     const avgScore =
@@ -88,34 +158,65 @@ router.get("/stats", authenticate, async (req, res, next) => {
       };
     });
 
+    // Recently visited lessons (for resuming)
+    const recentlyVisitedLessons = lessonProgress.slice(0, 5).map((lp) => ({
+      id: lp.lesson.id,
+      title: lp.lesson.title,
+      slug: lp.lesson.slug,
+      lessonNumber: lp.lesson.lessonNumber,
+      chapterTitle: lp.lesson.chapter.title,
+      chapterSlug: lp.lesson.chapter.slug,
+      isCompleted: lp.isCompleted,
+      lastAccessedAt: lp.lastAccessedAt,
+    }));
+
+    const statsPayload = {
+      user,
+      totalChapters,
+      totalLessons,
+      completedCount: completedChapters.length,
+      completedLessonsCount: completedLessons.length,
+      progressPercentage,
+      lessonPercentage,
+      completedChapters: completedChapters.map((cp) => ({
+        id: cp.chapter.id,
+        chapterNumber: cp.chapter.chapterNumber,
+        title: cp.chapter.title,
+        slug: cp.chapter.slug,
+        completedAt: cp.completedAt,
+      })),
+      recentlyVisitedLessons,
+      quizStats: {
+        totalAttempts: quizAttempts.length,
+        passedCount: totalQuizzesPassed,
+        averageScore: avgScore,
+      },
+      recentAttempts: quizAttempts.map((a) => ({
+        id: a.id,
+        title: a.quiz.title,
+        chapterTitle: a.quiz.chapter.title,
+        score: a.score,
+        totalPoints: a.totalPoints,
+        percentage: Math.round((a.score / a.totalPoints) * 100),
+        passed: a.passed,
+        attemptedAt: a.attemptedAt,
+      })),
+      bookmarks,
+      savedExperiments: parsedExperiments,
+      researchNotes,
+      badges: badgeGallery,
+      nextChapter,
+      progress: {
+        percentage: progressPercentage,
+        completedLessons: completedLessons.length,
+        totalLessons,
+      },
+    };
+
     res.json({
       success: true,
-      stats: {
-        totalChapters,
-        completedCount: completedChapters.length,
-        progressPercentage,
-        quizStats: {
-          totalAttempts: quizAttempts.length,
-          passedCount: totalQuizzesPassed,
-          averageScore: avgScore,
-        },
-        bookmarkCount: bookmarks.length,
-        experimentCount: savedExperiments.length,
-        nextChapter,
-        recentAttempts: quizAttempts.map((a) => ({
-          id: a.id,
-          title: a.quiz.title,
-          chapterTitle: a.quiz.chapter.title,
-          score: a.score,
-          totalPoints: a.totalPoints,
-          percentage: Math.round((a.score / a.totalPoints) * 100),
-          passed: a.passed,
-          attemptedAt: a.attemptedAt,
-        })),
-        bookmarks,
-        savedExperiments: parsedExperiments,
-        badges: badgeGallery,
-      },
+      stats: statsPayload,
+      data: statsPayload,
     });
   } catch (error) {
     next(error);
@@ -123,4 +224,3 @@ router.get("/stats", authenticate, async (req, res, next) => {
 });
 
 module.exports = router;
-

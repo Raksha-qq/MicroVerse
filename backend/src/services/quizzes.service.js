@@ -1,5 +1,64 @@
 const prisma = require("../lib/prisma");
 
+async function listAllQuizzes(userId = null) {
+  const [quizzes, userAttempts] = await Promise.all([
+    prisma.quiz.findMany({
+      include: {
+        chapter: {
+          select: { id: true, title: true, chapterNumber: true, slug: true, level: true },
+        },
+        _count: { select: { questions: true } },
+      },
+      orderBy: { chapter: { chapterNumber: "asc" } },
+    }),
+    userId
+      ? prisma.quizAttempt.findMany({
+          where: { userId },
+          orderBy: { attemptedAt: "desc" },
+        })
+      : Promise.resolve([]),
+  ]);
+
+  return quizzes.map((q) => {
+    const attempts = userAttempts.filter((a) => a.quizId === q.id);
+    const passed = attempts.some((a) => a.passed);
+    const bestScore = attempts.length > 0 ? Math.max(...attempts.map((a) => Math.round((a.score / a.totalPoints) * 100))) : null;
+
+    return {
+      id: q.id,
+      title: q.title,
+      description: q.description,
+      passingScore: q.passingScore,
+      chapter: q.chapter,
+      questionCount: q._count.questions,
+      attemptsCount: attempts.length,
+      passed,
+      bestScore,
+    };
+  });
+}
+
+async function getUserAttempts(userId) {
+  return await prisma.quizAttempt.findMany({
+    where: { userId },
+    include: {
+      quiz: {
+        select: {
+          id: true,
+          title: true,
+          passingScore: true,
+          chapter: { select: { id: true, title: true, slug: true, chapterNumber: true } },
+        },
+      },
+    },
+    orderBy: { attemptedAt: "desc" },
+  });
+}
+
+async function getQuizById(id) {
+  return await getQuizByChapter(id);
+}
+
 async function getQuizByChapter(chapterId) {
   const quiz = await prisma.quiz.findFirst({
     where: {
@@ -7,7 +66,7 @@ async function getQuizByChapter(chapterId) {
     },
     include: {
       chapter: {
-        select: { id: true, title: true, chapterNumber: true },
+        select: { id: true, title: true, chapterNumber: true, slug: true },
       },
       questions: {
         select: {
@@ -67,10 +126,10 @@ async function submitQuiz(quizId, userId, answers) {
     review.push({
       questionId: q.id,
       question: q.question,
-      submittedOptionIndex: submittedIndex,
+      submittedOptionIndex: submittedIndex !== undefined ? submittedIndex : null,
       correctOptionIndex: q.correctOptionIndex,
       isCorrect,
-      explanation: q.explanation,
+      explanation: q.explanation || "No explanation provided for this question.",
       pointsEarned: isCorrect ? q.points : 0,
       maxPoints: q.points,
     });
@@ -139,9 +198,57 @@ async function addQuestion(data) {
   return await prisma.quizQuestion.create({ data });
 }
 
+async function createQuiz(data) {
+  return await prisma.quiz.create({
+    data: {
+      chapterId: data.chapterId,
+      title: data.title,
+      description: data.description || "",
+      passingScore: data.passingScore || 70,
+    },
+    include: { chapter: true },
+  });
+}
+
+async function updateQuiz(id, data) {
+  return await prisma.quiz.update({
+    where: { id },
+    data,
+  });
+}
+
+async function deleteQuiz(id) {
+  return await prisma.quiz.delete({
+    where: { id },
+  });
+}
+
+async function updateQuestion(id, data) {
+  if (Array.isArray(data.options)) {
+    data.options = JSON.stringify(data.options);
+  }
+  return await prisma.quizQuestion.update({
+    where: { id },
+    data,
+  });
+}
+
+async function deleteQuestion(id) {
+  return await prisma.quizQuestion.delete({
+    where: { id },
+  });
+}
+
 module.exports = {
+  listAllQuizzes,
+  getUserAttempts,
+  getQuizById,
   getQuizByChapter,
   submitQuiz,
   addQuestion,
+  createQuiz,
+  updateQuiz,
+  deleteQuiz,
+  updateQuestion,
+  deleteQuestion,
 };
-

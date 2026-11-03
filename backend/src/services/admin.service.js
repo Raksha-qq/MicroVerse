@@ -41,6 +41,14 @@ async function getMetrics() {
       savedExperiments: experimentCount,
       researchNotes: noteCount,
     },
+    totalUsers: userCount,
+    totalControllers: controllerCount,
+    totalChapters: chapterCount,
+    totalLessons: lessonCount,
+    totalQuizzes: quizCount,
+    totalQuizAttempts: attemptCount,
+    totalExperiments: experimentCount,
+    totalResearchNotes: noteCount,
     recentAttempts,
   };
 }
@@ -61,6 +69,7 @@ async function listUsers(search = "") {
       email: true,
       name: true,
       role: true,
+      avatar: true,
       createdAt: true,
       _count: {
         select: {
@@ -69,6 +78,7 @@ async function listUsers(search = "") {
           attempts: true,
           savedExperiments: true,
           researchNotes: true,
+          bookmarks: true,
         },
       },
     },
@@ -76,9 +86,15 @@ async function listUsers(search = "") {
   });
 }
 
-async function updateUserRole(userId, role) {
+async function updateUserRole(callerId, targetUserId, role) {
+  if (callerId === targetUserId && role !== "ADMIN") {
+    const error = new Error("Administrators cannot demote themselves.");
+    error.statusCode = 400;
+    throw error;
+  }
+
   return await prisma.user.update({
-    where: { id: userId },
+    where: { id: targetUserId },
     data: { role },
     select: {
       id: true,
@@ -89,9 +105,65 @@ async function updateUserRole(userId, role) {
   });
 }
 
+async function deleteUser(callerId, targetUserId) {
+  if (callerId === targetUserId) {
+    const error = new Error("Administrators cannot delete their own active account.");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return await prisma.user.delete({
+    where: { id: targetUserId },
+  });
+}
+
+async function listAdminControllers() {
+  return await prisma.controller.findMany({
+    orderBy: [{ family: "asc" }, { name: "asc" }],
+  });
+}
+
+async function listAdminChapters() {
+  return await prisma.chapter.findMany({
+    include: {
+      lessons: {
+        orderBy: { lessonNumber: "asc" },
+      },
+      quiz: {
+        include: {
+          _count: { select: { questions: true } },
+        },
+      },
+    },
+    orderBy: { chapterNumber: "asc" },
+  });
+}
+
+async function listAdminQuizzes() {
+  const quizzes = await prisma.quiz.findMany({
+    include: {
+      chapter: { select: { id: true, chapterNumber: true, title: true } },
+      questions: true,
+      _count: { select: { attempts: true } },
+    },
+    orderBy: { chapter: { chapterNumber: "asc" } },
+  });
+
+  return quizzes.map((q) => ({
+    ...q,
+    questions: q.questions.map((qn) => ({
+      ...qn,
+      options: typeof qn.options === "string" ? JSON.parse(qn.options) : qn.options,
+    })),
+  }));
+}
+
 module.exports = {
   getMetrics,
   listUsers,
   updateUserRole,
+  deleteUser,
+  listAdminControllers,
+  listAdminChapters,
+  listAdminQuizzes,
 };
-

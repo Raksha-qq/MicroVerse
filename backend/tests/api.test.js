@@ -535,6 +535,168 @@ test('Authenticated experiment persistence lifecycle (save, list, retrieve, upda
 });
 
 // ==========================================
+// Milestone 7 Tests
+// ==========================================
+
+test('Dashboard stats returns live user metrics without hardcoded data', async () => {
+  const res = await request('/dashboard/stats', {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(res.status === 200, `Expected 200 OK, got ${res.status}`);
+  const data = res.data.data || res.data.stats;
+  assert(data && data.user && data.user.email, 'Expected authenticated user profile');
+  assert(data.progress && typeof data.progress.percentage === 'number', 'Expected progress metrics');
+  assert(Array.isArray(data.recentlyVisitedLessons), 'Expected recentlyVisitedLessons array');
+  assert(Array.isArray(data.completedChapters), 'Expected completedChapters array');
+  assert(data.quizStats && typeof data.quizStats.averageScore === 'number', 'Expected quizStats');
+  assert(Array.isArray(data.savedExperiments), 'Expected savedExperiments array');
+  assert(Array.isArray(data.researchNotes), 'Expected researchNotes array');
+  assert(Array.isArray(data.bookmarks), 'Expected bookmarks array');
+});
+
+test('Lesson completion marks lesson as complete and updates progress', async () => {
+  const lessonsRes = await request('/lessons');
+  assert(lessonsRes.status === 200 && lessonsRes.data.data.length > 0, 'Expected lessons array');
+  const targetLesson = lessonsRes.data.data[0];
+
+  const completeRes = await request(`/lessons/${targetLesson.id}/complete`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(completeRes.status === 200, `Expected 200 OK, got ${completeRes.status}`);
+  assert(completeRes.data.data.isCompleted === true, 'Expected isCompleted to be true');
+});
+
+test('Quiz catalog lists quizzes without exposing correct answers and records attempts', async () => {
+  // Public listing
+  const quizzesRes = await request('/quizzes');
+  assert(quizzesRes.status === 200, `Expected 200 OK, got ${quizzesRes.status}`);
+  assert(Array.isArray(quizzesRes.data.data), 'Expected quizzes array');
+  assert(quizzesRes.data.data.length > 0, 'Expected at least 1 quiz');
+
+  // Verify answer protection
+  const firstQuiz = quizzesRes.data.data[0];
+  if (firstQuiz.questions && firstQuiz.questions.length > 0) {
+    const q = firstQuiz.questions[0];
+    assert(q.correctOptionIndex === undefined, 'Quiz questions must not expose correctOptionIndex');
+    assert(q.explanation === undefined, 'Quiz questions must not expose explanation before submission');
+  }
+
+  // User attempts
+  const attemptsRes = await request('/quizzes/attempts', {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(attemptsRes.status === 200, `Expected 200 OK, got ${attemptsRes.status}`);
+  assert(Array.isArray(attemptsRes.data.data), 'Expected attempts array');
+});
+
+test('Bookmark lifecycle toggles controller bookmark and prevents duplicates', async () => {
+  const ctrlRes = await request('/controllers?limit=1');
+  const ctrl = ctrlRes.data.data[0];
+  assert(ctrl, 'Expected at least one controller');
+
+  // 1. Toggle ON
+  const toggleOn = await request('/bookmarks/toggle', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: { itemType: 'CONTROLLER', itemId: ctrl.id },
+  });
+  assert(toggleOn.status === 200, `Expected 200 OK, got ${toggleOn.status}`);
+  assert(toggleOn.data.data.bookmarked === true, 'Expected bookmark to be added');
+
+  // 2. Verify in list
+  const listRes = await request('/bookmarks', {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(listRes.status === 200, `Expected 200 OK, got ${listRes.status}`);
+  const found = listRes.data.data.find(b => b.itemId === ctrl.id);
+  assert(found, 'Expected bookmarked controller in list');
+
+  // 3. Toggle OFF
+  const toggleOff = await request('/bookmarks/toggle', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: { itemType: 'CONTROLLER', itemId: ctrl.id },
+  });
+  assert(toggleOff.status === 200, `Expected 200 OK, got ${toggleOff.status}`);
+  assert(toggleOff.data.data.bookmarked === false, 'Expected bookmark to be removed');
+});
+
+test('Research logbook CRUD lifecycle creates, updates and deletes notes', async () => {
+  // 1. Create
+  const createRes = await request('/research-notes', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: {
+      title: 'DMA FIFO Buffering Test Notes',
+      category: 'ROBOTICS',
+      content: 'Configured double-buffering DMA stream on SPI2 to avoid buffer overflow during 20MHz sampling.',
+      tags: ['DMA', 'SPI', 'Buffering'],
+      isPublic: false,
+    },
+  });
+  assert(createRes.status === 201, `Expected 201 Created, got ${createRes.status}`);
+  const noteId = createRes.data.data.id;
+  assert(noteId, 'Expected note ID');
+
+  // 2. Read
+  const getRes = await request('/research-notes', {
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(getRes.status === 200, `Expected 200 OK, got ${getRes.status}`);
+  const foundNote = getRes.data.data.find(n => n.id === noteId);
+  assert(foundNote && foundNote.title === 'DMA FIFO Buffering Test Notes', 'Expected created note in logbook');
+
+  // 3. Update
+  const updateRes = await request(`/research-notes/${noteId}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: {
+      title: 'DMA FIFO Buffering Test Notes (Verified)',
+      tags: ['DMA', 'SPI', 'Buffering', 'Benchmarked'],
+    },
+  });
+  assert(updateRes.status === 200, `Expected 200 OK, got ${updateRes.status}`);
+  assert(updateRes.data.data.title === 'DMA FIFO Buffering Test Notes (Verified)', 'Expected updated title');
+
+  // 4. Delete
+  const delRes = await request(`/research-notes/${noteId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${userToken}` },
+  });
+  assert(delRes.status === 200, `Expected 200 OK on note delete, got ${delRes.status}`);
+});
+
+test('Admin operations manage metrics, list users and prevent self-demotion', async () => {
+  // 1. Metrics
+  const metricsRes = await request('/admin/metrics', {
+    headers: { Authorization: `Bearer ${adminToken}` },
+  });
+  assert(metricsRes.status === 200, `Expected 200 OK, got ${metricsRes.status}`);
+  assert(typeof metricsRes.data.data.totalUsers === 'number', 'Expected totalUsers metric');
+  assert(typeof metricsRes.data.data.totalControllers === 'number', 'Expected totalControllers metric');
+
+  // 2. Users listing
+  const usersRes = await request('/admin/users', {
+    headers: { Authorization: `Bearer ${adminToken}` },
+  });
+  assert(usersRes.status === 200, `Expected 200 OK, got ${usersRes.status}`);
+  assert(Array.isArray(usersRes.data.data), 'Expected users list');
+
+  // Find admin user in list
+  const currentAdmin = usersRes.data.data.find(u => u.email === 'admin@microverse.lab');
+  assert(currentAdmin, 'Expected admin user in list');
+
+  // 3. Self-demotion prevention
+  const demoteRes = await request(`/admin/users/${currentAdmin.id}/role`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${adminToken}` },
+    body: { role: 'USER' },
+  });
+  assert(demoteRes.status === 400, `Expected 400 Bad Request on self-demotion, got ${demoteRes.status}`);
+});
+
+// ==========================================
 // Runner
 // ==========================================
 async function runAll() {

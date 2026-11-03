@@ -21,12 +21,30 @@ async function getUserBookmarks(userId) {
 }
 
 async function toggleBookmark(userId, itemType, itemId) {
+  let resolvedItemId = itemId;
+
+  // If itemType is CONTROLLER, resolve slug or ensure valid controller ID
+  if (itemType === "CONTROLLER") {
+    const ctrl = await prisma.controller.findFirst({
+      where: {
+        OR: [{ id: itemId }, { slug: itemId }],
+      },
+      select: { id: true },
+    });
+    if (!ctrl) {
+      const error = new Error("Target controller for bookmark not found.");
+      error.statusCode = 404;
+      throw error;
+    }
+    resolvedItemId = ctrl.id;
+  }
+
   const existing = await prisma.bookmark.findUnique({
     where: {
       userId_itemType_itemId: {
         userId,
         itemType,
-        itemId,
+        itemId: resolvedItemId,
       },
     },
   });
@@ -41,7 +59,7 @@ async function toggleBookmark(userId, itemType, itemId) {
       data: {
         userId,
         itemType,
-        itemId,
+        itemId: resolvedItemId,
       },
     });
     return { bookmarked: true, bookmark: created, message: "Bookmark saved" };

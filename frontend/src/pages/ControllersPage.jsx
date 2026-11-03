@@ -13,13 +13,16 @@ import {
   X,
   ArrowRight,
   ShieldCheck,
-  Bot
+  Bot,
+  Bookmark
 } from 'lucide-react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Card } from '../components/common/Card';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
+import { useAuth } from '../context/AuthContext';
 import { controllerService } from '../services/controllerService';
+import { bookmarkService } from '../services/bookmarkService';
 import { CONTROLLER_FAMILIES } from '../data/navigation';
 import { TaxonomyClarifier } from '../components/archive/TaxonomyClarifier';
 import { ControllerDetailModal } from '../components/archive/ControllerDetailModal';
@@ -27,11 +30,13 @@ import { ControllerDetailModal } from '../components/archive/ControllerDetailMod
 export function ControllersPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user, isAuthenticated, openAuth } = useAuth();
 
   // State
   const [controllers, setControllers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
 
   // Filters
   const [selectedFamily, setSelectedFamily] = useState(searchParams.get('family') || 'ALL');
@@ -87,6 +92,51 @@ export function ControllersPage() {
     sortOption,
     searchParams,
   ]);
+
+  // Fetch bookmarks if user is authenticated
+  useEffect(() => {
+    if (user) {
+      bookmarkService
+        .getBookmarks()
+        .then((res) => {
+          const bookmarks = res.data || res || [];
+          const ids = new Set(
+            bookmarks
+              .filter((b) => b.itemType === 'CONTROLLER')
+              .map((b) => b.itemId)
+          );
+          setBookmarkedIds(ids);
+        })
+        .catch((err) => {
+          console.warn('Could not load user bookmarks:', err);
+        });
+    } else {
+      setBookmarkedIds(new Set());
+    }
+  }, [user]);
+
+  const handleToggleBookmark = async (ctrlId, e) => {
+    e?.stopPropagation?.();
+    if (!isAuthenticated) {
+      openAuth('login');
+      return;
+    }
+    try {
+      const res = await bookmarkService.toggleBookmark('CONTROLLER', ctrlId);
+      const isNowBookmarked = res.data?.bookmarked ?? res.bookmarked;
+      setBookmarkedIds((prev) => {
+        const next = new Set(prev);
+        if (isNowBookmarked) {
+          next.add(ctrlId);
+        } else {
+          next.delete(ctrlId);
+        }
+        return next;
+      });
+    } catch (err) {
+      console.error('Failed to toggle bookmark:', err);
+    }
+  };
 
   // Comparison toggle
   const toggleCompare = (slugOrId) => {
@@ -255,7 +305,7 @@ export function ControllersPage() {
                   }`}
               >
                 <div className="space-y-3">
-                  {/* Top Bar: Manufacturer + Bit Badge */}
+                  {/* Top Bar: Manufacturer + Bit Badge + Bookmark */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="text-[10px] font-mono text-[#8FA6BC] uppercase tracking-wider">
@@ -269,9 +319,22 @@ export function ControllersPage() {
                       </h3>
                       <div className="text-xs font-mono text-[#55C7FF]">{ctrl.commonName}</div>
                     </div>
-                    <Badge variant={ctrl.bitWidth === 32 ? 'cyan' : ctrl.bitWidth === 16 ? 'emerald' : 'amber'}>
-                      {ctrl.bitWidth}-BIT
-                    </Badge>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={(e) => handleToggleBookmark(ctrl.id, e)}
+                        title={bookmarkedIds.has(ctrl.id) ? "Remove Bookmark" : "Bookmark Controller"}
+                        className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                          bookmarkedIds.has(ctrl.id)
+                            ? "bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/40 shadow-[0_0_8px_rgba(245,158,11,0.2)]"
+                            : "text-[#8FA6BC] hover:text-[#55C7FF] border-transparent hover:border-[#192B40]"
+                        }`}
+                      >
+                        <Bookmark className={`w-3.5 h-3.5 ${bookmarkedIds.has(ctrl.id) ? "fill-current" : ""}`} />
+                      </button>
+                      <Badge variant={ctrl.bitWidth === 32 ? 'cyan' : ctrl.bitWidth === 16 ? 'emerald' : 'amber'}>
+                        {ctrl.bitWidth}-BIT
+                      </Badge>
+                    </div>
                   </div>
 
                   {/* Architecture & Core Banner */}
@@ -407,6 +470,8 @@ export function ControllersPage() {
       {activeModalController && (
         <ControllerDetailModal
           controller={activeModalController}
+          isBookmarked={bookmarkedIds.has(activeModalController.id)}
+          onToggleBookmark={() => handleToggleBookmark(activeModalController.id)}
           onClose={() => setActiveModalController(null)}
           onAddToCompare={(id) => {
             if (!selectedForCompare.includes(id)) {

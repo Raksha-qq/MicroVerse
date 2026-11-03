@@ -14,14 +14,21 @@ import {
   HardDrive,
   Sliders,
   Layers,
-  FileText
+  FileText,
+  Bookmark
 } from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { PinoutVisualizer } from './PinoutVisualizer';
 import { useNavigate } from 'react-router-dom';
 
-export function ControllerDetailModal({ controller, onClose, onAddToCompare }) {
+export function ControllerDetailModal({
+  controller,
+  onClose,
+  onAddToCompare,
+  isBookmarked = false,
+  onToggleBookmark,
+}) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('specs');
 
@@ -79,12 +86,27 @@ export function ControllerDetailModal({ controller, onClose, onAddToCompare }) {
             <p className="text-xs font-mono text-[#8FA6BC]">{controller.commonName}</p>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg bg-[#192B40]/50 hover:bg-[#192B40] text-[#8FA6BC] hover:text-[#EAF5FF] transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {onToggleBookmark && (
+              <button
+                onClick={onToggleBookmark}
+                title={isBookmarked ? "Remove Bookmark" : "Save to Bookmarks"}
+                className={`p-2 rounded-lg border transition-all cursor-pointer ${
+                  isBookmarked
+                    ? "bg-[#F59E0B]/20 text-[#F59E0B] border-[#F59E0B]/50 shadow-[0_0_12px_rgba(245,158,11,0.25)]"
+                    : "bg-[#192B40]/50 hover:bg-[#192B40] text-[#8FA6BC] hover:text-[#EAF5FF] border-[#192B40]"
+                }`}
+              >
+                <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg bg-[#192B40]/50 hover:bg-[#192B40] text-[#8FA6BC] hover:text-[#EAF5FF] transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Tab Navigation */}

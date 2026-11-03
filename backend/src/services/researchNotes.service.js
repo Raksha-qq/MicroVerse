@@ -80,13 +80,17 @@ async function getResearchNoteById(id, userId = null) {
 }
 
 async function createResearchNote(userId, data) {
+  const formattedTags = Array.isArray(data.tags)
+    ? data.tags.join(", ")
+    : (data.tags || null);
+
   return await prisma.researchNote.create({
     data: {
       userId,
       title: data.title,
       content: data.content,
       category: data.category || "GENERAL",
-      tags: data.tags || null,
+      tags: formattedTags,
       controllerId: data.controllerId || null,
       chapterId: data.chapterId || null,
       lessonId: data.lessonId || null,
@@ -110,9 +114,14 @@ async function updateResearchNote(userId, noteId, data) {
     throw error;
   }
 
+  const updateData = { ...data };
+  if (Array.isArray(updateData.tags)) {
+    updateData.tags = updateData.tags.join(", ");
+  }
+
   return await prisma.researchNote.update({
     where: { id: noteId },
-    data,
+    data: updateData,
   });
 }
 
