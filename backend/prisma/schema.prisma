@@ -39,6 +39,7 @@ model Controller {
   family              String         // 8051 | AVR | PIC | ARM Cortex-M | STM32 | ESP32 | RP2040
   architecture        String         // e.g. ARMv7E-M, AVR 8-bit RISC, Xtensa LX6, etc.
   core                String         // Cortex-M4, AVR, Xtensa LX6, Cortex-M0+, etc.
+  coreCount           Int            @default(1)
   manufacturer        String         // STMicroelectronics, Microchip, Espressif, Raspberry Pi, etc.
   bitWidth            Int            // 8, 16, 32
   maxClockSpeedMHz    Float
@@ -53,6 +54,7 @@ model Controller {
   adcResolutionBits   Int
   dacChannels         Int            @default(0)
   timers              Int
+  pwmChannels         Int            @default(0)
   uartCount           Int
   spiCount            Int
   i2cCount            Int
@@ -67,6 +69,12 @@ model Controller {
   description         String
   architecturalNotes  String
   applications        String?        // Comma-separated or descriptive applications: Robotics, IoT, Motor Control, TinyML
+  developmentTools    String?        // Supported IDEs, compilers, debuggers
+  advantages          String?        // Key architectural advantages
+  limitations         String?        // Key architectural limitations
+  roboticsApplications String?       // Specific robotics use cases
+  technicalSources    String?        // Official reference datasheets & manuals
+  verifiedAt          DateTime?      @default(now())
   datasheetUrl        String
   pinoutDiagram       String?
   specifications      Json?          // Flexible register maps, clock trees & hardware registers

@@ -65,6 +65,7 @@ const testUserEmail = `test_engineer_${Date.now()}@microverse.lab`;
 const testUserPassword = 'QuantumSecurityPass2026!';
 let userToken = null;
 let userCookie = null;
+let adminToken = null;
 
 test('User registration succeeds with valid credentials', async () => {
   const res = await request('/auth/register', {
@@ -197,7 +198,7 @@ test('Admin endpoint succeeds with Admin credentials', async () => {
   });
 
   assert(loginRes.status === 200, `Admin login failed: ${loginRes.status}`);
-  const adminToken = loginRes.data.data.token;
+  adminToken = loginRes.data.data.token;
 
   const res = await request('/admin/metrics', {
     headers: { Authorization: `Bearer ${adminToken}` },
@@ -379,11 +380,101 @@ test('Authenticated progress marks chapter completed', async () => {
 });
 
 // ==========================================
+// Milestone 5: Silicon Archive & Comparison Lab Tests
+// ==========================================
+test('Controller comparison endpoint retrieves requested models by IDs/slugs', async () => {
+  const res = await request('/controllers/compare?ids=stm32f401ret6,esp32-s3,rp2040');
+  assert(res.status === 200, `Expected status 200, got ${res.status}`);
+  assert(Array.isArray(res.data.data), 'Expected array of compared controllers');
+  assert(res.data.data.length === 3, `Expected 3 controllers in comparison, got ${res.data.data.length}`);
+  const names = res.data.data.map(c => c.name);
+  assert(names.includes('STM32F401RET6'), 'Expected STM32F401RET6 in comparison');
+  assert(names.includes('ESP32-S3'), 'Expected ESP32-S3 in comparison');
+  assert(names.includes('RP2040'), 'Expected RP2040 in comparison');
+});
+
+test('Controller connectivity filtering isolates wireless and USB targets', async () => {
+  const resWireless = await request('/controllers?connectivity=wireless');
+  assert(resWireless.status === 200, `Expected status 200, got ${resWireless.status}`);
+  assert(resWireless.data.data.length > 0, 'Expected wireless controllers');
+  assert(resWireless.data.data.every(c => c.wireless && !c.wireless.startsWith('None')), 'Expected all wireless');
+
+  const resUsb = await request('/controllers?connectivity=usb');
+  assert(resUsb.status === 200, `Expected status 200, got ${resUsb.status}`);
+  assert(resUsb.data.data.every(c => c.usbSupport === true), 'Expected all USB support true');
+});
+
+test('Controller retrieval includes model-specific advantages and pinoutConfig', async () => {
+  const res = await request('/controllers/atmega328p');
+  assert(res.status === 200, `Expected status 200, got ${res.status}`);
+  const ctrl = res.data.data;
+  assert(ctrl.name === 'ATmega328P', 'Expected ATmega328P');
+  assert(ctrl.advantages && ctrl.advantages.length > 10, 'Expected detailed advantages');
+  assert(ctrl.technicalSources && ctrl.technicalSources.length > 5, 'Expected technical sources');
+  assert(Array.isArray(ctrl.pinoutConfig), 'Expected pinoutConfig array');
+});
+
+test('Admin controller creation and deletion lifecycle', async () => {
+  const testChip = {
+    name: "MSP430G2553-TEST",
+    commonName: "TI MSP430G2553 (Ultra-Low Power 16-bit)",
+    slug: "msp430g2553-test",
+    family: "ARM Cortex-M",
+    architecture: "MSP430 16-bit RISC",
+    core: "MSP430 CPU",
+    coreCount: 1,
+    manufacturer: "Texas Instruments",
+    bitWidth: 16,
+    maxClockSpeedMHz: 16.0,
+    flashKb: 16.0,
+    sramKb: 0.512,
+    operatingVoltageMin: 1.8,
+    operatingVoltageMax: 3.6,
+    logicLevel: "3.3V",
+    gpioCount: 24,
+    adcChannels: 8,
+    adcResolutionBits: 10,
+    timers: 2,
+    uartCount: 1,
+    spiCount: 1,
+    i2cCount: 1,
+    packageTypes: "PDIP-20, TSSOP-20",
+    description: "Ultra-low power 16-bit microcontroller for battery sensors.",
+    architecturalNotes: "Von Neumann architecture with 16-bit orthogonal register set.",
+    datasheetUrl: "https://www.ti.com/lit/ds/symlink/msp430g2553.pdf"
+  };
+
+  // Regular user creation should fail
+  const failRes = await request('/controllers', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: testChip,
+  });
+  assert(failRes.status === 403, `Expected 403 Forbidden for regular user, got ${failRes.status}`);
+
+  // Admin creation should succeed
+  const createRes = await request('/controllers', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${adminToken}` },
+    body: testChip,
+  });
+  assert(createRes.status === 201, `Expected 201 Created for admin, got ${createRes.status}`);
+  const createdId = createRes.data.data.id;
+
+  // Cleanup: Delete as admin
+  const deleteRes = await request(`/controllers/${createdId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${adminToken}` },
+  });
+  assert(deleteRes.status === 200, `Expected 200 OK on deletion, got ${deleteRes.status}`);
+});
+
+// ==========================================
 // Runner
 // ==========================================
 async function runAll() {
   console.log('\n=======================================================');
-  console.log('  MICROVERSE BACKEND TEST SUITE (MILESTONES 3 & 4)');
+  console.log('  MICROVERSE BACKEND TEST SUITE (MILESTONES 3, 4 & 5)');
   console.log('=======================================================\n');
 
   let passed = 0;

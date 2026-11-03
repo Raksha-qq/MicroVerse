@@ -7,6 +7,7 @@ async function listControllers(filters = {}) {
     architecture,
     manufacturer,
     application,
+    connectivity,
     bitWidth,
     wirelessOnly,
     page = 1,
@@ -25,23 +26,24 @@ async function listControllers(filters = {}) {
       { architecture: { contains: search, mode: "insensitive" } },
       { core: { contains: search, mode: "insensitive" } },
       { applications: { contains: search, mode: "insensitive" } },
+      { developmentTools: { contains: search, mode: "insensitive" } },
     ];
   }
 
   // Exact / partial filters
-  if (family) {
+  if (family && family !== "ALL") {
     where.family = { equals: family, mode: "insensitive" };
   }
 
-  if (architecture) {
+  if (architecture && architecture !== "ALL") {
     where.architecture = { contains: architecture, mode: "insensitive" };
   }
 
-  if (manufacturer) {
+  if (manufacturer && manufacturer !== "ALL") {
     where.manufacturer = { contains: manufacturer, mode: "insensitive" };
   }
 
-  if (application) {
+  if (application && application !== "ALL") {
     where.applications = { contains: application, mode: "insensitive" };
   }
 
@@ -49,8 +51,16 @@ async function listControllers(filters = {}) {
     where.bitWidth = parseInt(bitWidth, 10);
   }
 
-  if (wirelessOnly === "true") {
+  if (connectivity === "wireless" || wirelessOnly === "true") {
     where.wireless = { not: null };
+    where.NOT = [
+      ...(Array.isArray(where.NOT) ? where.NOT : where.NOT ? [where.NOT] : []),
+      { wireless: { startsWith: "None", mode: "insensitive" } },
+    ];
+  } else if (connectivity === "usb") {
+    where.usbSupport = true;
+  } else if (connectivity === "can") {
+    where.canCount = { gt: 0 };
   }
 
   // Sorting
@@ -58,7 +68,11 @@ async function listControllers(filters = {}) {
   if (sort === "clock_desc") orderBy = [{ maxClockSpeedMHz: "desc" }];
   if (sort === "clock_asc") orderBy = [{ maxClockSpeedMHz: "asc" }];
   if (sort === "flash_desc") orderBy = [{ flashKb: "desc" }];
+  if (sort === "flash_asc") orderBy = [{ flashKb: "asc" }];
+  if (sort === "sram_desc") orderBy = [{ sramKb: "desc" }];
+  if (sort === "sram_asc") orderBy = [{ sramKb: "asc" }];
   if (sort === "name_asc") orderBy = [{ name: "asc" }];
+  if (sort === "name_desc") orderBy = [{ name: "desc" }];
 
   const skip = (page - 1) * limit;
 
