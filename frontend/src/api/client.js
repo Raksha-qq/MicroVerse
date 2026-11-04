@@ -1,4 +1,4 @@
-const BASE_URL = '/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://microverse-api-34pc.onrender.com/api';
 
 export async function apiClient(endpoint, { body, ...customConfig } = {}) {
   const token = localStorage.getItem('microverse_token');

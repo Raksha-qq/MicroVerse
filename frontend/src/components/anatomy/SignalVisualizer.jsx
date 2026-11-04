@@ -196,7 +196,7 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                   <span>CMOS 3.3V Logic Transition & Thresholds</span>
                 </h4>
                 <p className="text-xs text-[#655F55] mt-0.5 font-sans">
-                  Observe standard 3.3V CMOS digital voltage thresholds ($V_{IH}, V_{IL}$) and finite rise/fall slew times.
+                  Observe standard 3.3V CMOS digital voltage thresholds (V<sub>IH</sub>, V<sub>IL</sub>) and finite rise/fall slew times.
                 </p>
               </div>
 
