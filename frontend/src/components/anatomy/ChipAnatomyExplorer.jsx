@@ -320,50 +320,36 @@ export function ChipAnatomyExplorer({ className = '' }) {
   return (
     <div className={`space-y-8 ${className}`}>
       {/* Distinction Header Callout */}
-      <div className="p-4 rounded-xl bg-[#111E30]/70 border border-[#55C7FF]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div className="p-4 rounded-xl bg-[#FAF5EB] border border-[#C9BDAA] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs bg-drafting-grid-subtle">
         <div className="flex items-start sm:items-center gap-3">
-          <div className="w-7 h-7 rounded-lg bg-[#0B1220] border border-[#55C7FF]/40 flex items-center justify-center text-[#55C7FF] shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] flex items-center justify-center text-[#D87535] shrink-0">
             <Info className="w-4 h-4" />
           </div>
           <div>
-            <span className="font-mono font-bold text-[#55C7FF] uppercase tracking-wider">
+            <span className="font-mono font-bold text-[#D87535] uppercase tracking-wider">
               Architectural Clarity Note:
             </span>{' '}
-            <span className="text-[#8FA6BC]">
+            <span className="text-[#655F55] font-sans">
               This is a <strong>Conceptual Functional Architecture Model</strong> illustrating logical signal and bus interconnects. Real physical silicon photolithography distributes transistors across multi-layer metallization (M1–M8) to optimize parasitics, heat dissipation, and clock tree skew.
             </span>
           </div>
         </div>
 
         {/* View Mode Switcher */}
-        <div className="flex items-center gap-1 bg-[#0B1220] p-1 rounded-lg border border-[#192B40] shrink-0">
-          <button
-            onClick={() => setViewMode('normal')}
-            className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all cursor-pointer ${viewMode === 'normal'
-                ? 'bg-[#55C7FF] text-[#0B1220] shadow-[0_0_10px_rgba(85,199,255,0.4)]'
-                : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
+        <div className="flex items-center gap-1 bg-[#EDE1CE] p-1 rounded-lg border border-[#C9BDAA] shrink-0">
+          {['normal', 'focused', 'exploded'].map((mode) => (
+            <button
+              key={mode}
+              onClick={() => setViewMode(mode)}
+              className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all cursor-pointer uppercase ${
+                viewMode === mode
+                  ? 'bg-[#22201D] text-[#FAF5EB] shadow-xs'
+                  : 'text-[#655F55] hover:text-[#22201D]'
               }`}
-          >
-            NORMAL
-          </button>
-          <button
-            onClick={() => setViewMode('focused')}
-            className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all cursor-pointer ${viewMode === 'focused'
-                ? 'bg-[#55C7FF] text-[#0B1220] shadow-[0_0_10px_rgba(85,199,255,0.4)]'
-                : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
-              }`}
-          >
-            FOCUSED
-          </button>
-          <button
-            onClick={() => setViewMode('exploded')}
-            className={`px-3 py-1 rounded text-xs font-mono font-bold transition-all cursor-pointer ${viewMode === 'exploded'
-                ? 'bg-[#55C7FF] text-[#0B1220] shadow-[0_0_10px_rgba(85,199,255,0.4)]'
-                : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
-              }`}
-          >
-            EXPLODED
-          </button>
+            >
+              {mode}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -373,13 +359,13 @@ export function ChipAnatomyExplorer({ className = '' }) {
         {/* LEFT / CENTER: THE INTERACTIVE ARCHITECTURE CANVAS (7 cols)    */}
         {/* ============================================================== */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="rounded-2xl bg-[#080D17] border border-[#192B40] p-5 sm:p-6 shadow-2xl relative overflow-hidden">
-            <div className="flex items-center justify-between text-xs font-mono text-[#8FA6BC] mb-4 pb-2 border-b border-[#192B40]/80">
-              <span className="flex items-center gap-1.5 text-[#55C7FF]">
-                <Cpu className="w-3.5 h-3.5" />
+          <div className="rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] p-5 sm:p-6 shadow-xs relative overflow-hidden bg-drafting-grid-subtle">
+            <div className="flex items-center justify-between text-xs font-mono text-[#655F55] mb-4 pb-2 border-b border-[#C9BDAA]">
+              <span className="flex items-center gap-1.5 text-[#22201D] font-bold">
+                <Cpu className="w-3.5 h-3.5 text-[#D87535]" />
                 MONOLITHIC SILICON DIE: 32-BIT RISC TOPOLOGY
               </span>
-              <span className="uppercase text-[10px] tracking-wider text-[#8FA6BC]">
+              <span className="uppercase text-[10px] tracking-wider text-[#8C8275]">
                 CLICK ANY BLOCK TO INSPECT
               </span>
             </div>
@@ -388,8 +374,8 @@ export function ChipAnatomyExplorer({ className = '' }) {
             {viewMode === 'normal' && (
               <div className="space-y-4">
                 {/* Processing Subsystem */}
-                <div className="p-3.5 rounded-xl bg-[#111E30]/70 border border-[#55C7FF]/30 space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#55C7FF] font-bold">
+                <div className="p-3.5 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA] space-y-2">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#D87535] font-bold">
                     PROCESSING CORE & REGISTER CLUSTER
                   </div>
                   <div className="grid grid-cols-3 gap-2">
@@ -400,15 +386,16 @@ export function ChipAnatomyExplorer({ className = '' }) {
                         <button
                           key={id}
                           onClick={() => setSelectedId(id)}
-                          className={`p-3 rounded-lg text-left transition-all border cursor-pointer ${isSelected
-                              ? 'bg-[#55C7FF]/20 border-[#55C7FF] shadow-[0_0_15px_rgba(85,199,255,0.4)] text-[#EAF5FF]'
-                              : 'bg-[#0B1220] border-[#192B40] text-[#8FA6BC] hover:border-[#55C7FF]/40 hover:text-[#EAF5FF]'
-                            }`}
+                          className={`p-3 rounded-lg text-left transition-all border cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#FAF5EB] border-[#D87535] shadow-xs text-[#22201D] ring-1 ring-[#D87535]'
+                              : 'bg-[#FAF5EB]/60 border-[#C9BDAA] text-[#655F55] hover:border-[#D87535]/60 hover:bg-[#FAF5EB] hover:text-[#22201D]'
+                          }`}
                         >
-                          <div className="text-[9px] font-mono uppercase text-[#55C7FF]">
+                          <div className="text-[9px] font-mono uppercase text-[#D87535] font-semibold">
                             {item.badge}
                           </div>
-                          <div className="font-heading font-bold text-xs mt-0.5 truncate">
+                          <div className="font-serif font-bold text-xs mt-0.5 truncate text-[#22201D]">
                             {item.name.split(' (')[0]}
                           </div>
                         </button>
@@ -420,21 +407,22 @@ export function ChipAnatomyExplorer({ className = '' }) {
                 {/* Central Bus Matrix Highway */}
                 <button
                   onClick={() => setSelectedId('buses')}
-                  className={`w-full py-2.5 px-4 rounded-xl border text-center transition-all cursor-pointer font-mono text-xs flex items-center justify-between ${selectedId === 'buses'
-                      ? 'bg-[#55C7FF]/20 border-[#55C7FF] text-[#55C7FF] shadow-[0_0_18px_rgba(85,199,255,0.4)] font-bold'
-                      : 'bg-[#111E30]/90 border-[#192B40] text-[#8FA6BC] hover:border-[#55C7FF]/50 hover:text-[#EAF5FF]'
-                    }`}
+                  className={`w-full py-2.5 px-4 rounded-xl border text-center transition-all cursor-pointer font-mono text-xs flex items-center justify-between ${
+                    selectedId === 'buses'
+                      ? 'bg-[#22201D] text-[#FAF5EB] border-[#22201D] shadow-xs font-bold'
+                      : 'bg-[#EDE1CE] border-[#C9BDAA] text-[#655F55] hover:border-[#D87535] hover:text-[#22201D]'
+                  }`}
                 >
                   <span className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#55C7FF] animate-ping" />
-                    MULTI-LAYER AHB / APB CROSSBAR BUS MATRIX
+                    <span className="w-2 h-2 rounded-full bg-[#D87535] animate-ping" />
+                    <span className="font-bold">MULTI-LAYER AHB / APB CROSSBAR BUS MATRIX</span>
                   </span>
-                  <span className="text-[10px] text-[#55C7FF] uppercase">32-Bit Concurrent Highway</span>
+                  <span className="text-[10px] uppercase font-semibold text-[#D87535]">32-Bit Concurrent Highway</span>
                 </button>
 
                 {/* Memory Subsystem */}
-                <div className="p-3.5 rounded-xl bg-[#111E30]/70 border border-[#34D399]/30 space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#34D399] font-bold">
+                <div className="p-3.5 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA] space-y-2">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#87945B] font-bold">
                     ON-DIE EMBEDDED MEMORY SUBSYSTEM
                   </div>
                   <div className="grid grid-cols-2 gap-2">
@@ -445,15 +433,16 @@ export function ChipAnatomyExplorer({ className = '' }) {
                         <button
                           key={id}
                           onClick={() => setSelectedId(id)}
-                          className={`p-3 rounded-lg text-left transition-all border cursor-pointer ${isSelected
-                              ? 'bg-[#34D399]/20 border-[#34D399] shadow-[0_0_15px_rgba(52,211,153,0.4)] text-[#EAF5FF]'
-                              : 'bg-[#0B1220] border-[#192B40] text-[#8FA6BC] hover:border-[#34D399]/40 hover:text-[#EAF5FF]'
-                            }`}
+                          className={`p-3 rounded-lg text-left transition-all border cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#FAF5EB] border-[#87945B] shadow-xs text-[#22201D] ring-1 ring-[#87945B]'
+                              : 'bg-[#FAF5EB]/60 border-[#C9BDAA] text-[#655F55] hover:border-[#87945B]/60 hover:bg-[#FAF5EB] hover:text-[#22201D]'
+                          }`}
                         >
-                          <div className="text-[9px] font-mono uppercase text-[#34D399]">
+                          <div className="text-[9px] font-mono uppercase text-[#87945B] font-semibold">
                             {item.badge}
                           </div>
-                          <div className="font-heading font-bold text-xs mt-0.5 truncate">
+                          <div className="font-serif font-bold text-xs mt-0.5 truncate text-[#22201D]">
                             {item.name}
                           </div>
                         </button>
@@ -463,8 +452,8 @@ export function ChipAnatomyExplorer({ className = '' }) {
                 </div>
 
                 {/* Peripheral Subsystem */}
-                <div className="p-3.5 rounded-xl bg-[#111E30]/70 border border-[#FBBF24]/30 space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#FBBF24] font-bold">
+                <div className="p-3.5 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA] space-y-2">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#B95D32] font-bold">
                     PERIPHERAL MATRIX & EXTERNAL I/O
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -475,15 +464,16 @@ export function ChipAnatomyExplorer({ className = '' }) {
                         <button
                           key={id}
                           onClick={() => setSelectedId(id)}
-                          className={`p-3 rounded-lg text-left transition-all border cursor-pointer ${isSelected
-                              ? 'bg-[#FBBF24]/20 border-[#FBBF24] shadow-[0_0_15px_rgba(251,191,36,0.4)] text-[#EAF5FF]'
-                              : 'bg-[#0B1220] border-[#192B40] text-[#8FA6BC] hover:border-[#FBBF24]/40 hover:text-[#EAF5FF]'
-                            }`}
+                          className={`p-3 rounded-lg text-left transition-all border cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#FAF5EB] border-[#B95D32] shadow-xs text-[#22201D] ring-1 ring-[#B95D32]'
+                              : 'bg-[#FAF5EB]/60 border-[#C9BDAA] text-[#655F55] hover:border-[#B95D32]/60 hover:bg-[#FAF5EB] hover:text-[#22201D]'
+                          }`}
                         >
-                          <div className="text-[9px] font-mono uppercase text-[#FBBF24]">
+                          <div className="text-[9px] font-mono uppercase text-[#B95D32] font-semibold">
                             {item.badge}
                           </div>
-                          <div className="font-heading font-bold text-xs mt-0.5 truncate">
+                          <div className="font-serif font-bold text-xs mt-0.5 truncate text-[#22201D]">
                             {item.name.split(' (')[0]}
                           </div>
                         </button>
@@ -497,45 +487,45 @@ export function ChipAnatomyExplorer({ className = '' }) {
             {/* VIEW 2: COMPONENT-FOCUSED VIEW */}
             {viewMode === 'focused' && (
               <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-[#111E30] border border-[#55C7FF] shadow-[0_0_20px_rgba(85,199,255,0.2)]">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#192B40]">
+                <div className="p-4 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA]">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#C9BDAA]">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded bg-[#0B1220] border border-[#55C7FF]/40 flex items-center justify-center text-[#55C7FF]">
+                      <div className="w-8 h-8 rounded bg-[#FAF5EB] border border-[#C9BDAA] flex items-center justify-center text-[#D87535]">
                         <selected.icon className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-[10px] font-mono uppercase text-[#55C7FF]">
+                        <div className="text-[10px] font-mono uppercase text-[#D87535] font-bold">
                           FOCUSED SUB-CIRCUIT SCHEMATIC
                         </div>
-                        <h4 className="font-heading font-bold text-sm text-[#EAF5FF]">
+                        <h4 className="font-serif font-bold text-sm text-[#22201D]">
                           {selected.name}
                         </h4>
                       </div>
                     </div>
-                    <span className="text-xs font-mono text-[#8FA6BC]">
-                      CATEGORY: <strong className="text-[#55C7FF]">{selected.category}</strong>
+                    <span className="text-xs font-mono text-[#655F55]">
+                      CATEGORY: <strong className="text-[#22201D]">{selected.category}</strong>
                     </span>
                   </div>
 
                   {/* Internal Sub-Circuits Grid */}
                   <div className="pt-4 space-y-3">
-                    <div className="text-[10px] font-mono uppercase tracking-wider text-[#8FA6BC]">
+                    <div className="text-[10px] font-mono uppercase tracking-wider text-[#655F55] font-semibold">
                       Internal Silicon Sub-Circuits & Execution Blocks:
                     </div>
                     <div className="grid grid-cols-1 gap-2.5">
                       {selected.subCircuits.map((sub, idx) => (
                         <div
                           key={idx}
-                          className="p-3 rounded-lg bg-[#0B1220] border border-[#192B40] flex items-start gap-3"
+                          className="p-3 rounded-lg bg-[#FAF5EB] border border-[#C9BDAA] flex items-start gap-3"
                         >
-                          <span className="w-5 h-5 rounded-full bg-[#55C7FF]/10 border border-[#55C7FF]/40 flex items-center justify-center font-mono text-[10px] text-[#55C7FF] shrink-0 mt-0.5">
+                          <span className="w-5 h-5 rounded-full bg-[#EDE1CE] border border-[#C9BDAA] flex items-center justify-center font-mono text-[10px] text-[#D87535] font-bold shrink-0 mt-0.5">
                             {idx + 1}
                           </span>
                           <div>
-                            <div className="font-heading font-bold text-xs text-[#EAF5FF]">
+                            <div className="font-serif font-bold text-xs text-[#22201D]">
                               {sub.name}
                             </div>
-                            <p className="text-[11px] text-[#8FA6BC] mt-0.5">
+                            <p className="text-[11px] text-[#655F55] mt-0.5 font-sans">
                               {sub.detail}
                             </p>
                           </div>
@@ -551,10 +541,11 @@ export function ChipAnatomyExplorer({ className = '' }) {
                     <button
                       key={c.id}
                       onClick={() => setSelectedId(c.id)}
-                      className={`px-2.5 py-1 rounded text-xs font-mono cursor-pointer transition-colors ${selectedId === c.id
-                          ? 'bg-[#55C7FF] text-[#0B1220] font-bold'
-                          : 'bg-[#111E30] text-[#8FA6BC] hover:text-[#EAF5FF]'
-                        }`}
+                      className={`px-2.5 py-1 rounded text-xs font-mono cursor-pointer transition-colors ${
+                        selectedId === c.id
+                          ? 'bg-[#22201D] text-[#FAF5EB] font-bold'
+                          : 'bg-[#EDE1CE] text-[#655F55] hover:text-[#22201D] border border-[#C9BDAA]'
+                      }`}
                     >
                       {c.name.split(' (')[0]}
                     </button>
@@ -566,7 +557,7 @@ export function ChipAnatomyExplorer({ className = '' }) {
             {/* VIEW 3: EXPLODED CONCEPTUAL HIERARCHY */}
             {viewMode === 'exploded' && (
               <div className="space-y-3 font-mono text-xs">
-                <div className="text-[10px] uppercase tracking-wider text-[#8FA6BC] mb-2">
+                <div className="text-[10px] uppercase tracking-wider text-[#655F55] mb-2 font-bold">
                   Layered Silicon Hierarchy (Physical Pins ➜ Core CPU)
                 </div>
 
@@ -574,34 +565,34 @@ export function ChipAnatomyExplorer({ className = '' }) {
                   {
                     layer: 'LAYER 4: PROCESSING & INTERNAL STORAGE',
                     items: ['CPU Core', 'ALU & FPU', 'Registers', 'SRAM (Data)', 'NOR Flash (Code)'],
-                    color: 'border-[#55C7FF] bg-[#55C7FF]/10 text-[#55C7FF]',
+                    color: 'border-[#D87535] bg-[#D87535]/10 text-[#22201D]',
                   },
                   {
                     layer: 'LAYER 3: CROSSBAR BUS MATRIX',
                     items: ['AHB Multi-Layer Master Matrix', 'APB1 / APB2 Peripheral Bridges', 'DMA Streams'],
-                    color: 'border-emerald-400 bg-emerald-500/10 text-emerald-400',
+                    color: 'border-[#87945B] bg-[#87945B]/10 text-[#22201D]',
                   },
                   {
                     layer: 'LAYER 2: PERIPHERAL CONTROL ENGINES',
                     items: ['GPIO Registers', 'Hardware Timers (TIM1-TIM8)', 'SAR ADC & Comparator', 'USART / SPI / I2C / CAN'],
-                    color: 'border-amber-400 bg-amber-500/10 text-amber-400',
+                    color: 'border-[#B95D32] bg-[#B95D32]/10 text-[#22201D]',
                   },
                   {
                     layer: 'LAYER 1: PHYSICAL LEADFRAME & PINS',
                     items: ['LQFP64 / QFN56 Silicon Pads', 'ESD Protection Diodes', '3.3V VDD / VSS Rails', 'Quartz Crystal Resonator Pins'],
-                    color: 'border-purple-400 bg-purple-500/10 text-purple-400',
+                    color: 'border-[#71818B] bg-[#71818B]/10 text-[#22201D]',
                   },
                 ].map((st, idx) => (
                   <div
                     key={idx}
-                    className={`p-3.5 rounded-xl border ${st.color} space-y-1.5 transition-all hover:scale-[1.01]`}
+                    className={`p-3.5 rounded-xl border ${st.color} space-y-1.5 transition-all`}
                   >
-                    <div className="text-[10px] font-bold tracking-widest">{st.layer}</div>
+                    <div className="text-[10px] font-bold tracking-widest text-[#22201D]">{st.layer}</div>
                     <div className="flex flex-wrap gap-1.5">
                       {st.items.map((it, i) => (
                         <span
                           key={i}
-                          className="px-2 py-0.5 rounded bg-[#0B1220]/80 border border-current text-[11px] text-[#EAF5FF]"
+                          className="px-2 py-0.5 rounded bg-[#FAF5EB] border border-[#C9BDAA] text-[11px] text-[#22201D]"
                         >
                           {it}
                         </span>
@@ -618,53 +609,53 @@ export function ChipAnatomyExplorer({ className = '' }) {
         {/* RIGHT: COMPONENT TECHNICAL INSPECTION DRAWER (5 cols)          */}
         {/* ============================================================== */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="rounded-2xl bg-[#0B1220] border border-[#192B40] p-5 sm:p-6 shadow-2xl space-y-5">
+          <div className="rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] p-5 sm:p-6 shadow-xs space-y-5 bg-drafting-grid-subtle">
             {/* Header */}
-            <div className="flex items-start justify-between gap-3 pb-4 border-b border-[#192B40]">
+            <div className="flex items-start justify-between gap-3 pb-4 border-b border-[#C9BDAA]">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#55C7FF]">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#D87535]">
                     {selected.category}
                   </span>
-                  <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-[#55C7FF]/10 text-[#55C7FF] border border-[#55C7FF]/30">
+                  <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-[#EDE1CE] text-[#22201D] border border-[#C9BDAA]">
                     {selected.badge}
                   </span>
                 </div>
-                <h3 className="font-heading font-bold text-xl text-[#EAF5FF] mt-1">
+                <h3 className="font-serif font-bold text-xl text-[#22201D] mt-1">
                   {selected.name}
                 </h3>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-[#111E30] border border-[#55C7FF]/40 flex items-center justify-center text-[#55C7FF] shrink-0 shadow-[0_0_15px_rgba(85,199,255,0.2)]">
+              <div className="w-10 h-10 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA] flex items-center justify-center text-[#D87535] shrink-0">
                 <selected.icon className="w-5 h-5" />
               </div>
             </div>
 
             {/* Purpose & Description */}
             <div className="space-y-1.5">
-              <div className="text-[10px] font-mono uppercase tracking-wider text-[#8FA6BC]">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-[#8C8275] font-semibold">
                 Formal Silicon Purpose
               </div>
-              <p className="text-xs text-[#EAF5FF] leading-relaxed">
+              <p className="text-xs text-[#22201D] leading-relaxed font-sans">
                 {selected.summary}
               </p>
             </div>
 
             {/* Component Interactions */}
             <div className="space-y-2">
-              <div className="text-[10px] font-mono uppercase tracking-wider text-[#8FA6BC]">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-[#8C8275] font-semibold">
                 How It Interacts with Other Subsystems:
               </div>
               <div className="space-y-1.5 font-mono text-xs">
                 {selected.interactions.map((inter, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-lg bg-[#080D17] border border-[#192B40] space-y-0.5"
+                    className="p-2.5 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] space-y-0.5"
                   >
-                    <div className="text-[11px] font-bold text-[#55C7FF] flex items-center gap-1">
-                      <ArrowRight className="w-3 h-3 text-[#55C7FF]" />
+                    <div className="text-[11px] font-bold text-[#D87535] flex items-center gap-1">
+                      <ArrowRight className="w-3 h-3 text-[#D87535]" />
                       {inter.target}
                     </div>
-                    <p className="text-[11px] text-[#8FA6BC] font-sans">
+                    <p className="text-[11px] text-[#655F55] font-sans">
                       {inter.desc}
                     </p>
                   </div>
@@ -674,12 +665,12 @@ export function ChipAnatomyExplorer({ className = '' }) {
 
             {/* Practical Code Example */}
             <div className="space-y-2">
-              <div className="text-[10px] font-mono uppercase tracking-wider text-[#8FA6BC] flex items-center justify-between">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-[#655F55] flex items-center justify-between font-semibold">
                 <span>Practical Bare-Metal Implementation</span>
-                <span className="text-[#55C7FF]">CORTEX-M MMIO</span>
+                <span className="text-[#D87535] font-bold">CORTEX-M MMIO</span>
               </div>
-              <div className="p-3 rounded-lg bg-[#080D17] border border-[#192B40] font-mono text-[11px] text-[#A5E3FF] overflow-x-auto leading-relaxed">
-                <div className="text-[#8FA6BC] text-[10px] mb-1 font-bold">
+              <div className="p-3 rounded-lg bg-[#242522] border border-[#3D3A36] font-mono text-[11px] text-[#E5E5DF] overflow-x-auto leading-relaxed shadow-xs">
+                <div className="text-[#8C8275] text-[10px] mb-1 font-bold">
                   // {selected.example.title}
                 </div>
                 <pre>{selected.example.code}</pre>
@@ -689,10 +680,10 @@ export function ChipAnatomyExplorer({ className = '' }) {
             {/* Link to Discover Syllabus Lesson */}
             <Link
               to={`/discover?chapter=${selected.discoverChapter}`}
-              className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-[#111E30] hover:bg-[#55C7FF] hover:text-[#0B1220] border border-[#55C7FF]/40 text-[#55C7FF] font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(85,199,255,0.15)] group"
+              className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-[#22201D] hover:bg-[#3D3A36] text-[#FAF5EB] font-mono text-xs font-bold transition-all shadow-xs group"
             >
               <span>Explore Chapter {selected.discoverChapterNum} in Discover Syllabus</span>
-              <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+              <ExternalLink className="w-3.5 h-3.5 text-[#D87535] group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
         </div>

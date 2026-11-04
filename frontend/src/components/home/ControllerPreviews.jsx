@@ -7,9 +7,6 @@ import {
   Zap,
   Radio,
   ArrowRight,
-  Shield,
-  Activity,
-  SlidersHorizontal,
 } from 'lucide-react';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
@@ -182,39 +179,40 @@ export function ControllerPreviews() {
         );
 
   return (
-    <section className="space-y-8" id="archive">
+    <section className="space-y-6" id="archive">
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#C9BDAA]/50 pb-4">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#55C7FF]">
+          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#D87535]">
             <Layers className="w-3.5 h-3.5" />
-            THE SILICON BENCHMARK
+            <span>// THE SILICON BENCHMARK</span>
           </div>
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#EAF5FF] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#22201D] tracking-tight">
             Selected Controller Families
           </h2>
-          <p className="text-sm text-[#8FA6BC] max-w-2xl">
+          <p className="text-sm text-[#655F55] max-w-2xl font-sans">
             Inspect the hardware footprints, clock topologies, and memory allocations powering the world's embedded devices.
           </p>
         </div>
 
         <Link to="/archive">
-          <Button variant="outline" size="sm" icon={ArrowRight}>
-            Explore Full Silicon Archive
+          <Button variant="secondary" size="sm" className="gap-2 font-mono">
+            <span>Explore Full Archive</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#D87535]" />
           </Button>
         </Link>
       </div>
 
       {/* Family Filter Tabs */}
-      <div className="flex flex-wrap gap-2 pb-2 overflow-x-auto">
+      <div className="flex flex-wrap gap-2 pb-1 overflow-x-auto">
         {CONTROLLER_FAMILIES.map((fam) => (
           <button
             key={fam.id}
             onClick={() => setSelectedFamily(fam.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 cursor-pointer ${
+            className={`px-3 py-1.5 rounded text-xs font-mono transition-all duration-200 cursor-pointer ${
               selectedFamily === fam.id
-                ? 'bg-[#55C7FF] text-[#0B1220] font-semibold shadow-[0_0_15px_rgba(85,199,255,0.35)]'
-                : 'bg-[#111E30] text-[#8FA6BC] hover:text-[#EAF5FF] border border-[#192B40]'
+                ? 'bg-[#D87535] text-[#FAF5EB] font-bold shadow-xs'
+                : 'bg-[#FAF5EB] text-[#655F55] hover:text-[#22201D] border border-[#C9BDAA]'
             }`}
           >
             {fam.label}
@@ -227,19 +225,19 @@ export function ControllerPreviews() {
         {filteredControllers.slice(0, 6).map((ctrl) => (
           <Card
             key={ctrl.id || ctrl.name}
-            className="flex flex-col justify-between space-y-4 group hover:border-[#55C7FF]/50 transition-all duration-300"
+            className="flex flex-col justify-between space-y-4 group hover:border-[#D87535] transition-all duration-200"
           >
             <div className="space-y-3">
               {/* Header with Manufacturer & Bit-width */}
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#8FA6BC]">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#8C8275]">
                     {ctrl.manufacturer}
                   </div>
-                  <h3 className="font-heading text-lg font-bold text-[#EAF5FF] group-hover:text-[#55C7FF] transition-colors leading-snug">
+                  <h3 className="font-serif text-xl font-bold text-[#22201D] group-hover:text-[#D87535] transition-colors leading-snug">
                     {ctrl.commonName}
                   </h3>
-                  <div className="text-xs font-mono text-[#55C7FF] font-medium">{ctrl.name}</div>
+                  <div className="text-xs font-mono text-[#D87535] font-semibold">{ctrl.name}</div>
                 </div>
                 <Badge variant={ctrl.bitWidth === 32 ? 'cyan' : 'amber'}>
                   {ctrl.bitWidth}-BIT
@@ -247,41 +245,41 @@ export function ControllerPreviews() {
               </div>
 
               {/* Description */}
-              <p className="text-xs text-[#8FA6BC] leading-relaxed line-clamp-3">
+              <p className="text-xs text-[#655F55] leading-relaxed line-clamp-3 font-sans">
                 {ctrl.description}
               </p>
 
               {/* Hardware Spec Badges Strip */}
-              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#192B40] text-[11px] font-mono">
-                <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                  <Clock className="w-3.5 h-3.5 text-[#55C7FF]" />
+              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#C9BDAA]/40 text-[11px] font-mono">
+                <div className="flex items-center gap-1.5 text-[#655F55]">
+                  <Clock className="w-3.5 h-3.5 text-[#D87535]" />
                   <span>{ctrl.maxClockSpeedMHz} MHz Clock</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                  <Zap className="w-3.5 h-3.5 text-[#A5E3FF]" />
+                <div className="flex items-center gap-1.5 text-[#655F55]">
+                  <Zap className="w-3.5 h-3.5 text-[#71818B]" />
                   <span>{ctrl.flashKb} KB Flash</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                  <Cpu className="w-3.5 h-3.5 text-[#10B981]" />
+                <div className="flex items-center gap-1.5 text-[#655F55]">
+                  <Cpu className="w-3.5 h-3.5 text-[#87945B]" />
                   <span>{ctrl.sramKb} KB SRAM</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                  <Radio className="w-3.5 h-3.5 text-[#FBBF24]" />
+                <div className="flex items-center gap-1.5 text-[#655F55]">
+                  <Radio className="w-3.5 h-3.5 text-[#B95D32]" />
                   <span>{ctrl.gpioCount} GPIO Lines</span>
                 </div>
               </div>
             </div>
 
             {/* Bottom Actions & Link */}
-            <div className="pt-3 border-t border-[#192B40] flex items-center justify-between text-xs font-mono">
-              <span className="text-[10px] text-[#8FA6BC] truncate max-w-[150px]">
+            <div className="pt-3 border-t border-[#C9BDAA]/40 flex items-center justify-between text-xs font-mono">
+              <span className="text-[10px] text-[#8C8275] truncate max-w-[150px]">
                 {ctrl.core}
               </span>
               <Link
-                to={`/archive?target=${encodeURIComponent(ctrl.name)}`}
-                className="inline-flex items-center gap-1 text-[#55C7FF] hover:text-[#A5E3FF] transition-colors font-medium group-hover:translate-x-1 transition-transform"
+                to={`/archive?mcu=${encodeURIComponent(ctrl.slug || ctrl.id)}`}
+                className="inline-flex items-center gap-1 text-[#D87535] hover:text-[#B95D32] transition-colors font-medium group-hover:translate-x-0.5 transition-transform"
               >
-                <span>Inspect Architecture</span>
+                <span>Inspect Specs</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
@@ -291,4 +289,3 @@ export function ControllerPreviews() {
     </section>
   );
 }
-

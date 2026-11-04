@@ -350,17 +350,17 @@ export function DiscoverPage() {
 
   return (
     <div className="space-y-8 pb-20">
-      {/* Top Banner */}
-      <div className="border-b border-[#192B40] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Top Banner / Engineering Header */}
+      <div className="border-b border-[#C9BDAA] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-xs font-mono text-[#D87535] uppercase tracking-wider mb-1">
             <Compass className="w-4 h-4" />
-            Microcontroller Architecture & Physical Computing Syllabus
+            <span>Syllabus Blueprint // Ref: MV-DISC-14</span>
           </div>
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[#EAF5FF]">
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#22201D] tracking-tight">
             Discover the Intelligence Inside Silicon
           </h1>
-          <p className="text-sm text-[#8FA6BC] mt-1.5 max-w-2xl leading-relaxed">
+          <p className="text-sm text-[#655F55] mt-1.5 max-w-2xl leading-relaxed font-sans">
             Fourteen foundational engineering modules taking you from semiconductor physics and register files to real-time interrupts and communication protocols.
           </p>
         </div>
@@ -368,10 +368,10 @@ export function DiscoverPage() {
         <div className="flex items-center gap-3 font-mono text-xs shrink-0">
           <Link
             to="/anatomy"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#111E30] hover:bg-[#55C7FF] hover:text-[#0B1220] border border-[#55C7FF]/40 text-[#55C7FF] transition-all font-bold shadow-[0_0_15px_rgba(85,199,255,0.15)]"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#FAF5EB] hover:bg-[#EDE1CE] border border-[#C9BDAA] text-[#22201D] hover:text-[#D87535] transition-all font-semibold shadow-sm"
           >
-            <Cpu className="w-4 h-4" />
-            3D Chip Anatomy Explorer
+            <Cpu className="w-4 h-4 text-[#D87535]" />
+            <span>3D Chip Anatomy Explorer →</span>
           </Link>
         </div>
       </div>
@@ -382,39 +382,39 @@ export function DiscoverPage() {
         {/* LEFT: 14-MODULE SYLLABUS NAVIGATOR (4 cols)                    */}
         {/* ============================================================== */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="p-4 rounded-2xl bg-[#0B1220] border border-[#192B40] space-y-4 shadow-xl">
-            <div className="flex items-center justify-between pb-2 border-b border-[#192B40]">
-              <span className="text-xs font-mono uppercase tracking-wider text-[#55C7FF] font-bold flex items-center gap-1.5">
-                <BookOpen className="w-3.5 h-3.5" />
+          <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] space-y-4 shadow-sm bg-drafting-grid-subtle">
+            <div className="flex items-center justify-between pb-3 border-b border-[#C9BDAA]">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#22201D] font-bold flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-[#D87535]" />
                 Curriculum Blueprint (14)
               </span>
-              <span className="text-[10px] font-mono text-[#8FA6BC]">
+              <span className="text-[11px] font-mono text-[#8C8275] bg-[#EDE1CE] px-2 py-0.5 rounded border border-[#C9BDAA]">
                 {Object.keys(completedMap).length} / {chapters.length} Completed
               </span>
             </div>
 
             {/* Search Box */}
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-2.5 text-[#8FA6BC]" />
+              <Search className="w-4 h-4 absolute left-3 top-2.5 text-[#8C8275]" />
               <input
                 type="text"
                 placeholder="Search topics, ALU, registers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#080D17] border border-[#192B40] text-xs font-mono text-[#EAF5FF] placeholder-[#8FA6BC]/60 focus:outline-none focus:border-[#55C7FF]"
+                className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#F5EBDD] border border-[#C9BDAA] text-xs font-mono text-[#22201D] placeholder-[#8C8275] focus:outline-none focus:border-[#D87535]"
               />
             </div>
 
             {/* Level Filter Tabs */}
-            <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-[#080D17] border border-[#192B40] text-[10px] font-mono">
+            <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA] text-[10px] font-mono">
               {['ALL', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'].map((lvl) => (
                 <button
                   key={lvl}
                   onClick={() => setLevelFilter(lvl)}
                   className={`py-1 rounded text-center cursor-pointer transition-colors ${
                     levelFilter === lvl
-                      ? 'bg-[#111E30] text-[#55C7FF] font-bold border border-[#55C7FF]/40'
-                      : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
+                      ? 'bg-[#FAF5EB] text-[#22201D] font-bold border border-[#C9BDAA] shadow-xs'
+                      : 'text-[#655F55] hover:text-[#22201D]'
                   }`}
                 >
                   {lvl.slice(0, 3)}
@@ -437,21 +437,25 @@ export function DiscoverPage() {
                       setSearchParams({ chapter: ch.slug });
                       setActiveTab('theory');
                     }}
-                    className={`w-full p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                    className={`w-full p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center justify-between gap-2.5 ${
                       isActive
-                        ? 'bg-[#111E30] border-[#55C7FF] shadow-[0_0_12px_rgba(85,199,255,0.25)] text-[#55C7FF]'
-                        : 'bg-[#080D17] border-[#192B40] text-[#8FA6BC] hover:border-[#55C7FF]/40 hover:text-[#EAF5FF]'
+                        ? 'bg-[#FAF5EB] border-[#D87535] shadow-xs text-[#22201D] ring-1 ring-[#D87535]/30'
+                        : 'bg-[#F5EBDD]/70 border-[#C9BDAA]/70 text-[#655F55] hover:border-[#C9BDAA] hover:bg-[#FAF5EB] hover:text-[#22201D]'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="w-6 h-6 rounded bg-[#0B1220] border border-current/30 font-mono text-[10px] font-bold flex items-center justify-center shrink-0">
+                      <span className={`w-6 h-6 rounded font-mono text-[10px] font-bold flex items-center justify-center shrink-0 border ${
+                        isActive
+                          ? 'bg-[#D87535] text-[#FAF5EB] border-[#D87535]'
+                          : 'bg-[#EDE1CE] text-[#655F55] border-[#C9BDAA]'
+                      }`}>
                         {String(ch.chapterNumber).padStart(2, '0')}
                       </span>
                       <div className="min-w-0">
-                        <div className="text-xs font-heading font-bold truncate text-[#EAF5FF]">
+                        <div className={`text-xs font-serif font-bold truncate ${isActive ? 'text-[#22201D]' : 'text-[#4A453E]'}`}>
                           {ch.title}
                         </div>
-                        <div className="text-[10px] font-mono text-[#8FA6BC] flex items-center gap-2">
+                        <div className="text-[10px] font-mono text-[#8C8275] flex items-center gap-2">
                           <span>{ch.estimatedMinutes}m</span>
                           <span>•</span>
                           <span className="uppercase">{ch.level}</span>
@@ -460,7 +464,7 @@ export function DiscoverPage() {
                     </div>
 
                     {done && (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-[#87945B] shrink-0" />
                     )}
                   </button>
                 );
@@ -473,19 +477,19 @@ export function DiscoverPage() {
         {/* RIGHT: CHAPTER EDITORIAL READER & INTERACTIVE BENCH (8 cols)  */}
         {/* ============================================================== */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="rounded-2xl bg-[#0B1220] border border-[#192B40] p-6 sm:p-8 space-y-6 shadow-2xl relative">
+          <div className="rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] p-6 sm:p-8 space-y-6 shadow-sm relative bg-drafting-grid-subtle">
             {/* Active Chapter Header */}
-            <div className="space-y-3 pb-5 border-b border-[#192B40]">
+            <div className="space-y-3 pb-5 border-b border-[#C9BDAA]">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2 text-xs font-mono">
-                  <span className="px-2.5 py-0.5 rounded bg-[#55C7FF]/10 text-[#55C7FF] border border-[#55C7FF]/30 font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#EDE1CE] text-[#D87535] border border-[#C9BDAA] font-bold">
                     MODULE {String(activeChapter.chapterNumber).padStart(2, '0')} OF 14
                   </span>
-                  <span className="px-2.5 py-0.5 rounded bg-[#111E30] text-[#8FA6BC] border border-[#192B40] uppercase">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#EDE1CE] text-[#655F55] border border-[#C9BDAA] uppercase">
                     {activeChapter.level}
                   </span>
-                  <span className="flex items-center gap-1 text-[#8FA6BC]">
-                    <Clock className="w-3.5 h-3.5 text-[#55C7FF]" />
+                  <span className="flex items-center gap-1 text-[#8C8275]">
+                    <Clock className="w-3.5 h-3.5 text-[#D87535]" />
                     {activeChapter.estimatedMinutes} Minutes
                   </span>
                 </div>
@@ -495,8 +499,8 @@ export function DiscoverPage() {
                   onClick={handleMarkCompleted}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     isCompleted
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50'
-                      : 'bg-[#111E30] hover:bg-[#192B40] text-[#55C7FF] border border-[#55C7FF]/40'
+                      ? 'bg-[#87945B]/15 text-[#87945B] border border-[#87945B]/50'
+                      : 'bg-[#22201D] hover:bg-[#3D3A36] text-[#FAF5EB] border border-[#22201D]'
                   }`}
                 >
                   <CheckCircle2 className="w-3.5 h-3.5" />
@@ -504,16 +508,16 @@ export function DiscoverPage() {
                 </button>
               </div>
 
-              <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#EAF5FF]">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#22201D] tracking-tight">
                 {activeChapter.title}
               </h2>
-              <p className="text-xs sm:text-sm text-[#8FA6BC] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#655F55] leading-relaxed font-sans">
                 {activeChapter.summary}
               </p>
             </div>
 
             {/* Editorial Navigation Tabs */}
-            <div className="flex flex-wrap gap-1.5 border-b border-[#192B40] pb-2 text-xs font-mono">
+            <div className="flex flex-wrap gap-1.5 border-b border-[#C9BDAA] pb-3 text-xs font-mono">
               {[
                 { id: 'theory', label: 'Overview & Theory' },
                 { id: 'diagram', label: 'Technical Diagram' },
@@ -524,10 +528,10 @@ export function DiscoverPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
                     activeTab === tab.id
-                      ? 'bg-[#55C7FF] text-[#0B1220] font-bold shadow-[0_0_10px_rgba(85,199,255,0.4)]'
-                      : 'bg-[#111E30]/70 text-[#8FA6BC] hover:text-[#EAF5FF]'
+                      ? 'bg-[#22201D] text-[#FAF5EB] font-bold shadow-xs'
+                      : 'bg-[#EDE1CE] text-[#655F55] hover:text-[#22201D] border border-[#C9BDAA]/70'
                   }`}
                 >
                   {tab.label}
@@ -537,17 +541,17 @@ export function DiscoverPage() {
 
             {/* TAB 1: THEORY & FORMAL DEFINITION */}
             {activeTab === 'theory' && (
-              <div className="space-y-6 text-sm text-[#EAF5FF] leading-relaxed">
+              <div className="space-y-6 text-sm text-[#22201D] leading-relaxed">
                 {/* Key Takeaways Callout */}
-                <div className="p-4 rounded-xl bg-[#111E30]/60 border border-[#55C7FF]/30 space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#55C7FF] font-bold flex items-center gap-1.5">
+                <div className="p-4 sm:p-5 rounded-xl bg-[#F5EBDD] border border-[#C9BDAA] space-y-2 relative">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#D87535] font-bold flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5" />
                     Core Architectural Takeaways
                   </div>
-                  <ul className="space-y-1.5 text-xs text-[#8FA6BC]">
+                  <ul className="space-y-1.5 text-xs text-[#655F55] font-sans">
                     {(activeChapter.keyTakeaways || []).map((point, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <span className="text-[#55C7FF] font-bold">›</span>
+                        <span className="text-[#D87535] font-bold font-mono">›</span>
                         <span>{point}</span>
                       </li>
                     ))}
@@ -556,16 +560,15 @@ export function DiscoverPage() {
 
                 {/* Markdown Body or Section Rendering */}
                 {currentChapterDetail?.content ? (
-                  <div className="prose prose-invert max-w-none text-xs leading-relaxed space-y-4">
-                    {/* Render content sections */}
-                    <div className="whitespace-pre-wrap font-sans text-xs text-[#8FA6BC]">
+                  <div className="prose max-w-none text-xs leading-relaxed space-y-4">
+                    <div className="whitespace-pre-wrap font-sans text-xs text-[#655F55]">
                       {currentChapterDetail.content}
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-4 text-xs text-[#8FA6BC] leading-relaxed">
-                    <div className="p-4 rounded-xl bg-[#080D17] border border-[#192B40] space-y-2">
-                      <div className="text-[10px] font-mono uppercase text-[#55C7FF] font-bold">
+                  <div className="space-y-4 text-xs text-[#655F55] leading-relaxed font-sans">
+                    <div className="p-4 rounded-xl bg-[#FAF5EB] border border-[#C9BDAA] space-y-2">
+                      <div className="text-[10px] font-mono uppercase text-[#D87535] font-bold">
                         Beginner-Friendly Explanation
                       </div>
                       <p>
@@ -573,8 +576,8 @@ export function DiscoverPage() {
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-[#080D17] border border-[#192B40] space-y-2">
-                      <div className="text-[10px] font-mono uppercase text-[#34D399] font-bold">
+                    <div className="p-4 rounded-xl bg-[#FAF5EB] border border-[#C9BDAA] space-y-2">
+                      <div className="text-[10px] font-mono uppercase text-[#87945B] font-bold">
                         Formal Technical Definition
                       </div>
                       <p>
@@ -590,8 +593,8 @@ export function DiscoverPage() {
             {activeTab === 'diagram' && (
               <div className="space-y-4">
                 <ChapterDiagram chapterNumber={activeChapter.chapterNumber} />
-                <p className="text-xs text-[#8FA6BC] leading-relaxed">
-                  Interactive blueprint depicting signal routing, bus matrices, and silicon cell arrangements.
+                <p className="text-xs text-[#8C8275] font-mono leading-relaxed">
+                  // Fig {activeChapter.chapterNumber}.0: Technical schematic depicting signal routing, bus matrices, and silicon cell arrangements.
                 </p>
               </div>
             )}
@@ -599,22 +602,22 @@ export function DiscoverPage() {
             {/* TAB 3: INDUSTRIAL FIRMWARE & PRACTICAL APPLICATION */}
             {activeTab === 'practical' && (
               <div className="space-y-5">
-                <div className="p-4 rounded-xl bg-[#111E30]/70 border border-[#FBBF24]/30 space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#FBBF24] font-bold flex items-center gap-1.5">
+                <div className="p-4 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA] space-y-2">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#B95D32] font-bold flex items-center gap-1.5">
                     <Terminal className="w-3.5 h-3.5" />
                     Industrial Mission-Critical Deployment
                   </div>
-                  <p className="text-xs text-[#EAF5FF] leading-relaxed">
+                  <p className="text-xs text-[#22201D] leading-relaxed font-sans">
                     Automotive, aerospace, and biomedical systems employ this architectural subsystem for deterministic safety-critical reflexes (e.g. ABS brake modulation, cardiac telemetry, quadcopter attitude control).
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#8FA6BC] flex items-center justify-between">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#655F55] flex items-center justify-between">
                     <span>Bare-Metal C Register Driver</span>
-                    <span className="text-[#55C7FF]">ARM CORTEX-M MMIO</span>
+                    <span className="text-[#D87535] font-bold">ARM CORTEX-M MMIO</span>
                   </div>
-                  <div className="p-4 rounded-xl bg-[#080D17] border border-[#192B40] font-mono text-xs text-[#A5E3FF] overflow-x-auto leading-relaxed">
+                  <div className="p-4 rounded-xl bg-[#242522] border border-[#3D3A36] font-mono text-xs text-[#E5E5DF] overflow-x-auto leading-relaxed shadow-sm">
                     <pre>{`// Production Bare-Metal Register Access Example
 #define PERIPH_BASE     0x40000000UL
 #define AHB1PERIPH_BASE (PERIPH_BASE + 0x00020000UL)
@@ -630,9 +633,9 @@ export function DiscoverPage() {
 
             {/* TAB 4: EXPANDABLE ENGINEERING DEEP DIVE */}
             {activeTab === 'deepdive' && (
-              <div className="space-y-4 text-xs leading-relaxed text-[#8FA6BC]">
-                <div className="p-5 rounded-xl bg-[#080D17] border border-[#55C7FF]/40 space-y-3">
-                  <div className="text-xs font-mono uppercase text-[#55C7FF] font-bold flex items-center gap-2">
+              <div className="space-y-4 text-xs leading-relaxed text-[#655F55] font-sans">
+                <div className="p-5 rounded-xl bg-[#F5EBDD] border border-[#C9BDAA] space-y-3">
+                  <div className="text-xs font-mono uppercase text-[#D87535] font-bold flex items-center gap-2">
                     <Code2 className="w-4 h-4" />
                     Silicon Gate Propagation & Wait-State Physics
                   </div>
@@ -640,7 +643,7 @@ export function DiscoverPage() {
                     Silicon gates incur propagation delay governed by channel length, gate capacitance, and supply voltage. When operating at frequencies beyond 50 MHz, memory access times mandate wait-state insertion unless bridged by prefetch instruction caches.
                   </p>
                   <p>
-                    Furthermore, compiler optimization flags (<code className="text-[#55C7FF]">-O2</code>) perform register allocation and dead-code elimination, necessitating the <code className="text-[#55C7FF]">volatile</code> keyword on hardware registers to prevent the compiler from caching asynchronous memory accesses into CPU registers.
+                    Furthermore, compiler optimization flags (<code className="px-1.5 py-0.5 rounded bg-[#EDE1CE] text-[#22201D] font-mono font-bold">-O2</code>) perform register allocation and dead-code elimination, necessitating the <code className="px-1.5 py-0.5 rounded bg-[#EDE1CE] text-[#22201D] font-mono font-bold">volatile</code> keyword on hardware registers to prevent the compiler from caching asynchronous memory accesses into CPU registers.
                   </p>
                 </div>
               </div>
@@ -660,7 +663,7 @@ export function DiscoverPage() {
             )}
 
             {/* Chapter Footer Navigation */}
-            <div className="pt-6 border-t border-[#192B40] flex items-center justify-between gap-4">
+            <div className="pt-6 border-t border-[#C9BDAA] flex items-center justify-between gap-4">
               <button
                 disabled={activeChapterIndex === 0}
                 onClick={() => {
@@ -671,7 +674,7 @@ export function DiscoverPage() {
                     setActiveTab('theory');
                   }
                 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#111E30] hover:bg-[#192B40] text-xs font-mono text-[#8FA6BC] hover:text-[#EAF5FF] border border-[#192B40] transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#EDE1CE] hover:bg-[#FAF5EB] text-xs font-mono text-[#22201D] border border-[#C9BDAA] transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
               >
                 <ChevronLeft className="w-4 h-4" /> PREVIOUS CHAPTER
               </button>
@@ -686,7 +689,7 @@ export function DiscoverPage() {
                     setActiveTab('theory');
                   }
                 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#55C7FF] hover:bg-[#A5E3FF] text-[#0B1220] text-xs font-mono font-bold transition-all shadow-[0_0_12px_rgba(85,199,255,0.3)] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#22201D] hover:bg-[#3D3A36] text-[#FAF5EB] text-xs font-mono font-bold transition-all shadow-xs cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 NEXT CHAPTER <ChevronRight className="w-4 h-4" />
               </button>

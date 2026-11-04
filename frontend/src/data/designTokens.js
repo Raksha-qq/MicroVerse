@@ -1,33 +1,63 @@
+/**
+ * MICROVERSE Engineering Journal Design Tokens
+ * Updated to match the warm engineering-paper palette.
+ * These tokens mirror what is defined in tokens.css and index.css.
+ * Use CSS custom properties from tokens.css wherever possible;
+ * import this file only where you need JS-level token access.
+ */
 export const DESIGN_TOKENS = {
   colors: {
-    midnight: "#0B1220",     // Primary Background
-    deepBlue: "#111E30",     // Secondary Background / Panels
-    slateBlue: "#192B40",    // Elevated Surfaces & Borders
-    cyanGlow: "#55C7FF",     // Primary Accent
-    iceBlue: "#A5E3FF",      // Secondary Accent
-    coolWhite: "#EAF5FF",    // Primary Readable Text
-    mutedBlue: "#8FA6BC",    // Secondary Text & Registers
+    // Paper & Background surfaces
+    paperBg: '#F5EBDD',         // Primary background (engineering paper)
+    paperSec: '#EDE1CE',        // Secondary background
+    paper: '#FAF5EB',           // Elevated surface / card surface
+
+    // Ink & Text
+    inkPrimary: '#22201D',      // Primary text (near-black)
+    inkSecondary: '#655F55',    // Secondary text
+    inkMuted: '#8C8275',        // Muted / annotations
+
+    // Drafting lines & borders
+    draftLine: '#C9BDAA',       // Borders and drafting lines
+    draftSubtle: '#DFD5C5',     // Very subtle borders
+
+    // Accent palette
+    burntOrange: '#D87535',     // Primary accent — CTA, links, hover states
+    terracotta: '#B95D32',      // Error states, destructive actions
+    olive: '#87945B',           // Success states, completed indicators
+    blueGrey: '#71818B',        // Info / secondary accent
+
+    // Instrument panels (dark workspace)
+    panelCharcoal: '#242522',   // Dark panel background
+    panelBezel: '#1E1C19',      // Deeper panel / oscilloscope bg
+    instrumentGreen: '#C8DE72', // Signal / waveform green
+
+    // Status
     status: {
-      online: "#10B981",
-      warning: "#FBBF24",
-      danger: "#EF4444",
-      info: "#55C7FF",
+      online: '#87945B',        // System online / success
+      warning: '#D87535',       // Warning
+      danger: '#B95D32',        // Error / danger
+      info: '#71818B',          // Info
     },
   },
+
   typography: {
-    heading: "'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif",
+    serif: "'Cormorant Garamond', 'Playfair Display', Georgia, serif",
     sans: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-    mono: "'JetBrains Mono', 'Fira Code', monospace",
+    mono: "'IBM Plex Mono', 'JetBrains Mono', monospace",
+    cursive: "'Caveat', cursive, serif",
   },
-  glows: {
-    cyanSm: "0 0 10px rgba(85, 199, 255, 0.18)",
-    cyanMd: "0 0 20px rgba(85, 199, 255, 0.28)",
-    cyanLg: "0 0 35px rgba(85, 199, 255, 0.38)",
-    text: "0 0 12px rgba(85, 199, 255, 0.5)",
+
+  shadows: {
+    xs: '0 1px 2px rgba(34,32,29,0.06)',
+    sm: '0 2px 4px rgba(34,32,29,0.08)',
+    md: '0 4px 12px rgba(34,32,29,0.10)',
+    lg: '0 8px 24px rgba(34,32,29,0.12)',
   },
+
   transitions: {
-    fast: "150ms cubic-bezier(0.16, 1, 0.3, 1)",
-    normal: "250ms cubic-bezier(0.16, 1, 0.3, 1)",
-    slow: "400ms cubic-bezier(0.16, 1, 0.3, 1)",
+    fast: '150ms cubic-bezier(0.16, 1, 0.3, 1)',
+    normal: '250ms cubic-bezier(0.16, 1, 0.3, 1)',
+    slow: '400ms cubic-bezier(0.16, 1, 0.3, 1)',
   },
 };

@@ -1,188 +1,78 @@
 /**
  * MICROVERSE Design System Tokens
- * Interactive Laboratory of Embedded Intelligence
+ * THE ENGINEERING JOURNAL & INTERACTIVE TECHNICAL BLUEPRINT
  */
 
 :root {
   /* =========================================================================
-     1. COLOR SYSTEM (Official Palette)
+     1. COLOR SYSTEM (Warm Engineering Paper Palette)
      ========================================================================= */
-  --mv-color-bg-primary: #0B1220;     /* Primary Canvas Background */
-  --mv-color-bg-secondary: #111E30;   /* Secondary Panels & Cards */
-  --mv-color-surface-elevated: #192B40;/* Elevated Surfaces & Dividers */
-  --mv-color-accent-primary: #55C7FF;  /* Primary Accent & Signal Cyan */
-  --mv-color-accent-secondary: #A5E3FF;/* Secondary Accent & Ice Blue */
-  --mv-color-text-primary: #EAF5FF;    /* Primary Text & High Contrast */
-  --mv-color-text-secondary: #8FA6BC;  /* Secondary Text & Registers */
+  --mv-color-bg-primary: #F5EBDD;        /* Primary Drafting Paper Background */
+  --mv-color-bg-secondary: #EDE1CE;      /* Secondary Background & Shaded Panels */
+  --mv-color-surface-paper: #FAF5EB;     /* Elevated Crisp Paper Surface */
+  --mv-color-surface-elevated: #FAF5EB;  /* Card & Sheet Background */
+  --mv-color-text-primary: #22201D;      /* Deep Ink / Carbon Black Primary Text */
+  --mv-color-text-secondary: #655F55;    /* Technical Graphite / Muted Text */
+  --mv-color-text-muted: #8C8275;        /* Sub-annotations & Metadata */
+  --mv-color-border-draft: #C9BDAA;      /* Ruled Drafting Lines & Card Borders */
+  --mv-color-border-subtle: rgba(201, 189, 170, 0.6);
+
+  /* Signature Engineering Accents */
+  --mv-color-accent-orange: #D87535;     /* Burnt Orange Primary Accent */
+  --mv-color-accent-terracotta: #B95D32; /* Deep Terracotta Accent */
+  --mv-color-accent-olive: #87945B;      /* Technical Olive Accent */
+  --mv-color-accent-bluegrey: #71818B;   /* Slate Drafting Pencil Blue-Grey */
+
+  /* Dark Instrument Panels (Oscilloscopes & Hardware Simulators) */
+  --mv-color-panel-dark: #242522;        /* Deep Instrument Panel Charcoal */
+  --mv-color-panel-deep: #1E1C19;        /* Instrument Bezel Black */
+  --mv-color-instrument-green: #C8DE72;  /* Phosphor Oscilloscope Waveform Green */
+  --mv-color-instrument-amber: #F59E0B;  /* Instrument Warning Amber */
 
   /* Semantic State Colors */
-  --mv-color-status-online: #10B981;   /* Live / Transmitting */
-  --mv-color-status-warning: #FBBF24;  /* Clock Drift / Caution */
-  --mv-color-status-danger: #EF4444;   /* Fault / Bus Collision */
-  --mv-color-status-info: #55C7FF;     /* Architectural State */
+  --mv-color-status-online: #87945B;     /* Technical Olive Live Status */
+  --mv-color-status-warning: #D87535;    /* Burnt Orange Caution */
+  --mv-color-status-danger: #B95D32;     /* Terracotta Fault */
+  --mv-color-status-info: #71818B;       /* Technical Blueprint Info */
 
   /* =========================================================================
-     2. TYPOGRAPHY SYSTEM
+     2. TYPOGRAPHY SYSTEM (Editorial Magazine & Drafting Mono)
      ========================================================================= */
-  --mv-font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mv-font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --mv-font-heading: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --mv-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --mv-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --mv-font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --mv-font-cursive: 'Caveat', cursive, serif;
 
   /* Typography Scale */
-  --mv-text-xs: 0.75rem;     /* 12px - Registers, footnotes, pin numbers */
+  --mv-text-xs: 0.75rem;     /* 12px - Annotations, pin numbers, Fig. labels */
   --mv-text-sm: 0.875rem;    /* 14px - Interface metadata, badges */
   --mv-text-base: 1rem;      /* 16px - Body text */
-  --mv-text-lg: 1.125rem;    /* 18px - Sub-section titles, lead text */
-  --mv-text-xl: 1.25rem;     /* 20px - Card titles, module headers */
-  --mv-text-2xl: 1.5rem;     /* 24px - Section headers */
+  --mv-text-lg: 1.125rem;    /* 18px - Editorial subheadings */
+  --mv-text-xl: 1.25rem;     /* 20px - Section headers */
+  --mv-text-2xl: 1.5rem;     /* 24px - Module headers */
   --mv-text-3xl: 1.875rem;   /* 30px - Major feature titles */
-  --mv-text-4xl: 2.25rem;    /* 36px - Page titles */
+  --mv-text-4xl: 2.25rem;    /* 36px - Display headings */
   --mv-text-5xl: 3rem;       /* 48px - Primary Hero display */
-  --mv-text-6xl: 3.75rem;    /* 60px - Display banner */
-
-  /* Line Heights */
-  --mv-leading-tight: 1.15;
-  --mv-leading-snug: 1.35;
-  --mv-leading-normal: 1.55;
-  --mv-leading-relaxed: 1.75;
-
-  /* Letter Spacing */
-  --mv-tracking-tight: -0.025em;
-  --mv-tracking-normal: 0em;
-  --mv-tracking-wide: 0.04em;
-  --mv-tracking-widest: 0.12em;
+  --mv-text-6xl: 3.75rem;    /* 60px - Editorial Lead Display */
 
   /* =========================================================================
-     3. SPACING & GRID SYSTEM (4px Base Grid)
+     3. BORDERS & SHADOWS (Drafting Sheets & Tactile Paper)
      ========================================================================= */
-  --mv-space-1: 0.25rem;  /* 4px */
-  --mv-space-2: 0.5rem;   /* 8px */
-  --mv-space-3: 0.75rem;  /* 12px */
-  --mv-space-4: 1rem;     /* 16px */
-  --mv-space-5: 1.25rem;  /* 20px */
-  --mv-space-6: 1.5rem;   /* 24px */
-  --mv-space-8: 2rem;     /* 32px */
-  --mv-space-10: 2.5rem;  /* 40px */
-  --mv-space-12: 3rem;    /* 48px */
-  --mv-space-16: 4rem;    /* 64px */
-  --mv-space-20: 5rem;    /* 80px */
-  --mv-space-24: 6rem;    /* 96px */
+  --mv-border-hairline: 1px solid #C9BDAA;
+  --mv-border-accent: 1px solid #D87535;
+  --mv-border-dark: 1px solid #3A3A34;
 
-  /* =========================================================================
-     4. BORDERS, RADII & ELEVATIONS
-     ========================================================================= */
-  --mv-border-subtle: 1px solid rgba(25, 43, 64, 0.8);
-  --mv-border-hairline: 1px solid #192B40;
-  --mv-border-accent: 1px solid rgba(85, 199, 255, 0.35);
-  --mv-border-accent-strong: 1px solid #55C7FF;
-
-  --mv-radius-xs: 4px;
-  --mv-radius-sm: 6px;
-  --mv-radius-md: 10px;
-  --mv-radius-lg: 16px;
-  --mv-radius-xl: 24px;
+  --mv-radius-xs: 2px;
+  --mv-radius-sm: 4px;
+  --mv-radius-md: 8px;
+  --mv-radius-lg: 12px;
+  --mv-radius-xl: 16px;
   --mv-radius-full: 9999px;
 
-  /* Calibrated Atmospheric Glows (Controlled & Non-Distracting) */
-  --mv-glow-cyan-sm: 0 0 10px rgba(85, 199, 255, 0.18);
-  --mv-glow-cyan-md: 0 0 20px rgba(85, 199, 255, 0.28);
-  --mv-glow-cyan-lg: 0 0 35px rgba(85, 199, 255, 0.38);
-  --mv-glow-text: 0 0 12px rgba(85, 199, 255, 0.5);
-
-  /* Shadows */
-  --mv-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
-  --mv-shadow-modal: 0 16px 40px rgba(0, 0, 0, 0.7);
-
-  /* =========================================================================
-     5. ANIMATION CONVENTIONS
-     ========================================================================= */
-  --mv-transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  --mv-transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
-  --mv-transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* =========================================================================
-   6. CIRCUIT BACKGROUND & GRAPHIC TEXTURES
-   ========================================================================= */
-.bg-circuit-grid {
-  background-image: 
-    linear-gradient(to right, rgba(85, 199, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(85, 199, 255, 0.04) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-.bg-circuit-dots {
-  background-image: radial-gradient(rgba(85, 199, 255, 0.12) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-/* Laboratory Panel Glass Surface */
-.lab-panel {
-  background: rgba(17, 30, 48, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid #192B40;
-}
-
-.lab-panel-interactive {
-  background: rgba(17, 30, 48, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid #192B40;
-  transition: all var(--mv-transition-normal);
-}
-
-.lab-panel-interactive:hover {
-  border-color: rgba(85, 199, 255, 0.45);
-  box-shadow: 0 0 25px rgba(85, 199, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-/* Technical Hairline Accent Line */
-.tech-hairline {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(85, 199, 255, 0.4), transparent);
-}
-
-/* Silicon Chip Die Texture */
-.die-texture {
-  background: 
-    linear-gradient(135deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%),
-    linear-gradient(225deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%),
-    linear-gradient(315deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%),
-    linear-gradient(45deg, rgba(85, 199, 255, 0.05) 25%, transparent 25%);
-  background-size: 8px 8px;
-}
-
-/* Hardware Oscilloscope CRT Screen */
-.oscilloscope-screen {
-  background: radial-gradient(circle at 50% 50%, #0d2238 0%, #07101b 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-.oscilloscope-screen::before {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-              linear-gradient(90deg, rgba(85, 199, 255, 0.03), rgba(0, 255, 128, 0.01), rgba(85, 199, 255, 0.03));
-  z-index: 2;
-  background-size: 100% 3px, 3px 100%;
-  pointer-events: none;
-}
-
-/* =========================================================================
-   7. ACCESSIBILITY & REDUCED MOTION PREFERENCES
-   ========================================================================= */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+  /* Subtle Tactile Shadows */
+  --mv-shadow-paper: 0 1px 3px rgba(34, 32, 29, 0.05), 0 4px 12px rgba(34, 32, 29, 0.04);
+  --mv-shadow-sheet: 0 2px 6px rgba(34, 32, 29, 0.08), 0 8px 24px rgba(34, 32, 29, 0.06);
+  --mv-shadow-modal: 0 20px 45px rgba(34, 32, 29, 0.25);
+  --mv-shadow-instrument: 0 8px 30px rgba(0, 0, 0, 0.45);
 }

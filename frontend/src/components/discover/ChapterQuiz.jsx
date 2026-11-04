@@ -70,8 +70,8 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
 
   if (loading) {
     return (
-      <div className="p-8 rounded-2xl bg-[#0B1220] border border-[#192B40] text-center font-mono text-xs text-[#8FA6BC] space-y-2">
-        <RefreshCw className="w-5 h-5 mx-auto animate-spin text-[#55C7FF]" />
+      <div className="p-8 rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] text-center font-mono text-xs text-[#655F55] space-y-2">
+        <RefreshCw className="w-5 h-5 mx-auto animate-spin text-[#D87535]" />
         <div>RETRIEVING KNOWLEDGE-CHECK BLUEPRINTS...</div>
       </div>
     );
@@ -79,9 +79,9 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
 
   if (error || !quiz || !quiz.questions || quiz.questions.length === 0) {
     return (
-      <div className="p-6 rounded-2xl bg-[#0B1220] border border-[#192B40] flex items-center justify-between text-xs font-mono text-[#8FA6BC]">
+      <div className="p-6 rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] flex items-center justify-between text-xs font-mono text-[#655F55]">
         <div className="flex items-center gap-2">
-          <HelpCircle className="w-4 h-4 text-[#55C7FF]" />
+          <HelpCircle className="w-4 h-4 text-[#D87535]" />
           <span>Curriculum assessment under calibration for this unit.</span>
         </div>
       </div>
@@ -91,28 +91,28 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
   const allAnswered = quiz.questions.every((q) => answers[q.id] !== undefined);
 
   return (
-    <div className="rounded-2xl bg-[#0B1220] border border-[#192B40] p-6 space-y-6 shadow-2xl">
+    <div className="rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] p-6 space-y-6 shadow-sm bg-drafting-grid-subtle">
       {/* Quiz Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#192B40]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#C9BDAA]">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#FBBF24]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[#D87535]">
             <Award className="w-4 h-4" />
             <span>KNOWLEDGE-CHECK ASSESSMENT</span>
           </div>
-          <h3 className="font-heading font-bold text-xl text-[#EAF5FF] mt-0.5">
+          <h3 className="font-serif font-bold text-xl text-[#22201D] mt-0.5">
             {quiz.title}
           </h3>
-          <p className="text-xs text-[#8FA6BC] mt-0.5">
+          <p className="text-xs text-[#655F55] mt-0.5 font-sans">
             {quiz.description || 'Validate your architectural and firmware comprehension.'}
           </p>
         </div>
 
         <div className="flex items-center gap-3 font-mono text-xs shrink-0">
-          <span className="p-2 rounded bg-[#111E30] border border-[#192B40] text-[#8FA6BC]">
-            Passing Score: <strong className="text-[#55C7FF]">{quiz.passingScore}%</strong>
+          <span className="p-2 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] text-[#655F55]">
+            Passing Score: <strong className="text-[#22201D]">{quiz.passingScore}%</strong>
           </span>
-          <span className="p-2 rounded bg-[#111E30] border border-[#192B40] text-[#8FA6BC]">
-            Questions: <strong className="text-[#EAF5FF]">{quiz.questions.length}</strong>
+          <span className="p-2 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] text-[#655F55]">
+            Questions: <strong className="text-[#22201D]">{quiz.questions.length}</strong>
           </span>
         </div>
       </div>
@@ -122,22 +122,22 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
         <div
           className={`p-4 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
             result.passed
-              ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300'
-              : 'bg-rose-500/10 border-rose-500/40 text-rose-300'
+              ? 'bg-[#87945B]/15 border-[#87945B] text-[#22201D]'
+              : 'bg-[#B95D32]/15 border-[#B95D32] text-[#22201D]'
           }`}
         >
           <div className="flex items-center gap-3">
             {result.passed ? (
-              <CheckCircle2 className="w-8 h-8 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-8 h-8 text-[#87945B] shrink-0" />
             ) : (
-              <XCircle className="w-8 h-8 text-rose-400 shrink-0" />
+              <XCircle className="w-8 h-8 text-[#B95D32] shrink-0" />
             )}
             <div>
-              <div className="font-heading font-bold text-base text-[#EAF5FF]">
+              <div className="font-serif font-bold text-base text-[#22201D]">
                 {result.passed ? 'Assessment Passed! Silicon Proficiency Verified.' : 'Assessment Unsuccessful. Review Concepts.'}
               </div>
-              <div className="text-xs font-mono mt-0.5">
-                Earned: <strong>{result.score}</strong> / {result.totalPoints} Points ({result.percentage}%)
+              <div className="text-xs font-mono mt-0.5 text-[#655F55]">
+                Earned: <strong className="text-[#22201D]">{result.score}</strong> / {result.totalPoints} Points ({result.percentage}%)
                 {' • '}
                 Threshold: {result.passingScore}%
               </div>
@@ -146,9 +146,9 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
 
           <button
             onClick={handleRetake}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#0B1220] border border-current text-xs font-mono font-bold transition-all hover:bg-white/10 cursor-pointer self-start sm:self-center"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#FAF5EB] border border-[#C9BDAA] text-xs font-mono font-bold text-[#22201D] transition-all hover:bg-[#EDE1CE] cursor-pointer self-start sm:self-center shadow-xs"
           >
-            <RefreshCw className="w-3.5 h-3.5" /> RETAKE
+            <RefreshCw className="w-3.5 h-3.5 text-[#D87535]" /> RETAKE
           </button>
         </div>
       )}
@@ -167,23 +167,23 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
           return (
             <div
               key={q.id}
-              className="p-4 sm:p-5 rounded-xl bg-[#080D17] border border-[#192B40] space-y-3"
+              className="p-4 sm:p-5 rounded-xl bg-[#F5EBDD] border border-[#C9BDAA] space-y-3"
             >
               <div className="flex items-start justify-between gap-3">
-                <div className="font-heading font-bold text-sm text-[#EAF5FF] flex items-start gap-2.5">
-                  <span className="w-6 h-6 rounded bg-[#111E30] border border-[#55C7FF]/40 text-[#55C7FF] font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <div className="font-serif font-bold text-sm text-[#22201D] flex items-start gap-2.5">
+                  <span className="w-6 h-6 rounded bg-[#FAF5EB] border border-[#C9BDAA] text-[#D87535] font-mono text-xs flex items-center justify-center shrink-0 mt-0.5">
                     {qIdx + 1}
                   </span>
                   <span>{q.question}</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#8FA6BC] shrink-0">
+                <span className="text-[10px] font-mono text-[#8C8275] shrink-0 bg-[#EDE1CE] px-2 py-0.5 rounded border border-[#C9BDAA]">
                   {q.points} PTS
                 </span>
               </div>
 
               {/* Code Snippet if present */}
               {q.codeSnippet && (
-                <div className="p-3 rounded-lg bg-[#0B1220] border border-[#192B40] font-mono text-xs text-[#A5E3FF] overflow-x-auto leading-relaxed">
+                <div className="p-3 rounded-lg bg-[#242522] border border-[#3D3A36] font-mono text-xs text-[#E5E5DF] overflow-x-auto leading-relaxed shadow-inner">
                   <pre>{q.codeSnippet}</pre>
                 </div>
               )}
@@ -196,19 +196,19 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
                   const isWrongSelected =
                     reviewItem && !reviewItem.isCorrect && isChecked;
 
-                  let borderClass = 'border-[#192B40] hover:border-[#55C7FF]/40';
-                  let bgClass = 'bg-[#0B1220] text-[#8FA6BC]';
+                  let borderClass = 'border-[#C9BDAA] hover:border-[#D87535]/70';
+                  let bgClass = 'bg-[#FAF5EB] text-[#4A453E]';
 
                   if (isChecked && !result) {
-                    borderClass = 'border-[#55C7FF] shadow-[0_0_10px_rgba(85,199,255,0.2)]';
-                    bgClass = 'bg-[#111E30] text-[#EAF5FF]';
+                    borderClass = 'border-[#D87535] shadow-xs ring-1 ring-[#D87535]/40';
+                    bgClass = 'bg-[#EDE1CE] text-[#22201D] font-medium';
                   }
 
                   if (result) {
                     if (isCorrect) {
-                      borderClass = 'border-emerald-500 bg-emerald-500/15 text-emerald-300 font-bold';
+                      borderClass = 'border-[#87945B] bg-[#87945B]/15 text-[#22201D] font-bold';
                     } else if (isWrongSelected) {
-                      borderClass = 'border-rose-500 bg-rose-500/15 text-rose-300';
+                      borderClass = 'border-[#B95D32] bg-[#B95D32]/15 text-[#22201D]';
                     }
                   }
 
@@ -224,7 +224,7 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
                         checked={isChecked}
                         onChange={() => {}}
                         disabled={!!result}
-                        className="mt-0.5 accent-[#55C7FF] cursor-pointer"
+                        className="mt-0.5 accent-[#D87535] cursor-pointer"
                       />
                       <span className="flex-1 leading-snug">{optText}</span>
                     </label>
@@ -237,11 +237,11 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
                 <div
                   className={`p-3 rounded-lg text-xs leading-relaxed mt-2 border ${
                     reviewItem.isCorrect
-                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                      : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                      ? 'bg-[#87945B]/10 border-[#87945B]/40 text-[#22201D]'
+                      : 'bg-[#EDE1CE] border-[#C9BDAA] text-[#655F55]'
                   }`}
                 >
-                  <strong>Explanation:</strong> {reviewItem.explanation}
+                  <strong className="text-[#22201D]">Explanation:</strong> {reviewItem.explanation}
                 </div>
               )}
             </div>
@@ -251,29 +251,29 @@ export function ChapterQuiz({ chapterId, quizMetadata, onQuizPassed }) {
 
       {/* Action Footer */}
       {!result && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-[#192B40]">
-          <div className="text-xs font-mono text-[#8FA6BC]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 border-t border-[#C9BDAA]">
+          <div className="text-xs font-mono text-[#655F55]">
             {!user ? (
-              <span className="text-amber-400">Sign in to save assessment progress and earn badges.</span>
+              <span className="text-[#B95D32]">Sign in to save assessment progress and earn badges.</span>
             ) : !allAnswered ? (
               <span>Answer all questions above to submit for grading.</span>
             ) : (
-              <span className="text-emerald-400">All questions answered. Ready for evaluation.</span>
+              <span className="text-[#87945B]">All questions answered. Ready for evaluation.</span>
             )}
           </div>
 
           <button
             onClick={handleSubmit}
-            disabled={submitting || (!user && false) || (!allAnswered && false)}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#55C7FF] hover:bg-[#A5E3FF] text-[#0B1220] font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(85,199,255,0.3)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={submitting}
+            className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#22201D] hover:bg-[#3D3A36] text-[#FAF5EB] font-mono text-xs font-bold transition-all shadow-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <>
-                <RefreshCw className="w-3.5 h-3.5 animate-spin" /> EVALUATING...
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-[#D87535]" /> EVALUATING...
               </>
             ) : (
               <>
-                <Send className="w-3.5 h-3.5" /> SUBMIT ASSESSMENT
+                <Send className="w-3.5 h-3.5 text-[#D87535]" /> SUBMIT ASSESSMENT
               </>
             )}
           </button>

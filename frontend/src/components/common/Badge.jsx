@@ -2,12 +2,13 @@ import React from 'react';
 
 export function Badge({
   children,
-  variant = 'cyan',
+  variant = 'cyan', // 'cyan' (orange), 'ice' (bluegrey), 'amber' (terracotta), 'emerald' (olive), 'muted', 'dark'
   size = 'sm',
   className = '',
   icon: Icon,
 }) {
-  const baseClasses = 'inline-flex items-center font-mono font-medium rounded tracking-wide uppercase select-none';
+  const baseClasses =
+    'inline-flex items-center font-mono font-medium rounded-sm tracking-wider uppercase select-none';
 
   const sizeClasses = {
     sm: 'text-[10px] px-2 py-0.5 gap-1',
@@ -15,18 +16,25 @@ export function Badge({
   };
 
   const variantClasses = {
-    cyan: 'bg-[#55C7FF]/10 text-[#55C7FF] border border-[#55C7FF]/30',
-    ice: 'bg-[#A5E3FF]/10 text-[#A5E3FF] border border-[#A5E3FF]/30',
-    amber: 'bg-[#FBBF24]/10 text-[#FBBF24] border border-[#FBBF24]/30',
-    emerald: 'bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30',
-    muted: 'bg-[#192B40]/40 text-[#8FA6BC] border border-[#192B40]',
+    cyan: 'bg-[#D87535]/10 text-[#D87535] border border-[#D87535]/30',
+    orange: 'bg-[#D87535]/10 text-[#D87535] border border-[#D87535]/30',
+    ice: 'bg-[#71818B]/10 text-[#71818B] border border-[#71818B]/30',
+    bluegrey: 'bg-[#71818B]/10 text-[#71818B] border border-[#71818B]/30',
+    amber: 'bg-[#B95D32]/10 text-[#B95D32] border border-[#B95D32]/30',
+    terracotta: 'bg-[#B95D32]/10 text-[#B95D32] border border-[#B95D32]/30',
+    emerald: 'bg-[#87945B]/10 text-[#87945B] border border-[#87945B]/30',
+    olive: 'bg-[#87945B]/10 text-[#87945B] border border-[#87945B]/30',
+    muted: 'bg-[#EDE1CE] text-[#655F55] border border-[#C9BDAA]',
+    dark: 'bg-[#242522] text-[#C8DE72] border border-[#C8DE72]/30',
   };
 
   return (
-    <span className={`${baseClasses} ${sizeClasses[size] || sizeClasses.sm} ${variantClasses[variant] || variantClasses.cyan} ${className}`}>
+    <span
+      className={`${baseClasses} ${sizeClasses[size] || sizeClasses.sm} ${variantClasses[variant] || variantClasses.cyan
+        } ${className}`}
+    >
       {Icon && <Icon className="w-3 h-3" />}
       {children}
     </span>
   );
 }
-

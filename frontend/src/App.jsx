@@ -23,9 +23,14 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ defa
 
 function RouteLoadingFallback() {
   return (
-    <div className="min-h-[50vh] flex flex-col items-center justify-center space-y-3 font-mono text-xs text-[#8FA6BC]">
-      <Cpu className="w-8 h-8 text-[#55C7FF] animate-spin" />
-      <span className="tracking-widest uppercase">INITIALIZING SILICON RUNTIME...</span>
+    <div className="min-h-[50vh] flex flex-col items-center justify-center space-y-3 font-mono text-xs text-[#655F55]">
+      <Cpu className="w-8 h-8 text-[#D87535] animate-spin" />
+      <span className="tracking-widest uppercase text-[#8C8275]">INITIALIZING SILICON RUNTIME...</span>
+      <div className="flex gap-1 mt-1">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#D87535] animate-pulse" style={{ animationDelay: '0ms' }} />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#D87535] animate-pulse" style={{ animationDelay: '150ms' }} />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#D87535] animate-pulse" style={{ animationDelay: '300ms' }} />
+      </div>
     </div>
   );
 }

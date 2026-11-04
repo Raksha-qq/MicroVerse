@@ -160,17 +160,17 @@ export function ControllersPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-20">
       {/* Page Header */}
       <div>
-        <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider mb-1">
+        <div className="flex items-center gap-2 text-xs font-mono text-[#D87535] uppercase tracking-wider mb-1">
           <Layers className="w-3.5 h-3.5" />
-          Silicon Registry & Architecture Reference
+          <span>Silicon Registry & Architecture Reference // REF: MV-CATALOG</span>
         </div>
-        <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[#EAF5FF]">
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#22201D] tracking-tight">
           Microcontroller Silicon Archive
         </h1>
-        <p className="text-sm text-[#8FA6BC] mt-1 max-w-3xl leading-relaxed">
+        <p className="text-sm text-[#655F55] mt-1 max-w-3xl leading-relaxed font-sans">
           Searchable reference database of verified microcontrollers, silicon dies, register
           architectures, peripheral matrices, pinouts, and physical AI / robotics capabilities.
         </p>
@@ -180,23 +180,23 @@ export function ControllersPage() {
       <TaxonomyClarifier />
 
       {/* Filter and Search Bar */}
-      <div className="space-y-4 rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-4 sm:p-5">
+      <div className="space-y-4 rounded-2xl border border-[#C9BDAA] bg-[#FAF5EB] p-4 sm:p-5 shadow-xs bg-drafting-grid-subtle">
         {/* Top Controls: Search + Dropdowns */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           {/* Search Input */}
           <div className="relative md:col-span-2">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8FA6BC]" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8C8275]" />
             <input
               type="text"
               placeholder="Search chip name, core, architecture, or ecosystem..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-xl pl-9 pr-4 py-2.5 text-xs text-[#EAF5FF] placeholder-[#8FA6BC] outline-none transition-colors font-mono"
+              className="w-full bg-[#F5EBDD] border border-[#C9BDAA] focus:border-[#D87535] rounded-xl pl-9 pr-4 py-2.5 text-xs text-[#22201D] placeholder-[#8C8275] outline-none transition-colors font-mono"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8FA6BC] hover:text-[#EAF5FF]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C8275] hover:text-[#22201D]"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -208,7 +208,7 @@ export function ControllersPage() {
             <select
               value={connectivityFilter}
               onChange={(e) => setConnectivityFilter(e.target.value)}
-              className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-xl px-3 py-2.5 text-xs text-[#EAF5FF] outline-none font-mono cursor-pointer"
+              className="w-full bg-[#F5EBDD] border border-[#C9BDAA] focus:border-[#D87535] rounded-xl px-3 py-2.5 text-xs text-[#22201D] outline-none font-mono cursor-pointer"
             >
               <option value="all">Connectivity: All Protocols</option>
               <option value="wireless">Wireless (Wi-Fi / BLE / Thread)</option>
@@ -222,7 +222,7 @@ export function ControllersPage() {
             <select
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
-              className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-xl px-3 py-2.5 text-xs text-[#EAF5FF] outline-none font-mono cursor-pointer"
+              className="w-full bg-[#F5EBDD] border border-[#C9BDAA] focus:border-[#D87535] rounded-xl px-3 py-2.5 text-xs text-[#22201D] outline-none font-mono cursor-pointer"
             >
               <option value="featured">Sort: Featured & Representative</option>
               <option value="clock_desc">Max Clock Speed (High → Low)</option>
@@ -234,17 +234,17 @@ export function ControllersPage() {
         </div>
 
         {/* Family Pill Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-[#192B40]/60 pb-1">
-          <span className="text-[11px] font-mono text-[#8FA6BC] shrink-0 mr-1 flex items-center gap-1">
-            <Filter className="w-3 h-3" /> Family:
+        <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-[#C9BDAA]/70 pb-1">
+          <span className="text-[11px] font-mono text-[#8C8275] shrink-0 mr-1 flex items-center gap-1">
+            <Filter className="w-3 h-3 text-[#D87535]" /> Family:
           </span>
           {CONTROLLER_FAMILIES.map((fam) => (
             <button
               key={fam.id}
               onClick={() => setSelectedFamily(fam.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition-all cursor-pointer ${selectedFamily === fam.id
-                  ? 'bg-[#55C7FF] text-[#0B1220] font-bold shadow-[0_0_12px_rgba(85,199,255,0.35)]'
-                  : 'bg-[#0B1220] text-[#8FA6BC] hover:text-[#EAF5FF] border border-[#192B40]'
+                  ? 'bg-[#22201D] text-[#FAF5EB] font-bold shadow-xs'
+                  : 'bg-[#EDE1CE] text-[#655F55] hover:text-[#22201D] border border-[#C9BDAA]'
                 }`}
             >
               {fam.label}
@@ -254,34 +254,34 @@ export function ControllersPage() {
       </div>
 
       {/* Results Meta Info */}
-      <div className="flex items-center justify-between text-xs font-mono text-[#8FA6BC] px-1">
+      <div className="flex items-center justify-between text-xs font-mono text-[#655F55] px-1">
         <div>
-          Showing <span className="text-[#55C7FF] font-bold">{controllers.length}</span> verified
+          Showing <span className="text-[#D87535] font-bold">{controllers.length}</span> verified
           silicon target{controllers.length === 1 ? '' : 's'}
         </div>
         {selectedForCompare.length > 0 && (
-          <div className="flex items-center gap-2 text-[#55C7FF]">
+          <div className="flex items-center gap-2 text-[#D87535]">
             <Sliders className="w-3.5 h-3.5" />
-            <span>{selectedForCompare.length} of 4 selected for comparison</span>
+            <span className="font-semibold">{selectedForCompare.length} of 4 selected for comparison</span>
           </div>
         )}
       </div>
 
       {/* Controllers Grid */}
       {loading ? (
-        <div className="py-24 text-center text-xs font-mono text-[#8FA6BC]">
-          <Cpu className="w-8 h-8 mx-auto text-[#55C7FF] animate-spin mb-3" />
+        <div className="py-24 text-center text-xs font-mono text-[#655F55]">
+          <Cpu className="w-8 h-8 mx-auto text-[#D87535] animate-spin mb-3" />
           INTERROGATING SILICON REGISTRY DATABASE...
         </div>
       ) : error ? (
-        <div className="p-8 text-center text-xs font-mono text-rose-400 bg-rose-500/10 rounded-xl border border-rose-500/30">
+        <div className="p-8 text-center text-xs font-mono text-[#B95D32] bg-[#B95D32]/10 rounded-xl border border-[#B95D32]/30">
           {error}
         </div>
       ) : controllers.length === 0 ? (
-        <div className="py-20 text-center text-xs font-mono text-[#8FA6BC] bg-[#111E30]/40 rounded-2xl border border-[#192B40] space-y-3">
-          <Cpu className="w-10 h-10 mx-auto text-[#8FA6BC]/40" />
-          <p className="text-sm text-[#EAF5FF]">No matching microcontroller records found.</p>
-          <p className="text-xs text-[#8FA6BC]">Try clearing search parameters or selecting "All Silicon".</p>
+        <div className="py-20 text-center text-xs font-mono text-[#655F55] bg-[#FAF5EB] rounded-2xl border border-[#C9BDAA] space-y-3">
+          <Cpu className="w-10 h-10 mx-auto text-[#8C8275]" />
+          <p className="text-sm text-[#22201D] font-serif font-bold">No matching microcontroller records found.</p>
+          <p className="text-xs text-[#655F55]">Try clearing search parameters or selecting "All Silicon".</p>
           <button
             onClick={() => {
               setSelectedFamily('ALL');
@@ -289,7 +289,7 @@ export function ControllersPage() {
               setConnectivityFilter('all');
               setSortOption('featured');
             }}
-            className="px-4 py-2 rounded-lg bg-[#192B40] text-[#55C7FF] hover:bg-[#55C7FF] hover:text-[#0B1220] transition-colors font-mono text-xs cursor-pointer"
+            className="px-4 py-2 rounded-lg bg-[#22201D] text-[#FAF5EB] hover:bg-[#3D3A36] transition-colors font-mono text-xs cursor-pointer shadow-xs"
           >
             Reset Filters
           </button>
@@ -301,33 +301,33 @@ export function ControllersPage() {
             return (
               <Card
                 key={ctrl.id}
-                className={`flex flex-col justify-between space-y-4 transition-all duration-300 relative ${isSelected ? 'border-[#55C7FF] shadow-[0_0_20px_rgba(85,199,255,0.15)] ring-1 ring-[#55C7FF]' : ''
+                variant="paper"
+                className={`flex flex-col justify-between space-y-4 transition-all duration-300 relative ${isSelected ? 'border-[#D87535] shadow-xs ring-1 ring-[#D87535]' : ''
                   }`}
               >
                 <div className="space-y-3">
                   {/* Top Bar: Manufacturer + Bit Badge + Bookmark */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="text-[10px] font-mono text-[#8FA6BC] uppercase tracking-wider">
+                      <div className="text-[10px] font-mono text-[#8C8275] uppercase tracking-wider">
                         {ctrl.manufacturer}
                       </div>
                       <h3
                         onClick={() => setActiveModalController(ctrl)}
-                        className="font-heading text-lg font-bold text-[#EAF5FF] hover:text-[#55C7FF] transition-colors cursor-pointer"
+                        className="font-serif text-lg font-bold text-[#22201D] hover:text-[#D87535] transition-colors cursor-pointer"
                       >
                         {ctrl.name}
                       </h3>
-                      <div className="text-xs font-mono text-[#55C7FF]">{ctrl.commonName}</div>
+                      <div className="text-xs font-mono text-[#D87535]">{ctrl.commonName}</div>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
                       <button
                         onClick={(e) => handleToggleBookmark(ctrl.id, e)}
                         title={bookmarkedIds.has(ctrl.id) ? "Remove Bookmark" : "Bookmark Controller"}
-                        className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
-                          bookmarkedIds.has(ctrl.id)
-                            ? "bg-[#F59E0B]/15 text-[#F59E0B] border-[#F59E0B]/40 shadow-[0_0_8px_rgba(245,158,11,0.2)]"
-                            : "text-[#8FA6BC] hover:text-[#55C7FF] border-transparent hover:border-[#192B40]"
-                        }`}
+                        className={`p-1.5 rounded-lg border transition-all cursor-pointer ${bookmarkedIds.has(ctrl.id)
+                            ? "bg-[#D87535]/15 text-[#D87535] border-[#D87535]/40"
+                            : "text-[#8C8275] hover:text-[#22201D] border-[#C9BDAA]"
+                          }`}
                       >
                         <Bookmark className={`w-3.5 h-3.5 ${bookmarkedIds.has(ctrl.id) ? "fill-current" : ""}`} />
                       </button>
@@ -338,74 +338,74 @@ export function ControllersPage() {
                   </div>
 
                   {/* Architecture & Core Banner */}
-                  <div className="p-2.5 rounded-lg bg-[#0B1220] border border-[#192B40] flex items-center justify-between text-[11px] font-mono">
-                    <span className="text-[#8FA6BC]">{ctrl.family}</span>
-                    <span className="text-[#A5E3FF] font-semibold">{ctrl.core}</span>
+                  <div className="p-2.5 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] flex items-center justify-between text-[11px] font-mono">
+                    <span className="text-[#655F55]">{ctrl.family}</span>
+                    <span className="text-[#22201D] font-bold">{ctrl.core}</span>
                   </div>
 
                   {/* Summary Description */}
-                  <p className="text-xs text-[#8FA6BC] line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-[#655F55] line-clamp-2 leading-relaxed font-sans">
                     {ctrl.description}
                   </p>
 
                   {/* Hardware Spec Quick Grid */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#192B40] text-[11px] font-mono">
-                    <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                      <Clock className="w-3.5 h-3.5 text-[#55C7FF]" />
-                      <span>{ctrl.maxClockSpeedMHz} MHz</span>
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#C9BDAA] text-[11px] font-mono">
+                    <div className="flex items-center gap-1.5 text-[#655F55]">
+                      <Clock className="w-3.5 h-3.5 text-[#D87535]" />
+                      <span className="text-[#22201D] font-medium">{ctrl.maxClockSpeedMHz} MHz</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                      <Zap className="w-3.5 h-3.5 text-[#A5E3FF]" />
-                      <span>
+                    <div className="flex items-center gap-1.5 text-[#655F55]">
+                      <Zap className="w-3.5 h-3.5 text-[#B95D32]" />
+                      <span className="text-[#22201D] font-medium">
                         {ctrl.flashKb >= 1024 ? `${(ctrl.flashKb / 1024).toFixed(0)} MB` : `${ctrl.flashKb} KB`} Flash
                       </span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                      <Cpu className="w-3.5 h-3.5 text-[#10B981]" />
-                      <span>
+                    <div className="flex items-center gap-1.5 text-[#655F55]">
+                      <Cpu className="w-3.5 h-3.5 text-[#87945B]" />
+                      <span className="text-[#22201D] font-medium">
                         {ctrl.sramKb >= 1024 ? `${(ctrl.sramKb / 1024).toFixed(0)} MB` : `${ctrl.sramKb} KB`} SRAM
                       </span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[#8FA6BC]">
-                      <Radio className="w-3.5 h-3.5 text-[#FBBF24]" />
-                      <span>{ctrl.gpioCount} GPIO</span>
+                    <div className="flex items-center gap-1.5 text-[#655F55]">
+                      <Radio className="w-3.5 h-3.5 text-[#71818B]" />
+                      <span className="text-[#22201D] font-medium">{ctrl.gpioCount} GPIO</span>
                     </div>
                   </div>
 
                   {/* Robotics Highlight Pill */}
                   {ctrl.roboticsApplications && (
-                    <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#8FA6BC] bg-[#0B1220]/60 p-2 rounded-lg border border-[#192B40]/70">
-                      <Bot className="w-3 h-3 text-[#55C7FF] shrink-0" />
+                    <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#655F55] bg-[#EDE1CE]/70 p-2 rounded-lg border border-[#C9BDAA]">
+                      <Bot className="w-3 h-3 text-[#D87535] shrink-0" />
                       <span className="line-clamp-1">{ctrl.roboticsApplications}</span>
                     </div>
                   )}
                 </div>
 
                 {/* Card Actions Footer */}
-                <div className="pt-3 border-t border-[#192B40] flex items-center justify-between gap-2">
+                <div className="pt-3 border-t border-[#C9BDAA] flex items-center justify-between gap-2">
                   <button
                     onClick={() => setActiveModalController(ctrl)}
-                    className="text-xs font-mono text-[#55C7FF] hover:text-[#A5E3FF] flex items-center gap-1 cursor-pointer transition-colors"
+                    className="text-xs font-mono text-[#22201D] hover:text-[#D87535] flex items-center gap-1 cursor-pointer transition-colors font-bold"
                   >
                     Inspect Specs
-                    <ArrowRight className="w-3 h-3" />
+                    <ArrowRight className="w-3 h-3 text-[#D87535]" />
                   </button>
 
                   <button
                     onClick={() => toggleCompare(ctrl.slug || ctrl.id)}
                     className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${isSelected
-                        ? 'bg-[#55C7FF] text-[#0B1220] font-bold shadow-[0_0_10px_rgba(85,199,255,0.4)]'
-                        : 'bg-[#192B40]/70 text-[#8FA6BC] hover:text-[#EAF5FF] hover:bg-[#192B40]'
+                        ? 'bg-[#22201D] text-[#FAF5EB] font-bold shadow-xs'
+                        : 'bg-[#EDE1CE] text-[#655F55] hover:text-[#22201D] hover:bg-[#FAF5EB] border border-[#C9BDAA]'
                       }`}
                   >
                     {isSelected ? (
                       <>
-                        <Check className="w-3 h-3" />
+                        <Check className="w-3 h-3 text-[#87945B]" />
                         Selected
                       </>
                     ) : (
                       <>
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3 h-3 text-[#D87535]" />
                         Compare
                       </>
                     )}
@@ -419,12 +419,12 @@ export function ControllersPage() {
 
       {/* Floating Comparison Dock (Active when >= 1 chip selected) */}
       {selectedForCompare.length > 0 && (
-        <div className="fixed bottom-6 inset-x-4 sm:inset-x-auto sm:right-8 z-40 max-w-xl mx-auto sm:mx-0 p-4 rounded-2xl bg-[#0B1220]/95 border-2 border-[#55C7FF] shadow-[0_10px_40px_rgba(0,0,0,0.8)] backdrop-blur-xl animate-bounce-short">
+        <div className="fixed bottom-6 inset-x-4 sm:inset-x-auto sm:right-8 z-40 max-w-xl mx-auto sm:mx-0 p-4 rounded-2xl bg-[#FAF5EB] border-2 border-[#D87535] shadow-2xl backdrop-blur-xl">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-[#55C7FF]" />
-                <span className="text-xs font-mono font-bold text-[#EAF5FF]">
+                <Sliders className="w-4 h-4 text-[#D87535]" />
+                <span className="text-xs font-mono font-bold text-[#22201D]">
                   Comparison Lab Active ({selectedForCompare.length}/4)
                 </span>
               </div>
@@ -432,7 +432,7 @@ export function ControllersPage() {
                 {selectedForCompare.map((id) => (
                   <span
                     key={id}
-                    className="inline-flex items-center gap-1 text-[10px] font-mono bg-[#111E30] text-[#55C7FF] px-2 py-0.5 rounded border border-[#192B40]"
+                    className="inline-flex items-center gap-1 text-[10px] font-mono bg-[#EDE1CE] text-[#D87535] px-2 py-0.5 rounded border border-[#C9BDAA]"
                   >
                     {id}
                     <X
@@ -447,12 +447,12 @@ export function ControllersPage() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setSelectedForCompare([])}
-                className="px-3 py-1.5 rounded-lg text-xs font-mono text-[#8FA6BC] hover:text-[#EAF5FF] bg-[#111E30] border border-[#192B40] cursor-pointer"
+                className="px-3 py-1.5 rounded-lg text-xs font-mono text-[#655F55] hover:text-[#22201D] bg-[#EDE1CE] border border-[#C9BDAA] cursor-pointer"
               >
                 Clear
               </button>
               <Button
-                variant="primary"
+                variant="accent"
                 size="sm"
                 onClick={handleLaunchCompare}
                 disabled={selectedForCompare.length < 2}

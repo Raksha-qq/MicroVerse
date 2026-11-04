@@ -62,15 +62,21 @@ export function DashboardPage() {
 
   if (!user) {
     return (
-      <div className="py-16 max-w-2xl mx-auto text-center space-y-6">
-        <div className="w-16 h-16 rounded-2xl bg-[#55C7FF]/10 border border-[#55C7FF]/30 mx-auto flex items-center justify-center text-[#55C7FF]">
+      <div className="py-16 max-w-2xl mx-auto text-center space-y-8">
+        {/* Not-authenticated state */}
+        <div className="w-16 h-16 rounded border border-[#C9BDAA] bg-[#FAF5EB] mx-auto flex items-center justify-center text-[#D87535] shadow-sm">
           <Activity className="w-8 h-8" />
         </div>
-        <div className="space-y-2">
-          <h1 className="font-heading text-3xl font-bold text-[#EAF5FF]">
-            Engineer Laboratory Dashboard
+        <div className="space-y-3">
+          <div className="text-[10px] font-mono text-[#D87535] uppercase tracking-widest">
+            MODULE / 06 // ENGINEER ACTIVITY LOG
+          </div>
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#22201D]">
+            Engineer Laboratory
+            <br />
+            <span className="italic font-normal text-[#D87535]">Dashboard</span>
           </h1>
-          <p className="text-sm text-[#8FA6BC] leading-relaxed">
+          <p className="text-sm text-[#655F55] leading-relaxed font-sans max-w-md mx-auto">
             Sign in to track real-time curriculum progress, manage bookmarked silicon targets,
             persist simulation experiment states, and view quiz assessments.
           </p>
@@ -87,22 +93,23 @@ export function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-xs font-mono text-[#8FA6BC] space-y-3">
-        <Activity className="w-8 h-8 mx-auto text-[#55C7FF] animate-spin" />
-        <div>INTERROGATING REAL-TIME ENGINEER TELEMETRY...</div>
+      <div className="py-24 text-center text-xs font-mono text-[#8C8275] space-y-3">
+        <Activity className="w-8 h-8 mx-auto text-[#D87535] animate-spin" />
+        <div className="tracking-widest uppercase">Interrogating Real-Time Engineer Telemetry...</div>
       </div>
     );
   }
 
   if (error || !stats) {
     return (
-      <div className="p-8 text-center text-xs font-mono text-rose-400 bg-rose-500/10 rounded-xl border border-rose-500/30 space-y-3">
-        <AlertTriangle className="w-8 h-8 mx-auto text-rose-400" />
+      <div className="p-8 text-center text-xs font-mono text-[#B95D32] bg-[#B95D32]/8 rounded border border-[#B95D32]/30 space-y-3">
+        <AlertTriangle className="w-8 h-8 mx-auto text-[#B95D32]" />
         <div>{error || 'Unable to parse dashboard state from database.'}</div>
         <button
           onClick={() => window.location.reload()}
-          className="px-4 py-2 rounded-lg bg-[#192B40] text-[#55C7FF] hover:bg-[#55C7FF] hover:text-[#0B1220] transition-colors"
+          className="px-4 py-2 rounded border border-[#C9BDAA] bg-[#EDE1CE] text-[#22201D] hover:border-[#D87535] transition-colors font-mono text-xs cursor-pointer"
         >
+          <RotateCcw className="w-3.5 h-3.5 inline mr-1.5" />
           Retry Connection
         </button>
       </div>
@@ -110,182 +117,195 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* 1. Welcome Section */}
-      <div className="p-6 sm:p-8 rounded-2xl border border-[#192B40] bg-[#111E30]/80 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl">
-        <div className="space-y-2 relative z-10">
-          <div className="flex items-center gap-2">
-            <Badge variant="cyan">ENGINEER PROFILE</Badge>
-            {user.role === 'ADMIN' && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-[#F59E0B]/10 text-[#F59E0B] px-2 py-0.5 rounded border border-[#F59E0B]/30">
-                <Shield className="w-3 h-3" />
-                SYSTEM ADMINISTRATOR
-              </span>
-            )}
-            <span className="text-xs font-mono text-[#8FA6BC]">
-              Member since {new Date(stats.user?.createdAt || user.createdAt).toLocaleDateString()}
-            </span>
+    <div className="space-y-8 pb-16">
+      {/* 1. Welcome / Identity Header */}
+      <div className="border-b border-[#C9BDAA] pb-6">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <div className="space-y-2">
+            {/* Technical header label */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="text-[10px] font-mono text-[#D87535] uppercase tracking-widest font-semibold">
+                MODULE / 06 // ENGINEER ACTIVITY LOG
+              </div>
+              {user.role === 'ADMIN' && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold bg-[#D87535]/10 text-[#D87535] px-2 py-0.5 rounded border border-[#D87535]/30">
+                  <Shield className="w-3 h-3" />
+                  SYSTEM ADMINISTRATOR
+                </span>
+              )}
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#22201D] tracking-tight">
+              Welcome back,{' '}
+              <span className="italic font-normal text-[#D87535]">{user.name}</span>
+            </h1>
+            <p className="text-sm text-[#655F55] max-w-xl leading-relaxed font-sans">
+              {stats.user?.bio ||
+                'Embedded systems researcher and robotics engineer advancing silicon hardware competencies.'}
+            </p>
+            <div className="text-[11px] font-mono text-[#8C8275]">
+              // Member since {new Date(stats.user?.createdAt || user.createdAt).toLocaleDateString()}
+            </div>
           </div>
 
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-[#EAF5FF]">
-            Welcome back, {user.name}
-          </h1>
-          <p className="text-xs sm:text-sm text-[#8FA6BC] max-w-xl leading-relaxed">
-            {stats.user?.bio ||
-              'Embedded systems researcher and robotics engineer advancing silicon hardware competencies.'}
-          </p>
-        </div>
+          {/* Quick Actions */}
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            {user.role === 'ADMIN' && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/admin')}
+                className="flex items-center gap-1.5 font-bold border-[#D87535]/40 text-[#D87535] hover:bg-[#D87535]/8"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                Admin Panel
+              </Button>
+            )}
 
-        {/* Quick Actions */}
-        <div className="flex flex-wrap items-center gap-3 relative z-10 shrink-0">
-          {user.role === 'ADMIN' && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => navigate('/admin')}
-              className="flex items-center gap-1.5 font-bold border-[#F59E0B]/40 text-[#F59E0B] hover:bg-[#F59E0B]/10"
-            >
-              <Shield className="w-3.5 h-3.5" />
-              Admin Panel
-            </Button>
-          )}
-
-          {stats.nextChapter && (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => navigate(`/discover#${stats.nextChapter.slug}`)}
-              className="flex items-center gap-1.5 font-bold"
-            >
-              <Play className="w-3.5 h-3.5" />
-              Next Chapter
-            </Button>
-          )}
+            {stats.nextChapter && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => navigate(`/discover#${stats.nextChapter.slug}`)}
+                className="flex items-center gap-1.5 font-bold"
+              >
+                <Play className="w-3.5 h-3.5" />
+                Next Chapter
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* 2. Key Metrics Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Chapters Progress */}
-        <Card className="space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#8FA6BC]">
-            <span>CHAPTERS COMPLETED</span>
-            <BookOpen className="w-3.5 h-3.5 text-[#55C7FF]" />
+      {/* 2. Key Metrics — engineering data readout row */}
+      <div>
+        <div className="text-[9px] font-mono text-[#8C8275] uppercase tracking-widest mb-3">
+          // PERFORMANCE TELEMETRY // REAL-TIME
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Chapters Progress */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-4 space-y-2 hover:border-[#D87535] transition-colors group">
+            <div className="flex items-center justify-between text-[10px] font-mono text-[#8C8275] uppercase tracking-wider">
+              <span>Chapters</span>
+              <BookOpen className="w-3.5 h-3.5 text-[#D87535]" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-serif font-bold text-[#22201D]">
+              {stats.completedCount}{' '}
+              <span className="text-sm font-sans font-normal text-[#8C8275]">/ {stats.totalChapters}</span>
+            </div>
+            <div className="w-full h-1 bg-[#EDE1CE] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#D87535] rounded-full transition-all duration-700"
+                style={{ width: `${stats.progressPercentage}%` }}
+              />
+            </div>
+            <div className="text-[10px] font-mono text-[#D87535] text-right font-bold">
+              {stats.progressPercentage}%
+            </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-[#EAF5FF]">
-            {stats.completedCount} <span className="text-sm font-normal text-[#8FA6BC]">/ {stats.totalChapters}</span>
-          </div>
-          <div className="w-full h-1.5 bg-[#0B1220] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#55C7FF] rounded-full transition-all duration-500"
-              style={{ width: `${stats.progressPercentage}%` }}
-            />
-          </div>
-          <div className="text-[10px] font-mono text-[#55C7FF] text-right font-bold">
-            {stats.progressPercentage}% Completed
-          </div>
-        </Card>
 
-        {/* Lessons Progress */}
-        <Card className="space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#8FA6BC]">
-            <span>LESSONS MASTERED</span>
-            <Layers className="w-3.5 h-3.5 text-[#A5E3FF]" />
+          {/* Lessons Progress */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-4 space-y-2 hover:border-[#71818B] transition-colors">
+            <div className="flex items-center justify-between text-[10px] font-mono text-[#8C8275] uppercase tracking-wider">
+              <span>Lessons</span>
+              <Layers className="w-3.5 h-3.5 text-[#71818B]" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-serif font-bold text-[#22201D]">
+              {stats.completedLessonsCount}{' '}
+              <span className="text-sm font-sans font-normal text-[#8C8275]">/ {stats.totalLessons}</span>
+            </div>
+            <div className="w-full h-1 bg-[#EDE1CE] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#71818B] rounded-full transition-all duration-700"
+                style={{ width: `${stats.lessonPercentage}%` }}
+              />
+            </div>
+            <div className="text-[10px] font-mono text-[#71818B] text-right font-bold">
+              {stats.lessonPercentage}%
+            </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-[#EAF5FF]">
-            {stats.completedLessonsCount} <span className="text-sm font-normal text-[#8FA6BC]">/ {stats.totalLessons}</span>
-          </div>
-          <div className="w-full h-1.5 bg-[#0B1220] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#A5E3FF] rounded-full transition-all duration-500"
-              style={{ width: `${stats.lessonPercentage}%` }}
-            />
-          </div>
-          <div className="text-[10px] font-mono text-[#A5E3FF] text-right font-bold">
-            {stats.lessonPercentage}% Completed
-          </div>
-        </Card>
 
-        {/* Quiz Competency */}
-        <Card className="space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#8FA6BC]">
-            <span>QUIZ PASS RATE</span>
-            <CheckSquare className="w-3.5 h-3.5 text-[#10B981]" />
+          {/* Quiz Competency */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-4 space-y-2 hover:border-[#87945B] transition-colors">
+            <div className="flex items-center justify-between text-[10px] font-mono text-[#8C8275] uppercase tracking-wider">
+              <span>Quiz Pass Rate</span>
+              <CheckSquare className="w-3.5 h-3.5 text-[#87945B]" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-serif font-bold text-[#87945B]">
+              {stats.quizStats.averageScore}%
+            </div>
+            <div className="text-[10px] font-mono text-[#8C8275] flex justify-between">
+              <span>{stats.quizStats.passedCount} Passed</span>
+              <span>{stats.quizStats.totalAttempts} Attempts</span>
+            </div>
+            <div className="text-[10px] font-mono text-[#87945B] pt-1 border-t border-[#EDE1CE]">
+              Average Assessment Score
+            </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-[#10B981]">
-            {stats.quizStats.averageScore}%
-          </div>
-          <div className="text-[10px] font-mono text-[#8FA6BC] flex justify-between">
-            <span>{stats.quizStats.passedCount} Passed</span>
-            <span>{stats.quizStats.totalAttempts} Attempts</span>
-          </div>
-          <div className="text-[10px] font-mono text-[#10B981] pt-1 border-t border-[#192B40]">
-            Average Assessment Score
-          </div>
-        </Card>
 
-        {/* Lab & Research Activity */}
-        <Card className="space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#8FA6BC]">
-            <span>EXPERIMENTS & NOTES</span>
-            <HardDrive className="w-3.5 h-3.5 text-[#FBBF24]" />
+          {/* Lab & Research Activity */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-4 space-y-2 hover:border-[#B95D32] transition-colors">
+            <div className="flex items-center justify-between text-[10px] font-mono text-[#8C8275] uppercase tracking-wider">
+              <span>Experiments & Notes</span>
+              <HardDrive className="w-3.5 h-3.5 text-[#B95D32]" />
+            </div>
+            <div className="text-2xl sm:text-3xl font-serif font-bold text-[#22201D]">
+              {stats.savedExperiments.length + stats.researchNotes.length}
+            </div>
+            <div className="text-[10px] font-mono text-[#8C8275] flex justify-between">
+              <span>{stats.savedExperiments.length} Experiments</span>
+              <span>{stats.researchNotes.length} Notes</span>
+            </div>
+            <div className="text-[10px] font-mono text-[#B95D32] pt-1 border-t border-[#EDE1CE]">
+              {stats.bookmarks.length} Bookmarked Silicon Targets
+            </div>
           </div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-[#EAF5FF]">
-            {stats.savedExperiments.length + stats.researchNotes.length}
-          </div>
-          <div className="text-[10px] font-mono text-[#8FA6BC] flex justify-between">
-            <span>{stats.savedExperiments.length} Experiments</span>
-            <span>{stats.researchNotes.length} Notes</span>
-          </div>
-          <div className="text-[10px] font-mono text-[#FBBF24] pt-1 border-t border-[#192B40]">
-            {stats.bookmarks.length} Bookmarked Silicon Targets
-          </div>
-        </Card>
+        </div>
       </div>
 
       {/* 3. Main Dashboard Sections Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column (2/3 width) */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Recently Visited Lessons (Resume Incomplete) */}
-          <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 sm:p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#55C7FF]" />
-                <h3 className="font-heading text-lg font-bold text-[#EAF5FF]">
-                  Recently Visited Lessons & Resume
+          {/* Recently Visited Lessons */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-5 sm:p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#C9BDAA] pb-3">
+              <div>
+                <div className="text-[10px] font-mono text-[#D87535] uppercase tracking-widest mb-0.5">
+                  RECENT ACTIVITY
+                </div>
+                <h3 className="font-serif text-lg font-bold text-[#22201D]">
+                  Recently Visited Lessons &amp; Resume
                 </h3>
               </div>
-              <Link to="/lessons" className="text-xs font-mono text-[#55C7FF] hover:underline flex items-center gap-1">
+              <Link to="/lessons" className="text-[11px] font-mono text-[#D87535] hover:underline flex items-center gap-1">
                 All Lessons <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
 
             {stats.recentlyVisitedLessons.length === 0 ? (
-              <div className="p-6 text-center text-xs font-mono text-[#8FA6BC] bg-[#0B1220]/60 rounded-xl border border-[#192B40]">
+              <div className="p-6 text-center text-xs font-mono text-[#8C8275] bg-[#EDE1CE] rounded border border-[#C9BDAA] border-dashed">
                 No recently visited lessons logged. Jump into the Discover curriculum to begin.
               </div>
             ) : (
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {stats.recentlyVisitedLessons.map((l) => (
                   <div
                     key={l.id}
-                    className="p-3.5 rounded-xl border border-[#192B40] bg-[#0B1220] flex items-center justify-between gap-3 text-xs font-mono hover:border-[#55C7FF]/40 transition-colors"
+                    className="p-3 rounded border border-[#C9BDAA] bg-[#F5EBDD] flex items-center justify-between gap-3 text-xs font-mono hover:border-[#D87535] transition-colors"
                   >
                     <div className="space-y-0.5 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-[#55C7FF] font-bold">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[10px] text-[#D87535] font-bold">
                           LESSON {l.lessonNumber}
                         </span>
-                        <span className="text-[10px] text-[#8FA6BC]">•</span>
-                        <span className="text-[10px] text-[#8FA6BC] truncate">{l.chapterTitle}</span>
+                        <span className="text-[10px] text-[#8C8275] truncate">{l.chapterTitle}</span>
                         {l.isCompleted && (
-                          <span className="text-[9px] text-[#10B981] bg-[#10B981]/10 px-1.5 py-0.5 rounded border border-[#10B981]/30">
+                          <span className="text-[9px] text-[#87945B] bg-[#87945B]/10 px-1.5 py-0.5 rounded border border-[#87945B]/30 font-semibold">
                             COMPLETED
                           </span>
                         )}
                       </div>
-                      <div className="font-bold text-[#EAF5FF] truncate text-sm">{l.title}</div>
+                      <div className="font-bold text-[#22201D] truncate text-sm">{l.title}</div>
                     </div>
 
                     <Button
@@ -303,93 +323,44 @@ export function DashboardPage() {
             )}
           </div>
 
-          {/* Quiz Performance & Recent Score History */}
-          <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 sm:p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-[#10B981]" />
-                <h3 className="font-heading text-lg font-bold text-[#EAF5FF]">
-                  Quiz Assessment Performance History
+          {/* Saved Experiments */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-5 sm:p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#C9BDAA] pb-3">
+              <div>
+                <div className="text-[10px] font-mono text-[#D87535] uppercase tracking-widest mb-0.5">
+                  EXPERIMENT LOG
+                </div>
+                <h3 className="font-serif text-lg font-bold text-[#22201D]">
+                  Saved Lab Experiments
                 </h3>
               </div>
-              <Link to="/quizzes" className="text-xs font-mono text-[#55C7FF] hover:underline flex items-center gap-1">
-                Take Assessments <ArrowRight className="w-3 h-3" />
-              </Link>
-            </div>
-
-            {stats.recentAttempts.length === 0 ? (
-              <div className="p-6 text-center text-xs font-mono text-[#8FA6BC] bg-[#0B1220]/60 rounded-xl border border-[#192B40]">
-                No quiz attempts on record. Test your engineering competency in the Quizzes section.
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {stats.recentAttempts.slice(0, 5).map((att) => (
-                  <div
-                    key={att.id}
-                    className="p-3 rounded-xl border border-[#192B40] bg-[#0B1220] flex items-center justify-between gap-3 text-xs font-mono"
-                  >
-                    <div>
-                      <div className="font-bold text-[#EAF5FF]">{att.title}</div>
-                      <div className="text-[10px] text-[#8FA6BC]">
-                        {att.chapterTitle} • {new Date(att.attemptedAt).toLocaleDateString()}
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <div className={`font-bold ${att.passed ? 'text-[#10B981]' : 'text-rose-400'}`}>
-                          {att.percentage}% ({att.score}/{att.totalPoints} pts)
-                        </div>
-                        <div className="text-[10px] text-[#8FA6BC]">
-                          {att.passed ? 'PASSED' : 'RETAKE SUGGESTED'}
-                        </div>
-                      </div>
-                      <Badge variant={att.passed ? 'emerald' : 'rose'}>
-                        {att.passed ? 'PASS' : 'FAIL'}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Saved Experiments (Milestone 6) */}
-          <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 sm:p-6 space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <HardDrive className="w-4 h-4 text-[#FBBF24]" />
-                <h3 className="font-heading text-lg font-bold text-[#EAF5FF]">
-                  Saved Virtual Experiment Configurations
-                </h3>
-              </div>
-              <Link to="/experiment" className="text-xs font-mono text-[#55C7FF] hover:underline flex items-center gap-1">
-                Open Experiment Bench <ArrowRight className="w-3 h-3" />
+              <Link to="/lab" className="text-[11px] font-mono text-[#D87535] hover:underline flex items-center gap-1">
+                Open Lab <ArrowRight className="w-3 h-3" />
               </Link>
             </div>
 
             {stats.savedExperiments.length === 0 ? (
-              <div className="p-6 text-center text-xs font-mono text-[#8FA6BC] bg-[#0B1220]/60 rounded-xl border border-[#192B40]">
-                No saved experiment benchmarks yet. Tune a PWM, Signal, or Sonar simulation in the Lab and save it.
+              <div className="p-6 text-center text-xs font-mono text-[#8C8275] bg-[#EDE1CE] rounded border border-[#C9BDAA] border-dashed">
+                No experiments saved yet. Run a simulation in the Virtual Laboratory and save your state.
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {stats.savedExperiments.slice(0, 4).map((exp) => (
+              <div className="space-y-2">
+                {stats.savedExperiments.slice(0, 5).map((exp) => (
                   <div
                     key={exp.id}
-                    onClick={() => navigate('/experiment')}
-                    className="p-3.5 rounded-xl border border-[#192B40] bg-[#0B1220] hover:border-[#55C7FF]/40 transition-colors cursor-pointer space-y-1.5"
+                    onClick={() => navigate('/lab')}
+                    className="p-3 rounded border border-[#C9BDAA] bg-[#F5EBDD] flex items-center justify-between gap-3 text-xs font-mono hover:border-[#D87535] transition-colors cursor-pointer"
                   >
-                    <div className="flex items-center justify-between">
-                      <Badge variant="cyan">{exp.experimentType}</Badge>
-                      <span className="text-[10px] font-mono text-[#8FA6BC]">
-                        {new Date(exp.updatedAt).toLocaleDateString()}
-                      </span>
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="orange">{exp.experimentType}</Badge>
+                        <span className="font-bold text-[#22201D]">{exp.name}</span>
+                      </div>
+                      <div className="text-[10px] text-[#8C8275]">
+                        {new Date(exp.savedAt || exp.createdAt).toLocaleDateString()}
+                      </div>
                     </div>
-                    <div className="font-bold text-xs text-[#EAF5FF] truncate">{exp.title}</div>
-                    {exp.description && (
-                      <p className="text-[11px] text-[#8FA6BC] line-clamp-1">{exp.description}</p>
-                    )}
+                    <HardDrive className="w-4 h-4 text-[#C9BDAA] group-hover:text-[#D87535]" />
                   </div>
                 ))}
               </div>
@@ -397,28 +368,26 @@ export function DashboardPage() {
           </div>
         </div>
 
-        {/* Right Column (1/3 width): Bookmarks, Research Notes & Recommendations */}
+        {/* Right Column (1/3 width) */}
         <div className="space-y-6">
-          {/* Recommended Next Learning Unit */}
+          {/* Next Chapter Recommendation */}
           {stats.nextChapter && (
-            <div className="p-5 rounded-2xl border border-[#55C7FF]/40 bg-[#55C7FF]/5 space-y-3">
-              <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] font-bold uppercase tracking-wider">
-                <Play className="w-3.5 h-3.5" />
-                Recommended Next Unit
+            <div className="bg-[#22201D] border border-[#38332E] rounded p-5 space-y-3 text-[#FAF5EB]">
+              <div className="text-[10px] font-mono text-[#C8DE72] uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C8DE72] animate-pulse" />
+                NEXT UP
               </div>
-              <div>
-                <div className="text-[10px] font-mono text-[#8FA6BC] uppercase">
-                  CHAPTER {String(stats.nextChapter.chapterNumber).padStart(2, '0')} • {stats.nextChapter.level}
-                </div>
-                <h4 className="font-heading text-base font-bold text-[#EAF5FF] mt-0.5">
-                  {stats.nextChapter.title}
-                </h4>
-                <p className="text-xs text-[#8FA6BC] mt-1 line-clamp-2">
-                  {stats.nextChapter.summary}
-                </p>
+              <div className="text-[11px] font-mono text-[#C9BDAA]">
+                CH. {String(stats.nextChapter.chapterNumber).padStart(2, '0')} · {stats.nextChapter.level}
               </div>
+              <h4 className="font-serif text-base font-bold text-[#FAF5EB]">
+                {stats.nextChapter.title}
+              </h4>
+              <p className="text-xs text-[#C9BDAA] line-clamp-2 leading-relaxed font-sans">
+                {stats.nextChapter.summary}
+              </p>
               <Button
-                variant="primary"
+                variant="instrument"
                 size="sm"
                 onClick={() => navigate(`/discover#${stats.nextChapter.slug}`)}
                 className="w-full flex items-center justify-center gap-1 font-bold"
@@ -429,24 +398,24 @@ export function DashboardPage() {
             </div>
           )}
 
-          {/* Bookmarked Silicon Targets (Part D) */}
-          <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider font-semibold">
+          {/* Bookmarked Silicon Targets */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-[#C9BDAA] pb-3">
+              <div className="flex items-center gap-2 text-xs font-mono text-[#D87535] uppercase tracking-wider font-semibold">
                 <Bookmark className="w-3.5 h-3.5" />
                 Saved Controllers ({stats.bookmarks.length})
               </div>
-              <Link to="/archive" className="text-[11px] font-mono text-[#8FA6BC] hover:text-[#EAF5FF]">
+              <Link to="/archive" className="text-[11px] font-mono text-[#8C8275] hover:text-[#D87535]">
                 Browse All
               </Link>
             </div>
 
             {stats.bookmarks.length === 0 ? (
-              <div className="p-4 text-center text-xs font-mono text-[#8FA6BC] bg-[#0B1220]/60 rounded-xl border border-[#192B40]">
+              <div className="p-4 text-center text-xs font-mono text-[#8C8275] bg-[#EDE1CE] rounded border border-[#C9BDAA] border-dashed">
                 No controllers bookmarked yet. Click the bookmark ribbon on any chip in the Silicon Archive.
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {stats.bookmarks.map((bm) => {
                   const ctrl = bm.controller;
                   if (!ctrl) return null;
@@ -454,15 +423,15 @@ export function DashboardPage() {
                     <div
                       key={bm.id}
                       onClick={() => navigate(`/archive?mcu=${ctrl.slug || ctrl.id}`)}
-                      className="p-2.5 rounded-lg border border-[#192B40] bg-[#0B1220] hover:border-[#55C7FF]/40 transition-colors cursor-pointer flex items-center justify-between text-xs font-mono"
+                      className="p-2.5 rounded border border-[#C9BDAA] bg-[#F5EBDD] hover:border-[#D87535] transition-colors cursor-pointer flex items-center justify-between text-xs font-mono"
                     >
                       <div>
-                        <div className="font-bold text-[#EAF5FF]">{ctrl.name}</div>
-                        <div className="text-[10px] text-[#8FA6BC]">
-                          {ctrl.family} • {ctrl.maxClockSpeedMHz} MHz
+                        <div className="font-bold text-[#22201D]">{ctrl.name}</div>
+                        <div className="text-[10px] text-[#8C8275]">
+                          {ctrl.family} · {ctrl.maxClockSpeedMHz} MHz
                         </div>
                       </div>
-                      <Badge variant="cyan">{ctrl.bitWidth}-BIT</Badge>
+                      <Badge variant="orange">{ctrl.bitWidth}-BIT</Badge>
                     </div>
                   );
                 })}
@@ -470,37 +439,37 @@ export function DashboardPage() {
             )}
           </div>
 
-          {/* Research Notes Preview (Part E) */}
-          <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-mono text-[#A5E3FF] uppercase tracking-wider font-semibold">
+          {/* Research Notes Preview */}
+          <div className="bg-[#FAF5EB] border border-[#C9BDAA] rounded p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-[#C9BDAA] pb-3">
+              <div className="flex items-center gap-2 text-xs font-mono text-[#71818B] uppercase tracking-wider font-semibold">
                 <FileText className="w-3.5 h-3.5" />
                 Research Logbook ({stats.researchNotes.length})
               </div>
-              <Link to="/research" className="text-[11px] font-mono text-[#8FA6BC] hover:text-[#EAF5FF]">
+              <Link to="/research" className="text-[11px] font-mono text-[#8C8275] hover:text-[#D87535]">
                 Open Notes
               </Link>
             </div>
 
             {stats.researchNotes.length === 0 ? (
-              <div className="p-4 text-center text-xs font-mono text-[#8FA6BC] bg-[#0B1220]/60 rounded-xl border border-[#192B40]">
+              <div className="p-4 text-center text-xs font-mono text-[#8C8275] bg-[#EDE1CE] rounded border border-[#C9BDAA] border-dashed">
                 No technical notes logged. Use the Research Notebook to record errata and lab findings.
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {stats.researchNotes.slice(0, 3).map((note) => (
                   <div
                     key={note.id}
                     onClick={() => navigate('/research')}
-                    className="p-2.5 rounded-lg border border-[#192B40] bg-[#0B1220] hover:border-[#A5E3FF]/40 transition-colors cursor-pointer space-y-1"
+                    className="p-2.5 rounded border border-[#C9BDAA] bg-[#F5EBDD] hover:border-[#71818B] transition-colors cursor-pointer space-y-0.5"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono text-[#55C7FF] uppercase">{note.category}</span>
-                      <span className="text-[10px] font-mono text-[#8FA6BC]">
+                      <span className="text-[10px] font-mono text-[#71818B] uppercase font-semibold">{note.category}</span>
+                      <span className="text-[10px] font-mono text-[#8C8275]">
                         {new Date(note.updatedAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <div className="font-bold text-xs text-[#EAF5FF] truncate">{note.title}</div>
+                    <div className="font-bold text-xs text-[#22201D] truncate">{note.title}</div>
                   </div>
                 ))}
               </div>

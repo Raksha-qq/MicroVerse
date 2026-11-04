@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Zap, Mail, Lock, User, Terminal, AlertCircle, ArrowRight } from 'lucide-react';
+import { X, Zap, Mail, Lock, User, Terminal, AlertCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { Button } from './Button';
 
@@ -49,39 +49,39 @@ export function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B1220]/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#22201D]/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-md rounded-2xl bg-[#111E30] border border-[#55C7FF]/40 shadow-[0_0_50px_rgba(85,199,255,0.2)] p-6 sm:p-8 space-y-6 overflow-hidden"
+        className="relative w-full max-w-md rounded-lg bg-[#FAF5EB] border-2 border-[#C9BDAA] shadow-2xl p-6 sm:p-8 space-y-6 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Subtle top glow bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#55C7FF] to-transparent" />
+        {/* Top Ruled Drafting Accent */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#D87535]" />
 
         {/* Header & Close Button */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF]">
-            <Zap className="w-4 h-4 animate-pulse" />
-            <span className="uppercase tracking-widest">
-              {isLogin ? 'Security Access Gateway' : 'Engineer Enrollment'}
+        <div className="flex items-center justify-between border-b border-[#C9BDAA]/50 pb-3">
+          <div className="flex items-center gap-2 text-xs font-mono text-[#D87535]">
+            <ShieldCheck className="w-4 h-4 text-[#D87535]" />
+            <span className="uppercase tracking-widest font-bold">
+              {isLogin ? '// SECURITY ACCESS GATEWAY' : '// ENGINEER ENROLLMENT'}
             </span>
           </div>
           <button
             onClick={closeAuth}
-            className="p-1 rounded-lg text-[#8FA6BC] hover:text-[#EAF5FF] hover:bg-[#192B40] transition-colors cursor-pointer"
+            className="p-1 rounded text-[#8C8275] hover:text-[#22201D] hover:bg-[#EDE1CE] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-2 p-1 rounded-lg bg-[#0B1220] border border-[#192B40] text-xs font-mono">
+        <div className="grid grid-cols-2 p-1 rounded bg-[#EDE1CE] border border-[#C9BDAA] text-xs font-mono">
           <button
             type="button"
             onClick={() => switchMode(true)}
-            className={`py-2 rounded-md font-semibold transition-all cursor-pointer ${
+            className={`py-1.5 rounded font-semibold transition-all cursor-pointer ${
               isLogin
-                ? 'bg-[#192B40] text-[#55C7FF] shadow-[0_0_10px_rgba(85,199,255,0.2)]'
-                : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
+                ? 'bg-[#FAF5EB] text-[#D87535] shadow-xs border border-[#C9BDAA]'
+                : 'text-[#655F55] hover:text-[#22201D]'
             }`}
           >
             SIGN IN
@@ -89,10 +89,10 @@ export function AuthModal() {
           <button
             type="button"
             onClick={() => switchMode(false)}
-            className={`py-2 rounded-md font-semibold transition-all cursor-pointer ${
+            className={`py-1.5 rounded font-semibold transition-all cursor-pointer ${
               !isLogin
-                ? 'bg-[#192B40] text-[#55C7FF] shadow-[0_0_10px_rgba(85,199,255,0.2)]'
-                : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
+                ? 'bg-[#FAF5EB] text-[#D87535] shadow-xs border border-[#C9BDAA]'
+                : 'text-[#655F55] hover:text-[#22201D]'
             }`}
           >
             REGISTER
@@ -101,7 +101,7 @@ export function AuthModal() {
 
         {/* Error Alert Banner */}
         {error && (
-          <div className="p-3 rounded-lg bg-[#EF4444]/10 border border-[#EF4444]/40 flex items-start gap-2.5 text-xs text-[#EF4444] font-mono">
+          <div className="p-3 rounded bg-[#B95D32]/10 border border-[#B95D32]/30 flex items-start gap-2.5 text-xs text-[#B95D32] font-mono">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{error}</span>
           </div>
@@ -112,34 +112,34 @@ export function AuthModal() {
           {!isLogin && (
             <>
               <div className="space-y-1.5">
-                <label className="text-[#8FA6BC] uppercase text-[10px] tracking-wider">
+                <label className="text-[#655F55] uppercase text-[10px] tracking-wider">
                   Engineer Full Name
                 </label>
                 <div className="relative">
-                  <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8FA6BC]" />
+                  <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8C8275]" />
                   <input
                     type="text"
                     required
                     placeholder="e.g. Alex Mercer"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-lg pl-9 pr-3 py-2 text-[#EAF5FF] placeholder-[#8FA6BC]/50 outline-none transition-colors"
+                    className="w-full bg-[#FAF5EB] border border-[#C9BDAA] focus:border-[#D87535] rounded pl-9 pr-3 py-2 text-[#22201D] placeholder-[#8C8275]/60 outline-none transition-colors"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[#8FA6BC] uppercase text-[10px] tracking-wider">
+                <label className="text-[#655F55] uppercase text-[10px] tracking-wider">
                   Engineering Handle (Username)
                 </label>
                 <div className="relative">
-                  <Terminal className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8FA6BC]" />
+                  <Terminal className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8C8275]" />
                   <input
                     type="text"
                     placeholder="e.g. alex_embedded"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-lg pl-9 pr-3 py-2 text-[#EAF5FF] placeholder-[#8FA6BC]/50 outline-none transition-colors"
+                    className="w-full bg-[#FAF5EB] border border-[#C9BDAA] focus:border-[#D87535] rounded pl-9 pr-3 py-2 text-[#22201D] placeholder-[#8C8275]/60 outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -147,78 +147,88 @@ export function AuthModal() {
           )}
 
           <div className="space-y-1.5">
-            <label className="text-[#8FA6BC] uppercase text-[10px] tracking-wider">
-              Engineering Email Address
+            <label className="text-[#655F55] uppercase text-[10px] tracking-wider">
+              Institutional Email
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8FA6BC]" />
+              <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8C8275]" />
               <input
                 type="email"
                 required
                 placeholder="engineer@microverse.lab"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-lg pl-9 pr-3 py-2 text-[#EAF5FF] placeholder-[#8FA6BC]/50 outline-none transition-colors"
+                className="w-full bg-[#FAF5EB] border border-[#C9BDAA] focus:border-[#D87535] rounded pl-9 pr-3 py-2 text-[#22201D] placeholder-[#8C8275]/60 outline-none transition-colors"
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[#8FA6BC] uppercase text-[10px] tracking-wider">
-              Security Passphrase
+            <label className="text-[#655F55] uppercase text-[10px] tracking-wider">
+              Access Key / Password
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8FA6BC]" />
+              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8C8275]" />
               <input
                 type="password"
                 required
                 placeholder="••••••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-lg pl-9 pr-3 py-2 text-[#EAF5FF] placeholder-[#8FA6BC]/50 outline-none transition-colors"
+                className="w-full bg-[#FAF5EB] border border-[#C9BDAA] focus:border-[#D87535] rounded pl-9 pr-3 py-2 text-[#22201D] placeholder-[#8C8275]/60 outline-none transition-colors"
               />
             </div>
           </div>
 
-          {!isLogin && (
-            <div className="space-y-1.5">
-              <label className="text-[#8FA6BC] uppercase text-[10px] tracking-wider">
-                Specialization / Bio (Optional)
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. Firmware & TinyML Explorer"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                className="w-full bg-[#0B1220] border border-[#192B40] focus:border-[#55C7FF] rounded-lg px-3 py-2 text-[#EAF5FF] placeholder-[#8FA6BC]/50 outline-none transition-colors"
-              />
-            </div>
-          )}
-
-          <div className="pt-2">
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full justify-center"
-              icon={ArrowRight}
-            >
-              {loading
-                ? 'VERIFYING CREDENTIALS...'
-                : isLogin
-                ? 'AUTHENTICATE SESSION'
-                : 'INITIALIZE ACCOUNT'}
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            disabled={loading}
+            variant="primary"
+            className="w-full py-2.5 mt-2 flex items-center justify-center gap-2 font-bold"
+          >
+            {loading ? (
+              <span>Authenticating...</span>
+            ) : isLogin ? (
+              <>
+                <span>Access Terminal</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            ) : (
+              <>
+                <span>Enroll Credentials</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </Button>
         </form>
 
-        {/* Demo Credentials Hint */}
-        <div className="p-3 rounded-lg bg-[#0B1220]/60 border border-[#192B40] text-[10px] font-mono text-[#8FA6BC] space-y-1">
-          <div className="text-[#55C7FF] font-semibold">PRE-CONFIGURED DEMO CREDENTIALS:</div>
-          <div>Admin: <span className="text-[#EAF5FF]">admin@microverse.lab</span> / <span className="text-[#EAF5FF]">AdminPass123!</span></div>
-          <div>User: <span className="text-[#EAF5FF]">engineer@microverse.lab</span> / <span className="text-[#EAF5FF]">Engineer123!</span></div>
+        {/* Footer Note */}
+        <div className="pt-2 text-center text-[10px] font-mono text-[#8C8275]">
+          {isLogin ? (
+            <span>
+              New engineer?{' '}
+              <button
+                type="button"
+                onClick={() => switchMode(false)}
+                className="text-[#D87535] hover:underline font-semibold cursor-pointer"
+              >
+                Enroll new account
+              </button>
+            </span>
+          ) : (
+            <span>
+              Already registered?{' '}
+              <button
+                type="button"
+                onClick={() => switchMode(true)}
+                className="text-[#D87535] hover:underline font-semibold cursor-pointer"
+              >
+                Sign in with existing credentials
+              </button>
+            </span>
+          )}
         </div>
       </div>
     </div>
   );
 }
-

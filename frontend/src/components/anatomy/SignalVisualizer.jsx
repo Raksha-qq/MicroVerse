@@ -114,24 +114,24 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
 
   return (
     <div
-      className={`rounded-2xl bg-[#0B1220] border border-[#192B40] overflow-hidden shadow-2xl ${className}`}
+      className={`rounded-2xl bg-[#FAF5EB] border border-[#C9BDAA] overflow-hidden shadow-xs bg-drafting-grid-subtle ${className}`}
     >
       {/* Visualizer Top Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 border-b border-[#192B40] bg-[#111E30]/60 backdrop-blur-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 border-b border-[#C9BDAA] bg-[#EDE1CE]">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-[#0B1220] border border-[#55C7FF]/40 flex items-center justify-center text-[#55C7FF] shadow-[0_0_12px_rgba(85,199,255,0.25)]">
+          <div className="w-9 h-9 rounded-lg bg-[#FAF5EB] border border-[#C9BDAA] flex items-center justify-center text-[#D87535]">
             <Activity className="w-4 h-4 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-heading font-bold text-base text-[#EAF5FF]">
+              <h3 className="font-serif font-bold text-base text-[#22201D]">
                 Real-Time Silicon Signal Visualizer
               </h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#55C7FF]/10 text-[#55C7FF] border border-[#55C7FF]/30">
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#FAF5EB] text-[#D87535] border border-[#C9BDAA]">
                 ACTIVE
               </span>
             </div>
-            <p className="text-xs text-[#8FA6BC] mt-0.5">
+            <p className="text-xs text-[#655F55] mt-0.5 font-sans">
               Interactive physics simulation of voltage transitions, bus clocks, and hardware triggers.
             </p>
           </div>
@@ -141,16 +141,16 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#192B40]/70 hover:bg-[#192B40] text-xs font-mono text-[#EAF5FF] border border-[#55C7FF]/30 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAF5EB] hover:bg-[#EDE1CE] text-xs font-mono font-bold text-[#22201D] border border-[#C9BDAA] transition-colors cursor-pointer shadow-xs"
             title="Toggle Clock Animation"
           >
             {isPlaying ? (
               <>
-                <Pause className="w-3.5 h-3.5 text-[#55C7FF]" /> PAUSE
+                <Pause className="w-3.5 h-3.5 text-[#D87535]" /> PAUSE
               </>
             ) : (
               <>
-                <Play className="w-3.5 h-3.5 text-[#55C7FF]" /> RUN
+                <Play className="w-3.5 h-3.5 text-[#D87535]" /> RUN
               </>
             )}
           </button>
@@ -158,7 +158,7 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
       </div>
 
       {/* Mode Navigation Tabs */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 border-b border-[#192B40] bg-[#0B1220]/70">
+      <div className="grid grid-cols-2 sm:grid-cols-5 border-b border-[#C9BDAA] bg-[#EDE1CE]/60">
         {SIGNAL_MODES.map((mode) => {
           const Icon = mode.icon;
           const isActive = activeMode === mode.id;
@@ -168,13 +168,13 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
               onClick={() => setActiveMode(mode.id)}
               className={`p-3 text-left transition-all border-b-2 cursor-pointer flex items-center gap-2 ${
                 isActive
-                  ? 'border-[#55C7FF] bg-[#111E30] text-[#55C7FF] shadow-[inset_0_-2px_10px_rgba(85,199,255,0.15)]'
-                  : 'border-transparent text-[#8FA6BC] hover:text-[#EAF5FF] hover:bg-[#111E30]/40'
+                  ? 'border-[#D87535] bg-[#FAF5EB] text-[#22201D] font-bold shadow-xs'
+                  : 'border-transparent text-[#655F55] hover:text-[#22201D] hover:bg-[#FAF5EB]/50'
               }`}
             >
-              <Icon className="w-4 h-4 shrink-0" />
+              <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#D87535]' : ''}`} />
               <div className="min-w-0">
-                <div className="text-xs font-heading font-bold truncate">
+                <div className="text-xs font-serif font-bold truncate">
                   {mode.label.split(' ')[0]} {mode.label.split(' ')[1]}
                 </div>
               </div>
@@ -192,23 +192,23 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h4 className="font-heading font-bold text-lg text-[#EAF5FF] flex items-center gap-2">
+                <h4 className="font-serif font-bold text-lg text-[#22201D] flex items-center gap-2">
                   <span>CMOS 3.3V Logic Transition & Thresholds</span>
                 </h4>
-                <p className="text-xs text-[#8FA6BC] mt-0.5">
+                <p className="text-xs text-[#655F55] mt-0.5 font-sans">
                   Observe standard 3.3V CMOS digital voltage thresholds ($V_{IH}, V_{IL}$) and finite rise/fall slew times.
                 </p>
               </div>
 
               {/* Logic Toggle Control */}
-              <div className="flex items-center gap-3 bg-[#111E30] p-1.5 rounded-xl border border-[#192B40]">
-                <span className="text-xs font-mono text-[#8FA6BC] px-2">DRIVE INPUT:</span>
+              <div className="flex items-center gap-3 bg-[#EDE1CE] p-1.5 rounded-xl border border-[#C9BDAA]">
+                <span className="text-xs font-mono text-[#655F55] px-2 font-bold">DRIVE INPUT:</span>
                 <button
                   onClick={() => setLogicState(0)}
                   className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     logicState === 0
-                      ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50 shadow-[0_0_12px_rgba(244,63,94,0.3)]'
-                      : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
+                      ? 'bg-[#22201D] text-[#FAF5EB] shadow-xs'
+                      : 'text-[#655F55] hover:text-[#22201D]'
                   }`}
                 >
                   LOW (0V / '0')
@@ -217,8 +217,8 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                   onClick={() => setLogicState(1)}
                   className={`px-4 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     logicState === 1
-                      ? 'bg-[#55C7FF]/20 text-[#55C7FF] border border-[#55C7FF]/50 shadow-[0_0_12px_rgba(85,199,255,0.3)]'
-                      : 'text-[#8FA6BC] hover:text-[#EAF5FF]'
+                      ? 'bg-[#D87535] text-[#FAF5EB] shadow-xs'
+                      : 'text-[#655F55] hover:text-[#22201D]'
                   }`}
                 >
                   HIGH (3.3V / '1')
@@ -227,30 +227,30 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
             </div>
 
             {/* Voltage Waveform & Threshold Graphic */}
-            <div className="relative h-64 w-full bg-[#080D17] rounded-xl border border-[#192B40] p-4 flex flex-col justify-between overflow-hidden">
+            <div className="relative h-64 w-full bg-[#242522] rounded-xl border border-[#3D3A36] p-4 flex flex-col justify-between overflow-hidden shadow-inner">
               {/* Threshold Band Lines */}
               <div className="absolute inset-0 pointer-events-none flex flex-col justify-between py-6 px-12 opacity-80">
                 {/* 3.3V Rail */}
-                <div className="border-b border-dashed border-[#55C7FF]/30 flex justify-between text-[10px] font-mono text-[#55C7FF]">
+                <div className="border-b border-dashed border-[#55C7FF]/40 flex justify-between text-[10px] font-mono text-[#55C7FF]">
                   <span>VDD (3.30 V)</span>
                   <span>LOGIC HIGH RAIL</span>
                 </div>
                 {/* VIH (2.31V) */}
-                <div className="border-b border-dashed border-emerald-500/40 flex justify-between text-[10px] font-mono text-emerald-400">
+                <div className="border-b border-dashed border-[#87945B]/60 flex justify-between text-[10px] font-mono text-[#87945B]">
                   <span>VIH MIN (2.31 V = 0.7 × VDD)</span>
                   <span>GUARANTEED LOGIC '1' REGION</span>
                 </div>
                 {/* Indeterminate Region */}
-                <div className="bg-amber-500/5 h-10 -my-2 flex items-center justify-center text-[10px] font-mono text-amber-400/70 border-y border-amber-500/20">
+                <div className="bg-[#B95D32]/10 h-10 -my-2 flex items-center justify-center text-[10px] font-mono text-[#D87535] border-y border-[#B95D32]/30 font-bold">
                   INDETERMINATE FORBIDDEN ZONE (Potential Crowbar Shoot-Through)
                 </div>
                 {/* VIL (0.99V) */}
-                <div className="border-b border-dashed border-rose-500/40 flex justify-between text-[10px] font-mono text-rose-400">
+                <div className="border-b border-dashed border-[#B95D32]/50 flex justify-between text-[10px] font-mono text-[#B95D32]">
                   <span>VIL MAX (0.99 V = 0.3 × VDD)</span>
                   <span>GUARANTEED LOGIC '0' REGION</span>
                 </div>
                 {/* GND (0.0V) */}
-                <div className="border-b border-dashed border-[#8FA6BC]/30 flex justify-between text-[10px] font-mono text-[#8FA6BC]">
+                <div className="border-b border-dashed border-[#8C8275]/40 flex justify-between text-[10px] font-mono text-[#8C8275]">
                   <span>VSS (0.00 V)</span>
                   <span>LOGIC LOW RAIL</span>
                 </div>
@@ -266,7 +266,7 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                         : 'M 0 30 Q 150 30, 220 170 L 700 170'
                     }
                     fill="none"
-                    stroke={logicState === 1 ? '#55C7FF' : '#F43F5E'}
+                    stroke={logicState === 1 ? '#C8DE72' : '#B95D32'}
                     strokeWidth="4"
                     strokeLinecap="round"
                     animate={{
@@ -282,38 +282,37 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                     cx="200"
                     cy={logicState === 1 ? 30 : 170}
                     r="7"
-                    fill={logicState === 1 ? '#55C7FF' : '#F43F5E'}
+                    fill={logicState === 1 ? '#C8DE72' : '#B95D32'}
                     animate={{
                       cy: logicState === 1 ? 30 : 170,
                     }}
                     transition={{ duration: slewRate / 50, ease: 'easeInOut' }}
-                    className="shadow-[0_0_15px_#55C7FF]"
                   />
                 </svg>
               </div>
 
               {/* Bottom Voltage & Telemetry Readout */}
-              <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono pt-2 border-t border-[#192B40]/60">
-                <div className="flex items-center gap-4 text-[#8FA6BC]">
+              <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono pt-2 border-t border-[#3D3A36]">
+                <div className="flex items-center gap-4 text-[#8C8275]">
                   <span>
                     STATE:{' '}
                     <strong
-                      className={logicState === 1 ? 'text-[#55C7FF]' : 'text-rose-400'}
+                      className={logicState === 1 ? 'text-[#C8DE72]' : 'text-[#B95D32]'}
                     >
                       {logicState === 1 ? 'HIGH (1)' : 'LOW (0)'}
                     </strong>
                   </span>
                   <span>
                     VOLTAGE:{' '}
-                    <strong className="text-[#EAF5FF]">
+                    <strong className="text-[#E5E5DF]">
                       {logicState === 1 ? '3.30 V' : '0.00 V'}
                     </strong>
                   </span>
                   <span>
-                    SLEW TIME: <strong className="text-[#55C7FF]">{slewRate} ns</strong>
+                    SLEW TIME: <strong className="text-[#D87535]">{slewRate} ns</strong>
                   </span>
                 </div>
-                <div className="text-[11px] text-[#55C7FF] flex items-center gap-1">
+                <div className="text-[11px] text-[#C8DE72] flex items-center gap-1 font-bold">
                   <Zap className="w-3.5 h-3.5" />
                   CMOS Schmitt Trigger Hysteresis Active
                 </div>
@@ -321,12 +320,12 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
             </div>
 
             {/* Slew Rate Slider */}
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-[#111E30]/70 border border-[#192B40]">
-              <Sliders className="w-4 h-4 text-[#55C7FF] shrink-0" />
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-[#EDE1CE] border border-[#C9BDAA]">
+              <Sliders className="w-4 h-4 text-[#D87535] shrink-0" />
               <div className="flex-1 space-y-1">
-                <div className="flex justify-between text-xs font-mono text-[#8FA6BC]">
-                  <span>Output Driver Slew Rate / Pin Rise Time</span>
-                  <span className="text-[#55C7FF] font-bold">{slewRate} nanoseconds</span>
+                <div className="flex justify-between text-xs font-mono text-[#655F55]">
+                  <span className="font-bold text-[#22201D]">Output Driver Slew Rate / Pin Rise Time</span>
+                  <span className="text-[#D87535] font-bold">{slewRate} nanoseconds</span>
                 </div>
                 <input
                   type="range"
@@ -334,7 +333,7 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                   max="60"
                   value={slewRate}
                   onChange={(e) => setSlewRate(Number(e.target.value))}
-                  className="w-full accent-[#55C7FF] cursor-pointer"
+                  className="w-full accent-[#D87535] cursor-pointer"
                 />
               </div>
             </div>
@@ -348,27 +347,27 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h4 className="font-heading font-bold text-lg text-[#EAF5FF]">
+                <h4 className="font-serif font-bold text-lg text-[#22201D]">
                   System Clock Generator & Duty Cycle
                 </h4>
-                <p className="text-xs text-[#8FA6BC] mt-0.5">
+                <p className="text-xs text-[#655F55] mt-0.5 font-sans">
                   The central silicon heartbeat. Notice rising-edge (↑) and falling-edge (↓) trigger points.
                 </p>
               </div>
 
               <div className="flex items-center gap-4 text-xs font-mono">
-                <span className="p-2 rounded bg-[#111E30] border border-[#192B40] text-[#55C7FF]">
+                <span className="p-2 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] text-[#D87535] font-bold">
                   Period T = {(1000 / clockFreqMHz).toFixed(1)} ns
                 </span>
-                <span className="p-2 rounded bg-[#111E30] border border-[#192B40] text-[#EAF5FF]">
+                <span className="p-2 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] text-[#22201D] font-bold">
                   f_SYS = {clockFreqMHz} MHz
                 </span>
               </div>
             </div>
 
             {/* Animated Square Wave Canvas */}
-            <div className="h-56 w-full bg-[#080D17] rounded-xl border border-[#192B40] p-4 flex flex-col justify-between relative overflow-hidden">
-              <div className="absolute top-3 left-4 text-[10px] font-mono text-[#8FA6BC]">
+            <div className="h-56 w-full bg-[#242522] rounded-xl border border-[#3D3A36] p-4 flex flex-col justify-between relative overflow-hidden shadow-inner">
+              <div className="absolute top-3 left-4 text-[10px] font-mono text-[#8C8275]">
                 SYSCLK_OUT (Single-Ended CMOS Square Wave)
               </div>
 
@@ -377,8 +376,8 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                 <svg className="w-full h-28 overflow-hidden" viewBox="0 0 800 100">
                   <defs>
                     <linearGradient id="clockGlow" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#55C7FF" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#55C7FF" stopOpacity="0.0" />
+                      <stop offset="0%" stopColor="#C8DE72" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#C8DE72" stopOpacity="0.0" />
                     </linearGradient>
                   </defs>
 
@@ -394,7 +393,7 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                         <path
                           d={`M 0 80 L 0 20 L ${highWidth} 20 L ${highWidth} 80 L ${periodWidth} 80`}
                           fill="none"
-                          stroke="#55C7FF"
+                          stroke="#C8DE72"
                           strokeWidth="2.5"
                         />
                         {/* Shaded Area under high pulse */}
@@ -403,11 +402,11 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                           fill="url(#clockGlow)"
                         />
                         {/* Rising Edge Arrow */}
-                        <circle cx="0" cy="20" r="3" fill="#A5E3FF" />
+                        <circle cx="0" cy="20" r="3" fill="#FAF5EB" />
                         <text
                           x="-4"
                           y="14"
-                          fill="#55C7FF"
+                          fill="#C8DE72"
                           fontSize="9"
                           fontFamily="monospace"
                         >
@@ -420,11 +419,11 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
               </div>
 
               {/* Interactive Controls */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-[#192B40]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-[#3D3A36]">
                 <div className="space-y-1">
-                  <div className="flex justify-between text-xs font-mono text-[#8FA6BC]">
-                    <span>Clock Frequency (f_SYS)</span>
-                    <span className="text-[#55C7FF] font-bold">{clockFreqMHz} MHz</span>
+                  <div className="flex justify-between text-xs font-mono text-[#8C8275]">
+                    <span className="text-[#E5E5DF]">Clock Frequency (f_SYS)</span>
+                    <span className="text-[#D87535] font-bold">{clockFreqMHz} MHz</span>
                   </div>
                   <input
                     type="range"
@@ -432,14 +431,14 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                     max="84"
                     value={clockFreqMHz}
                     onChange={(e) => setClockFreqMHz(Number(e.target.value))}
-                    className="w-full accent-[#55C7FF] cursor-pointer"
+                    className="w-full accent-[#D87535] cursor-pointer"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex justify-between text-xs font-mono text-[#8FA6BC]">
-                    <span>Duty Cycle (t_HIGH / T)</span>
-                    <span className="text-[#55C7FF] font-bold">{dutyCycle}%</span>
+                  <div className="flex justify-between text-xs font-mono text-[#8C8275]">
+                    <span className="text-[#E5E5DF]">Duty Cycle (t_HIGH / T)</span>
+                    <span className="text-[#D87535] font-bold">{dutyCycle}%</span>
                   </div>
                   <input
                     type="range"
@@ -447,7 +446,7 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                     max="90"
                     value={dutyCycle}
                     onChange={(e) => setDutyCycle(Number(e.target.value))}
-                    className="w-full accent-[#55C7FF] cursor-pointer"
+                    className="w-full accent-[#D87535] cursor-pointer"
                   />
                 </div>
               </div>
@@ -462,24 +461,24 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h4 className="font-heading font-bold text-lg text-[#EAF5FF]">
+                <h4 className="font-serif font-bold text-lg text-[#22201D]">
                   Synchronous SPI Multi-Channel Bus Analyzer
                 </h4>
-                <p className="text-xs text-[#8FA6BC] mt-0.5">
-                  Synchronous 4-wire serial bus transmitting byte <code className="text-[#55C7FF]">0xA5</code> (10100101b).
+                <p className="text-xs text-[#655F55] mt-0.5 font-sans">
+                  Synchronous 4-wire serial bus transmitting byte <code className="text-[#D87535] font-bold">0xA5</code> (10100101b).
                 </p>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setTimingPlaying(!timingPlaying)}
-                  className="px-3 py-1.5 rounded-lg bg-[#111E30] border border-[#192B40] text-xs font-mono text-[#55C7FF] cursor-pointer hover:border-[#55C7FF]/40"
+                  className="px-3 py-1.5 rounded-lg bg-[#FAF5EB] border border-[#C9BDAA] text-xs font-mono text-[#22201D] font-bold cursor-pointer hover:bg-[#EDE1CE] shadow-xs"
                 >
                   {timingPlaying ? 'PAUSE CLOCK' : 'RESUME CLOCK'}
                 </button>
                 <button
                   onClick={() => setTimingStep((s) => (s + 1) % 8)}
-                  className="px-3 py-1.5 rounded-lg bg-[#192B40] text-xs font-mono text-[#EAF5FF] cursor-pointer hover:bg-[#55C7FF]/20"
+                  className="px-3 py-1.5 rounded-lg bg-[#22201D] text-xs font-mono text-[#FAF5EB] font-bold cursor-pointer hover:bg-[#3D3A36] shadow-xs"
                 >
                   STEP BIT ➜
                 </button>
@@ -487,35 +486,35 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
             </div>
 
             {/* Oscilloscope Channel View */}
-            <div className="space-y-3 bg-[#080D17] rounded-xl border border-[#192B40] p-4 font-mono text-xs">
+            <div className="space-y-3 bg-[#242522] rounded-xl border border-[#3D3A36] p-4 font-mono text-xs shadow-inner">
               {/* Channel 1: CS (Active Low) */}
               <div className="space-y-1">
-                <div className="flex justify-between text-[11px] text-[#8FA6BC]">
-                  <span className="text-amber-400 font-bold">CH1: /CS (Chip Select, Active-Low)</span>
-                  <span>LOW (ASSERTED)</span>
+                <div className="flex justify-between text-[11px] text-[#8C8275]">
+                  <span className="text-[#D87535] font-bold">CH1: /CS (Chip Select, Active-Low)</span>
+                  <span className="text-[#E5E5DF]">LOW (ASSERTED)</span>
                 </div>
-                <div className="h-6 bg-[#0B1220] rounded border border-[#192B40] relative flex items-center px-2">
-                  <div className="w-full h-0.5 bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
+                <div className="h-6 bg-[#1C1D1A] rounded border border-[#3D3A36] relative flex items-center px-2">
+                  <div className="w-full h-0.5 bg-[#D87535]" />
                 </div>
               </div>
 
               {/* Channel 2: SCK (Clock) */}
               <div className="space-y-1">
-                <div className="flex justify-between text-[11px] text-[#8FA6BC]">
-                  <span className="text-[#55C7FF] font-bold">CH2: SCK (Serial Clock - Mode 0)</span>
-                  <span>BIT INDEX: {7 - timingStep} (MSB First)</span>
+                <div className="flex justify-between text-[11px] text-[#8C8275]">
+                  <span className="text-[#C8DE72] font-bold">CH2: SCK (Serial Clock - Mode 0)</span>
+                  <span className="text-[#E5E5DF]">BIT INDEX: {7 - timingStep} (MSB First)</span>
                 </div>
-                <div className="h-9 bg-[#0B1220] rounded border border-[#192B40] flex items-center px-2 relative overflow-hidden">
+                <div className="h-9 bg-[#1C1D1A] rounded border border-[#3D3A36] flex items-center px-2 relative overflow-hidden">
                   <div className="grid grid-cols-8 w-full h-full items-center">
                     {Array.from({ length: 8 }).map((_, i) => (
                       <div
                         key={i}
-                        className={`h-full border-r border-[#192B40]/40 flex flex-col justify-center items-center ${
-                          timingStep === i ? 'bg-[#55C7FF]/20 font-bold text-[#55C7FF]' : ''
+                        className={`h-full border-r border-[#3D3A36] flex flex-col justify-center items-center ${
+                          timingStep === i ? 'bg-[#C8DE72]/20 font-bold text-[#C8DE72]' : ''
                         }`}
                       >
-                        <div className="w-full h-3 border-t-2 border-r-2 border-l-2 border-[#55C7FF]" />
-                        <span className="text-[9px] mt-0.5 text-[#8FA6BC]">B{7 - i}</span>
+                        <div className="w-full h-3 border-t-2 border-r-2 border-l-2 border-[#C8DE72]" />
+                        <span className="text-[9px] mt-0.5 text-[#8C8275]">B{7 - i}</span>
                       </div>
                     ))}
                   </div>
@@ -527,19 +526,19 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                 const bits = [1, 0, 1, 0, 0, 1, 0, 1];
                 return (
                   <div className="space-y-1">
-                    <div className="flex justify-between text-[11px] text-[#8FA6BC]">
-                      <span className="text-emerald-400 font-bold">CH3: MOSI (TX Payload: 0xA5)</span>
-                      <span>ACTIVE BIT = {bits[timingStep]}</span>
+                    <div className="flex justify-between text-[11px] text-[#8C8275]">
+                      <span className="text-[#87945B] font-bold">CH3: MOSI (TX Payload: 0xA5)</span>
+                      <span className="text-[#E5E5DF]">ACTIVE BIT = {bits[timingStep]}</span>
                     </div>
-                    <div className="h-9 bg-[#0B1220] rounded border border-[#192B40] flex items-center px-2">
+                    <div className="h-9 bg-[#1C1D1A] rounded border border-[#3D3A36] flex items-center px-2">
                       <div className="grid grid-cols-8 w-full h-full items-center">
                         {bits.map((bit, idx) => (
                           <div
                             key={idx}
-                            className={`h-full border-r border-[#192B40]/40 flex items-center justify-center font-bold ${
+                            className={`h-full border-r border-[#3D3A36] flex items-center justify-center font-bold ${
                               timingStep === idx
-                                ? 'bg-emerald-500/20 text-emerald-400'
-                                : 'text-[#8FA6BC]/60'
+                                ? 'bg-[#87945B]/25 text-[#87945B]'
+                                : 'text-[#8C8275]/50'
                             }`}
                           >
                             <span className="text-sm">{bit}</span>
@@ -556,19 +555,19 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                 const bits = [0, 1, 1, 0, 1, 0, 0, 1];
                 return (
                   <div className="space-y-1">
-                    <div className="flex justify-between text-[11px] text-[#8FA6BC]">
-                      <span className="text-purple-400 font-bold">CH4: MISO (RX Response: 0x69)</span>
-                      <span>FULL-DUPLEX RETURN</span>
+                    <div className="flex justify-between text-[11px] text-[#8C8275]">
+                      <span className="text-[#71818B] font-bold">CH4: MISO (RX Response: 0x69)</span>
+                      <span className="text-[#E5E5DF]">FULL-DUPLEX RETURN</span>
                     </div>
-                    <div className="h-9 bg-[#0B1220] rounded border border-[#192B40] flex items-center px-2">
+                    <div className="h-9 bg-[#1C1D1A] rounded border border-[#3D3A36] flex items-center px-2">
                       <div className="grid grid-cols-8 w-full h-full items-center">
                         {bits.map((bit, idx) => (
                           <div
                             key={idx}
-                            className={`h-full border-r border-[#192B40]/40 flex items-center justify-center font-bold ${
+                            className={`h-full border-r border-[#3D3A36] flex items-center justify-center font-bold ${
                               timingStep === idx
-                                ? 'bg-purple-500/20 text-purple-400'
-                                : 'text-[#8FA6BC]/60'
+                                ? 'bg-[#71818B]/25 text-[#FAF5EB]'
+                                : 'text-[#8C8275]/50'
                             }`}
                           >
                             <span className="text-sm">{bit}</span>
@@ -590,10 +589,10 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h4 className="font-heading font-bold text-lg text-[#EAF5FF]">
+                <h4 className="font-serif font-bold text-lg text-[#22201D]">
                   Deterministic NVIC Interrupt Handling Flow
                 </h4>
-                <p className="text-xs text-[#8FA6BC] mt-0.5">
+                <p className="text-xs text-[#655F55] mt-0.5 font-sans">
                   Trace asynchronous hardware triggers from peripheral IRQ lines through the 12-cycle context stacker.
                 </p>
               </div>
@@ -604,10 +603,10 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                   setInterruptStep(1);
                 }}
                 disabled={isInterruptActive}
-                className={`px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 cursor-pointer transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 cursor-pointer transition-all shadow-xs ${
                   isInterruptActive
-                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 animate-pulse'
-                    : 'bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/30'
+                    ? 'bg-[#D87535]/20 text-[#D87535] border border-[#D87535]/50 animate-pulse'
+                    : 'bg-[#B95D32] hover:bg-[#8C4623] text-[#FAF5EB] border border-[#B95D32]'
                 }`}
               >
                 <ShieldAlert className="w-4 h-4" />
@@ -662,19 +661,21 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                     key={phase.step}
                     className={`p-3 rounded-xl border transition-all ${
                       isCurrent
-                        ? 'bg-[#111E30] border-[#55C7FF] shadow-[0_0_15px_rgba(85,199,255,0.3)] text-[#55C7FF]'
+                        ? 'bg-[#22201D] border-[#D87535] text-[#FAF5EB] shadow-xs'
                         : isPassed
-                        ? 'bg-[#0B1220] border-emerald-500/40 text-emerald-400 opacity-80'
-                        : 'bg-[#0B1220]/50 border-[#192B40] text-[#8FA6BC] opacity-50'
+                        ? 'bg-[#87945B]/15 border-[#87945B]/40 text-[#22201D]'
+                        : 'bg-[#FAF5EB] border-[#C9BDAA] text-[#655F55]'
                     }`}
                   >
-                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold">
+                    <div className={`text-[10px] font-mono uppercase tracking-wider font-bold ${
+                      isCurrent ? 'text-[#D87535]' : isPassed ? 'text-[#87945B]' : 'text-[#8C8275]'
+                    }`}>
                       {phase.badge}
                     </div>
-                    <div className="font-heading font-bold text-xs mt-1 text-[#EAF5FF]">
+                    <div className={`font-serif font-bold text-xs mt-1 ${isCurrent ? 'text-[#FAF5EB]' : 'text-[#22201D]'}`}>
                       {phase.label}
                     </div>
-                    <p className="text-[11px] text-[#8FA6BC] mt-1 leading-snug">
+                    <p className={`text-[11px] mt-1 leading-snug font-sans ${isCurrent ? 'text-[#FAF5EB]/80' : 'text-[#655F55]'}`}>
                       {phase.sub}
                     </p>
                   </div>
@@ -683,10 +684,10 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
             </div>
 
             {/* Register Stack Visualizer */}
-            <div className="p-4 rounded-xl bg-[#080D17] border border-[#192B40] space-y-2">
-              <div className="text-[10px] font-mono text-[#8FA6BC] uppercase tracking-wider flex justify-between">
+            <div className="p-4 rounded-xl bg-[#242522] border border-[#3D3A36] space-y-2 shadow-inner">
+              <div className="text-[10px] font-mono text-[#8C8275] uppercase tracking-wider flex justify-between">
                 <span>Hardware Automatic Stack Frame (Pushed to SRAM top)</span>
-                <span className="text-[#55C7FF]">12 CLOCK CYCLES LATENCY</span>
+                <span className="text-[#D87535] font-bold">12 CLOCK CYCLES LATENCY</span>
               </div>
               <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 font-mono text-xs text-center">
                 {['R0', 'R1', 'R2', 'R3', 'R12', 'LR (R14)', 'PC (R15)', 'xPSR'].map((reg, idx) => (
@@ -694,11 +695,11 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                     key={reg}
                     className={`p-2 rounded border transition-all ${
                       interruptStep >= 3 && interruptStep < 5
-                        ? 'bg-[#55C7FF]/20 border-[#55C7FF] text-[#55C7FF] font-bold shadow-[0_0_8px_rgba(85,199,255,0.3)]'
-                        : 'bg-[#0B1220] border-[#192B40] text-[#8FA6BC]'
+                        ? 'bg-[#D87535]/25 border-[#D87535] text-[#FAF5EB] font-bold shadow-xs'
+                        : 'bg-[#1C1D1A] border-[#3D3A36] text-[#8C8275]'
                     }`}
                   >
-                    <div className="text-[9px] text-[#8FA6BC]">+{idx * 4}B</div>
+                    <div className="text-[9px] text-[#8C8275]">+{idx * 4}B</div>
                     <div className="text-xs mt-0.5">{reg}</div>
                   </div>
                 ))}
@@ -714,17 +715,17 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h4 className="font-heading font-bold text-lg text-[#EAF5FF]">
+                <h4 className="font-serif font-bold text-lg text-[#22201D]">
                   Internal Bus Matrix & Instruction Pipeline
                 </h4>
-                <p className="text-xs text-[#8FA6BC] mt-0.5">
+                <p className="text-xs text-[#655F55] mt-0.5 font-sans">
                   Follow the data trajectory as instructions are fetched from Flash and executed on GPIO registers.
                 </p>
               </div>
 
               <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="text-[#8FA6BC]">ACTIVE STAGE:</span>
-                <span className="px-2.5 py-1 rounded bg-[#55C7FF]/10 text-[#55C7FF] border border-[#55C7FF]/30 font-bold">
+                <span className="text-[#655F55] font-bold">ACTIVE STAGE:</span>
+                <span className="px-2.5 py-1 rounded bg-[#EDE1CE] text-[#D87535] border border-[#C9BDAA] font-bold">
                   {['1. FETCH', '2. DECODE', '3. OPERAND READ', '4. ALU EXECUTE', '5. WRITEBACK'][pipelineStage]}
                 </span>
               </div>
@@ -773,17 +774,19 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
                     }}
                     className={`p-4 rounded-xl border transition-all ${
                       isHighlight
-                        ? 'bg-[#111E30] border-[#55C7FF] shadow-[0_0_20px_rgba(85,199,255,0.35)] text-[#55C7FF]'
-                        : 'bg-[#0B1220] border-[#192B40] text-[#8FA6BC]'
+                        ? 'bg-[#22201D] border-[#D87535] text-[#FAF5EB] shadow-xs'
+                        : 'bg-[#FAF5EB] border-[#C9BDAA] text-[#655F55]'
                     }`}
                   >
-                    <div className="text-[10px] font-mono uppercase tracking-wider font-bold">
+                    <div className={`text-[10px] font-mono uppercase tracking-wider font-bold ${
+                      isHighlight ? 'text-[#D87535]' : 'text-[#8C8275]'
+                    }`}>
                       {block.tag}
                     </div>
-                    <div className="font-heading font-bold text-sm text-[#EAF5FF] mt-1">
+                    <div className={`font-serif font-bold text-sm mt-1 ${isHighlight ? 'text-[#FAF5EB]' : 'text-[#22201D]'}`}>
                       {block.name}
                     </div>
-                    <p className="text-[11px] text-[#8FA6BC] mt-1 leading-snug">
+                    <p className={`text-[11px] mt-1 leading-snug font-sans ${isHighlight ? 'text-[#FAF5EB]/80' : 'text-[#655F55]'}`}>
                       {block.detail}
                     </p>
                   </motion.div>
@@ -792,12 +795,12 @@ export function SignalVisualizer({ defaultMode = 'binary', className = '' }) {
             </div>
 
             {/* Bus Activity Status Bar */}
-            <div className="p-3 rounded-lg bg-[#111E30]/70 border border-[#192B40] flex items-center justify-between text-xs font-mono text-[#8FA6BC]">
+            <div className="p-3.5 rounded-lg bg-[#EDE1CE] border border-[#C9BDAA] flex items-center justify-between text-xs font-mono text-[#22201D]">
               <span className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#55C7FF] animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-[#D87535] animate-ping" />
                 Bus Matrix Transaction: I-Code Bus ➜ AHB System Bus ➜ APB1 Peripheral Bridge
               </span>
-              <span className="text-[#55C7FF] font-bold">32-BIT TRANSIT</span>
+              <span className="text-[#D87535] font-bold">32-BIT TRANSIT</span>
             </div>
           </div>
         )}
