@@ -23,9 +23,6 @@ export function AuthProvider({ children }) {
         }
       } catch (err) {
         console.warn('Initial session check failed:', err.message);
-        localStorage.removeItem('microverse_token');
-        setToken(null);
-        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -132,4 +129,3 @@ export function useAuth() {
   }
   return context;
 }
-

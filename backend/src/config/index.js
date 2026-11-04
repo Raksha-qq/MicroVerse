@@ -7,6 +7,22 @@ if (isProduction && !jwtSecret) {
   throw new Error("JWT_SECRET must be set in production.");
 }
 
+// Build allowed CORS origins
+const buildCorsOrigin = () => {
+  if (process.env.CORS_ORIGIN) {
+    return process.env.CORS_ORIGIN.includes(",")
+      ? process.env.CORS_ORIGIN.split(",").map((s) => s.trim())
+      : process.env.CORS_ORIGIN;
+  }
+  if (isProduction) {
+    return "https://micro-verse.vercel.app";
+  }
+  return [
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ];
+};
+
 const config = {
   env: process.env.NODE_ENV || "development",
   isProduction,
@@ -29,11 +45,7 @@ const config = {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   },
   cors: {
-    origin: process.env.CORS_ORIGIN
-      ? process.env.CORS_ORIGIN.includes(",")
-        ? process.env.CORS_ORIGIN.split(",").map((s) => s.trim())
-        : process.env.CORS_ORIGIN
-      : "http://localhost:5173",
+    origin: buildCorsOrigin(),
     credentials: true,
   },
   rateLimit: {

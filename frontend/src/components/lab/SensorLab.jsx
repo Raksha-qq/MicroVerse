@@ -109,7 +109,7 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
       ctx.clearRect(0, 0, w, h);
 
       // Grid
-      ctx.strokeStyle = 'rgba(25, 43, 64, 0.4)';
+      ctx.strokeStyle = 'rgba(101, 95, 85, 0.4)';
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 40) {
         ctx.beginPath();
@@ -122,11 +122,11 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
       const trigY_high = 30;
       const trigY_low = 65;
 
-      ctx.fillStyle = '#55C7FF';
+      ctx.fillStyle = '#C8DE72';
       ctx.font = '10px monospace';
       ctx.fillText('CH1: TRIGGER (10µs PULSE FROM MCU TIMER)', 15, 20);
 
-      ctx.strokeStyle = '#55C7FF';
+      ctx.strokeStyle = '#C8DE72';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(15, trigY_low);
@@ -141,14 +141,14 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
       const echoY_high = 100;
       const echoY_low = 135;
 
-      ctx.fillStyle = '#10B981';
+      ctx.fillStyle = '#87945B';
       ctx.fillText(
         `CH2: ECHO PULSE (DURATION = ${idealEchoTimeUs.toFixed(0)}µs ~ ${(idealEchoTimeUs / 1000).toFixed(2)}ms)`,
         15,
         90
       );
 
-      ctx.strokeStyle = '#10B981';
+      ctx.strokeStyle = '#87945B';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(15, echoY_low);
@@ -182,17 +182,17 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
   return (
     <div className="space-y-6">
       {/* Simulation Controls & Parameters Bar */}
-      <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#192B40] pb-4">
+      <div className="rounded-2xl border border-[#655F55] bg-[#242522]/70 p-5 space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#655F55] pb-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider mb-1">
+            <div className="flex items-center gap-2 text-xs font-mono text-[#C8DE72] uppercase tracking-wider mb-1">
               <Radio className="w-3.5 h-3.5" />
               Acoustic Transduction & Time-of-Flight Lab
             </div>
-            <h3 className="font-heading text-xl font-bold text-[#EAF5FF]">
+            <h3 className="font-heading text-xl font-bold text-[#FAF5EB]">
               Ultrasonic Distance & Environmental Jitter Lab
             </h3>
-            <p className="text-xs text-[#8FA6BC] mt-0.5">
+            <p className="text-xs text-[#C9BDAA] mt-0.5">
               Simulate HC-SR04 sonar pulses, temperature-dependent speed of sound, surface absorption, and MCU input capture filtering.
             </p>
           </div>
@@ -237,10 +237,10 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
         {/* Sliders Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
           {/* Target Distance Slider */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">TARGET DISTANCE:</span>
-              <span className="text-[#55C7FF] font-bold">{targetDistanceCm.toFixed(1)} cm</span>
+              <span className="text-[#C9BDAA]">TARGET DISTANCE:</span>
+              <span className="text-[#C8DE72] font-bold">{targetDistanceCm.toFixed(1)} cm</span>
             </div>
             <input
               type="range"
@@ -249,18 +249,18 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
               step="1.0"
               value={targetDistanceCm}
               onChange={(e) => setTargetDistanceCm(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-[#192B40] rounded-lg appearance-none cursor-pointer accent-[#55C7FF]"
+              className="w-full h-1.5 bg-[#655F55] rounded-lg appearance-none cursor-pointer accent-[#C8DE72]"
             />
-            <div className="text-[10px] text-[#8FA6BC]">
+            <div className="text-[10px] text-[#C9BDAA]">
               Echo Time: {idealEchoTimeUs.toFixed(0)} µs
             </div>
           </div>
 
           {/* Ambient Temperature Slider */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">AMBIENT TEMP:</span>
-              <span className="text-[#A5E3FF] font-bold">{ambientTempC.toFixed(1)} °C</span>
+              <span className="text-[#C9BDAA]">AMBIENT TEMP:</span>
+              <span className="text-[#C8DE72] font-bold">{ambientTempC.toFixed(1)} °C</span>
             </div>
             <input
               type="range"
@@ -269,23 +269,23 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
               step="1.0"
               value={ambientTempC}
               onChange={(e) => setAmbientTempC(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-[#192B40] rounded-lg appearance-none cursor-pointer accent-[#A5E3FF]"
+              className="w-full h-1.5 bg-[#655F55] rounded-lg appearance-none cursor-pointer accent-[#C8DE72]"
             />
-            <div className="text-[10px] text-[#8FA6BC]">
+            <div className="text-[10px] text-[#C9BDAA]">
               v_sound: {speedOfSoundMps.toFixed(1)} m/s
             </div>
           </div>
 
           {/* Surface Material Selection */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
-            <span className="text-[#8FA6BC]">SURFACE REFLECTIVITY:</span>
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
+            <span className="text-[#C9BDAA]">SURFACE REFLECTIVITY:</span>
             <div className="flex gap-1.5">
               <button
                 onClick={() => setSurfaceMaterial('HARD')}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                   surfaceMaterial === 'HARD'
-                    ? 'bg-[#55C7FF] text-[#0B1220]'
-                    : 'bg-[#111E30] text-[#8FA6BC] hover:text-[#EAF5FF]'
+                    ? 'bg-[#C8DE72] text-[#1E1C19]'
+                    : 'bg-[#242522] text-[#C9BDAA] hover:text-[#FAF5EB]'
                 }`}
               >
                 Hard / Metal
@@ -294,8 +294,8 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
                 onClick={() => setSurfaceMaterial('SOFT')}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                   surfaceMaterial === 'SOFT'
-                    ? 'bg-[#55C7FF] text-[#0B1220]'
-                    : 'bg-[#111E30] text-[#8FA6BC] hover:text-[#EAF5FF]'
+                    ? 'bg-[#C8DE72] text-[#1E1C19]'
+                    : 'bg-[#242522] text-[#C9BDAA] hover:text-[#FAF5EB]'
                 }`}
               >
                 Soft / Foam
@@ -304,9 +304,9 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
           </div>
 
           {/* Sensor Noise & Filter Window */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
             <div className="flex justify-between items-center">
-              <span className="text-[#8FA6BC]">SENSOR JITTER:</span>
+              <span className="text-[#C9BDAA]">SENSOR JITTER:</span>
               <button
                 onClick={() => setEnableNoise(!enableNoise)}
                 className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer ${
@@ -317,8 +317,8 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
               </button>
             </div>
             <div className="flex justify-between text-[11px] pt-1">
-              <span className="text-[#8FA6BC]">MA Filter Window:</span>
-              <span className="text-[#10B981] font-bold">{filterWindowSize} Samples</span>
+              <span className="text-[#C9BDAA]">MA Filter Window:</span>
+              <span className="text-[#87945B] font-bold">{filterWindowSize} Samples</span>
             </div>
             <input
               type="range"
@@ -327,32 +327,32 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
               step="1"
               value={filterWindowSize}
               onChange={(e) => setFilterWindowSize(parseInt(e.target.value, 10))}
-              className="w-full h-1.5 bg-[#192B40] rounded-lg appearance-none cursor-pointer accent-[#10B981]"
+              className="w-full h-1.5 bg-[#655F55] rounded-lg appearance-none cursor-pointer accent-[#87945B]"
             />
           </div>
         </div>
       </div>
 
       {/* Logic Analyzer: Trigger & Echo Pulses */}
-      <div className="rounded-2xl border border-[#192B40] bg-[#0B1220] overflow-hidden shadow-2xl">
-        <div className="px-4 py-2.5 bg-[#111E30] border-b border-[#192B40] flex items-center justify-between text-xs font-mono">
-          <div className="flex items-center gap-2 text-[#55C7FF]">
+      <div className="rounded-2xl border border-[#655F55] bg-[#1E1C19] overflow-hidden shadow-2xl">
+        <div className="px-4 py-2.5 bg-[#242522] border-b border-[#655F55] flex items-center justify-between text-xs font-mono">
+          <div className="flex items-center gap-2 text-[#C8DE72]">
             <Activity className="w-3.5 h-3.5" />
             <span>HC-SR04 SONAR TIMING PROTOCOL (INPUT CAPTURE TIMER CHANNELS)</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[#8FA6BC]">
-              AIR TEMP: <span className="text-[#55C7FF]">{ambientTempC}°C</span>
+            <span className="text-xs text-[#C9BDAA]">
+              AIR TEMP: <span className="text-[#C8DE72]">{ambientTempC}°C</span>
             </span>
           </div>
         </div>
 
         <div className="p-4 relative">
           <canvas ref={canvasRef} width={800} height={150} className="w-full h-36 block" />
-          <div className="flex justify-between items-center text-[10px] font-mono text-[#8FA6BC] pt-2 border-t border-[#192B40]/60">
+          <div className="flex justify-between items-center text-[10px] font-mono text-[#C9BDAA] pt-2 border-t border-[#655F55]/60">
             <span>TRIGGER: 10 µs HIGH PULSE</span>
             <span>ECHO WIDTH: PROPORTIONAL TO 2x FLIGHT TIME</span>
-            <span className="text-[#10B981] font-bold">
+            <span className="text-[#87945B] font-bold">
               t_echo = {(idealEchoTimeUs / 1000).toFixed(2)} ms
             </span>
           </div>
@@ -361,19 +361,19 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
 
       {/* Raw Reading vs Filtered Reading Comparison */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="p-5 rounded-2xl border border-[#192B40] bg-[#111E30]/70 flex flex-col justify-between space-y-3">
+        <div className="p-5 rounded-2xl border border-[#655F55] bg-[#242522]/70 flex flex-col justify-between space-y-3">
           <div>
-            <div className="text-[10px] font-mono text-[#8FA6BC] uppercase tracking-wider">
+            <div className="text-[10px] font-mono text-[#C9BDAA] uppercase tracking-wider">
               GROUND TRUTH PHYSICAL DISTANCE
             </div>
-            <div className="font-heading text-2xl font-bold text-[#EAF5FF] mt-1">
+            <div className="font-heading text-2xl font-bold text-[#FAF5EB] mt-1">
               {targetDistanceCm.toFixed(1)} cm
             </div>
-            <p className="text-xs text-[#8FA6BC] mt-1">
+            <p className="text-xs text-[#C9BDAA] mt-1">
               Actual geometric clearance between transceiver horn and obstacle.
             </p>
           </div>
-          <div className="text-xs font-mono text-[#55C7FF]">
+          <div className="text-xs font-mono text-[#C8DE72]">
             Speed of Sound: {speedOfSoundMps.toFixed(2)} m/s
           </div>
         </div>
@@ -386,7 +386,7 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
             <div className="font-heading text-2xl font-bold text-amber-300 mt-1">
               {(rawReadings[rawReadings.length - 1] ?? targetDistanceCm).toFixed(2)} cm
             </div>
-            <p className="text-xs text-[#8FA6BC] mt-1">
+            <p className="text-xs text-[#C9BDAA] mt-1">
               Direct arithmetic conversion from unbuffered timer input capture register.
             </p>
           </div>
@@ -403,7 +403,7 @@ export function SensorLab({ onSaveConfig, initialConfig }) {
             <div className="font-heading text-2xl font-bold text-emerald-300 mt-1">
               {filteredDistanceCm.toFixed(2)} cm
             </div>
-            <p className="text-xs text-[#8FA6BC] mt-1">
+            <p className="text-xs text-[#C9BDAA] mt-1">
               Smoothed output from {filterWindowSize}-sample circular memory buffer.
             </p>
           </div>

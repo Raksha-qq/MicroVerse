@@ -118,7 +118,7 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
       ctx.clearRect(0, 0, w, h);
 
       // Background grid
-      ctx.strokeStyle = 'rgba(25, 43, 64, 0.4)';
+      ctx.strokeStyle = 'rgba(101, 95, 85, 0.4)';
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 40) {
         ctx.beginPath();
@@ -140,7 +140,7 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
       const vilY = lowY - ((currentSpec.vil / currentSpec.vcc) * (lowY - highY));
 
       // Draw VCC line
-      ctx.strokeStyle = 'rgba(85, 199, 255, 0.2)';
+      ctx.strokeStyle = 'rgba(200, 222, 114, 0.2)';
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
       ctx.moveTo(0, highY);
@@ -148,7 +148,7 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
       ctx.stroke();
 
       // Draw GND line
-      ctx.strokeStyle = 'rgba(143, 166, 188, 0.2)';
+      ctx.strokeStyle = 'rgba(201, 189, 170, 0.2)';
       ctx.beginPath();
       ctx.moveTo(0, lowY);
       ctx.lineTo(w, lowY);
@@ -162,9 +162,9 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
       // Draw Logic Waveform
       const history = historyRef.current;
       if (history.length > 1) {
-        ctx.strokeStyle = '#55C7FF';
+        ctx.strokeStyle = '#C8DE72';
         ctx.lineWidth = 2.5;
-        ctx.shadowColor = 'rgba(85, 199, 255, 0.6)';
+        ctx.shadowColor = 'rgba(200, 222, 114, 0.6)';
         ctx.shadowBlur = 8;
         ctx.beginPath();
 
@@ -208,17 +208,17 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
   return (
     <div className="space-y-6">
       {/* Simulation Controls & Parameters Bar */}
-      <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#192B40] pb-4">
+      <div className="rounded-2xl border border-[#655F55] bg-[#242522]/70 p-5 space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#655F55] pb-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider mb-1">
+            <div className="flex items-center gap-2 text-xs font-mono text-[#C8DE72] uppercase tracking-wider mb-1">
               <Zap className="w-3.5 h-3.5" />
               Digital Logic & Timing Engine
             </div>
-            <h3 className="font-heading text-xl font-bold text-[#EAF5FF]">
+            <h3 className="font-heading text-xl font-bold text-[#FAF5EB]">
               Signal Generator & Logic Level Lab
             </h3>
-            <p className="text-xs text-[#8FA6BC] mt-0.5">
+            <p className="text-xs text-[#C9BDAA] mt-0.5">
               Generate binary bit sequences, evaluate clock edges, and analyze noise margins.
             </p>
           </div>
@@ -257,12 +257,12 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
         {/* Controls Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
           {/* Logic Standard Selector */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
-            <span className="text-[#8FA6BC]">LOGIC STANDARD:</span>
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
+            <span className="text-[#C9BDAA]">LOGIC STANDARD:</span>
             <select
               value={logicStandard}
               onChange={(e) => setLogicStandard(e.target.value)}
-              className="w-full bg-[#111E30] border border-[#192B40] focus:border-[#55C7FF] rounded-lg p-2 text-xs text-[#EAF5FF] outline-none font-mono"
+              className="w-full bg-[#242522] border border-[#655F55] focus:border-[#C8DE72] rounded-lg p-2 text-xs text-[#FAF5EB] outline-none font-mono"
             >
               <option value="3.3V_LVCMOS">3.3V LVCMOS (ARM / ESP32 / RP2040)</option>
               <option value="5.0V_TTL">5.0V TTL (AVR / PIC / 8051)</option>
@@ -271,10 +271,10 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
           </div>
 
           {/* Clock Frequency Slider */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">CLOCK FREQ:</span>
-              <span className="text-[#55C7FF] font-bold">{frequencyHz} Hz</span>
+              <span className="text-[#C9BDAA]">CLOCK FREQ:</span>
+              <span className="text-[#C8DE72] font-bold">{frequencyHz} Hz</span>
             </div>
             <input
               type="range"
@@ -283,21 +283,21 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
               step="1"
               value={frequencyHz}
               onChange={(e) => setFrequencyHz(parseInt(e.target.value, 10))}
-              className="w-full h-1.5 bg-[#192B40] rounded-lg appearance-none cursor-pointer accent-[#55C7FF]"
+              className="w-full h-1.5 bg-[#655F55] rounded-lg appearance-none cursor-pointer accent-[#C8DE72]"
             />
-            <div className="text-[10px] text-[#8FA6BC]">Period T: {(1000 / frequencyHz).toFixed(1)} ms</div>
+            <div className="text-[10px] text-[#C9BDAA]">Period T: {(1000 / frequencyHz).toFixed(1)} ms</div>
           </div>
 
           {/* Mode Switcher */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
-            <span className="text-[#8FA6BC]">SIGNAL MODE:</span>
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
+            <span className="text-[#C9BDAA]">SIGNAL MODE:</span>
             <div className="flex gap-1.5">
               <button
                 onClick={() => setMode('SEQUENCE')}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                   mode === 'SEQUENCE'
-                    ? 'bg-[#55C7FF] text-[#0B1220]'
-                    : 'bg-[#111E30] text-[#8FA6BC] hover:text-[#EAF5FF]'
+                    ? 'bg-[#C8DE72] text-[#1E1C19]'
+                    : 'bg-[#242522] text-[#C9BDAA] hover:text-[#FAF5EB]'
                 }`}
               >
                 Bit Sequence
@@ -306,8 +306,8 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
                 onClick={() => setMode('MANUAL')}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                   mode === 'MANUAL'
-                    ? 'bg-[#55C7FF] text-[#0B1220]'
-                    : 'bg-[#111E30] text-[#8FA6BC] hover:text-[#EAF5FF]'
+                    ? 'bg-[#C8DE72] text-[#1E1C19]'
+                    : 'bg-[#242522] text-[#C9BDAA] hover:text-[#FAF5EB]'
                 }`}
               >
                 Manual Toggle
@@ -316,28 +316,28 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
           </div>
 
           {/* Bit Pattern or Manual Toggle Button */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
             {mode === 'SEQUENCE' ? (
               <>
-                <span className="text-[#8FA6BC]">BINARY SEQUENCE:</span>
+                <span className="text-[#C9BDAA]">BINARY SEQUENCE:</span>
                 <input
                   type="text"
                   maxLength={16}
                   value={bitSequence}
                   onChange={(e) => setBitSequence(e.target.value.replace(/[^01]/g, ''))}
-                  className="w-full bg-[#111E30] border border-[#192B40] focus:border-[#55C7FF] rounded-lg px-2.5 py-1.5 text-xs text-[#55C7FF] font-bold tracking-widest outline-none"
+                  className="w-full bg-[#242522] border border-[#655F55] focus:border-[#C8DE72] rounded-lg px-2.5 py-1.5 text-xs text-[#C8DE72] font-bold tracking-widest outline-none"
                   placeholder="10110010"
                 />
               </>
             ) : (
               <>
-                <span className="text-[#8FA6BC]">MANUAL PIN STATE:</span>
+                <span className="text-[#C9BDAA]">MANUAL PIN STATE:</span>
                 <button
                   onClick={() => setIsManualHigh(!isManualHigh)}
                   className={`w-full py-2 rounded-lg font-bold text-xs cursor-pointer transition-all ${
                     isManualHigh
-                      ? 'bg-emerald-500 text-[#0B1220] shadow-[0_0_12px_rgba(16,185,129,0.5)]'
-                      : 'bg-[#111E30] text-[#8FA6BC] hover:text-[#EAF5FF] border border-[#192B40]'
+                      ? 'bg-emerald-500 text-[#1E1C19] shadow-[0_0_12px_rgba(16,185,129,0.5)]'
+                      : 'bg-[#242522] text-[#C9BDAA] hover:text-[#FAF5EB] border border-[#655F55]'
                   }`}
                 >
                   {isManualHigh ? 'FORCED LOGIC HIGH (1)' : 'FORCED LOGIC LOW (0)'}
@@ -349,14 +349,14 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
       </div>
 
       {/* Virtual Timing Diagram Oscilloscope Display */}
-      <div className="rounded-2xl border border-[#192B40] bg-[#0B1220] overflow-hidden shadow-2xl">
-        <div className="px-4 py-2.5 bg-[#111E30] border-b border-[#192B40] flex items-center justify-between text-xs font-mono">
-          <div className="flex items-center gap-2 text-[#55C7FF]">
+      <div className="rounded-2xl border border-[#655F55] bg-[#1E1C19] overflow-hidden shadow-2xl">
+        <div className="px-4 py-2.5 bg-[#242522] border-b border-[#655F55] flex items-center justify-between text-xs font-mono">
+          <div className="flex items-center gap-2 text-[#C8DE72]">
             <Activity className="w-3.5 h-3.5" />
             <span>REAL-TIME DIGITAL LOGIC TIMING DIAGRAM (CH1)</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-[#8FA6BC]">
+            <span className="text-[#C9BDAA]">
               CURRENT STATE:{' '}
               <span className={`font-bold ${isCurrentlyHigh ? 'text-emerald-400' : 'text-slate-400'}`}>
                 {isCurrentlyHigh ? `HIGH (+${currentSpec.vcc}V)` : 'LOW (0.0V)'}
@@ -367,7 +367,7 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
 
         <div className="p-4 relative">
           <canvas ref={canvasRef} width={800} height={200} className="w-full h-48 block" />
-          <div className="flex justify-between items-center text-[10px] font-mono text-[#8FA6BC] pt-2 border-t border-[#192B40]/60">
+          <div className="flex justify-between items-center text-[10px] font-mono text-[#C9BDAA] pt-2 border-t border-[#655F55]/60">
             <span>VOLTAGE SCALE: 0V TO +{currentSpec.vcc}V</span>
             <span className="text-[#F87171]/80">RED BAND = UNDEFINED / METASTABLE REGION</span>
             <span>TIMEBASE: {(1000 / frequencyHz).toFixed(0)} ms / BIT</span>
@@ -377,42 +377,42 @@ export function SignalLab({ onSaveConfig, initialConfig }) {
 
       {/* Logic Levels & Noise Margins Explanatory Matrix */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl border border-[#192B40] bg-[#111E30]/60 space-y-2">
-          <div className="text-xs font-mono text-[#55C7FF] uppercase tracking-wider font-semibold">
+        <div className="p-4 rounded-xl border border-[#655F55] bg-[#242522]/60 space-y-2">
+          <div className="text-xs font-mono text-[#C8DE72] uppercase tracking-wider font-semibold">
             {currentSpec.name}
           </div>
-          <p className="text-xs text-[#8FA6BC] leading-relaxed">
+          <p className="text-xs text-[#C9BDAA] leading-relaxed">
             {currentSpec.description}
           </p>
-          <div className="pt-2 text-xs font-mono text-[#EAF5FF] space-y-1">
-            <div>Supply Rail: <span className="text-[#55C7FF] font-bold">+{currentSpec.vcc}V</span></div>
+          <div className="pt-2 text-xs font-mono text-[#FAF5EB] space-y-1">
+            <div>Supply Rail: <span className="text-[#C8DE72] font-bold">+{currentSpec.vcc}V</span></div>
             <div>Guaranteed Output HIGH (V_OH): <span className="text-emerald-400 font-bold">≥ {currentSpec.voh}V</span></div>
             <div>Guaranteed Output LOW (V_OL): <span className="text-slate-400 font-bold">≤ {currentSpec.vol}V</span></div>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-[#192B40] bg-[#111E30]/60 space-y-2">
-          <div className="text-xs font-mono text-[#A5E3FF] uppercase tracking-wider font-semibold">
+        <div className="p-4 rounded-xl border border-[#655F55] bg-[#242522]/60 space-y-2">
+          <div className="text-xs font-mono text-[#C8DE72] uppercase tracking-wider font-semibold">
             Input Detection Thresholds
           </div>
-          <p className="text-xs text-[#8FA6BC] leading-relaxed">
+          <p className="text-xs text-[#C9BDAA] leading-relaxed">
             A receiver pin requires voltages strictly outside the red band to deterministically resolve 0 or 1.
           </p>
-          <div className="pt-2 text-xs font-mono text-[#EAF5FF] space-y-1">
-            <div>Recognized Input HIGH (V_IH): <span className="text-[#55C7FF] font-bold">≥ {currentSpec.vih}V</span></div>
+          <div className="pt-2 text-xs font-mono text-[#FAF5EB] space-y-1">
+            <div>Recognized Input HIGH (V_IH): <span className="text-[#C8DE72] font-bold">≥ {currentSpec.vih}V</span></div>
             <div>Recognized Input LOW (V_IL): <span className="text-slate-400 font-bold">≤ {currentSpec.vil}V</span></div>
             <div>Forbidden / Undefined Band: <span className="text-rose-400 font-bold">{currentSpec.vil}V – {currentSpec.vih}V</span></div>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-[#192B40] bg-[#111E30]/60 space-y-2">
-          <div className="text-xs font-mono text-[#10B981] uppercase tracking-wider font-semibold">
+        <div className="p-4 rounded-xl border border-[#655F55] bg-[#242522]/60 space-y-2">
+          <div className="text-xs font-mono text-[#87945B] uppercase tracking-wider font-semibold">
             Calculated Noise Margins
           </div>
-          <p className="text-xs text-[#8FA6BC] leading-relaxed">
+          <p className="text-xs text-[#C9BDAA] leading-relaxed">
             Noise Margin is the maximum spurious noise voltage the signal line can sustain without triggering false bit flips.
           </p>
-          <div className="pt-2 text-xs font-mono text-[#EAF5FF] space-y-1">
+          <div className="pt-2 text-xs font-mono text-[#FAF5EB] space-y-1">
             <div>High Noise Margin (NMH = V_OH - V_IH): <span className="text-emerald-400 font-bold">+{(currentSpec.voh - currentSpec.vih).toFixed(2)}V</span></div>
             <div>Low Noise Margin (NML = V_IL - V_OL): <span className="text-emerald-400 font-bold">+{(currentSpec.vil - currentSpec.vol).toFixed(2)}V</span></div>
           </div>

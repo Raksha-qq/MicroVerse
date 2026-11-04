@@ -259,7 +259,7 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
       ctx.clearRect(0, 0, w, h);
 
       // Arena Grid
-      ctx.strokeStyle = 'rgba(25, 43, 64, 0.4)';
+      ctx.strokeStyle = 'rgba(101, 95, 85, 0.4)';
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 30) {
         ctx.beginPath();
@@ -276,8 +276,8 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
 
       // Draw Obstacles
       for (const ob of obstacles) {
-        ctx.fillStyle = '#192B40';
-        ctx.strokeStyle = '#55C7FF';
+        ctx.fillStyle = '#655F55';
+        ctx.strokeStyle = '#C8DE72';
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(ob.x, ob.y, ob.radius, 0, 2 * Math.PI);
@@ -285,7 +285,7 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
         ctx.stroke();
 
         // Inner hatch
-        ctx.fillStyle = 'rgba(85, 199, 255, 0.15)';
+        ctx.fillStyle = 'rgba(200, 222, 114, 0.15)';
         ctx.beginPath();
         ctx.arc(ob.x, ob.y, ob.radius * 0.5, 0, 2 * Math.PI);
         ctx.fill();
@@ -314,8 +314,8 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
         ctx.fill();
       };
 
-      const frontColor = rayFront < detectionThreshold ? '#F87171' : 'rgba(85, 199, 255, 0.6)';
-      const leftColor = rayLeft < detectionThreshold ? '#F87171' : 'rgba(165, 227, 255, 0.5)';
+      const frontColor = rayFront < detectionThreshold ? '#F87171' : 'rgba(200, 222, 114, 0.6)';
+      const leftColor = rayLeft < detectionThreshold ? '#F87171' : 'rgba(200, 222, 114, 0.5)';
       const rightColor = rayRight < detectionThreshold ? '#F87171' : 'rgba(16, 185, 129, 0.5)';
 
       drawRay(0, rayFront, frontColor);
@@ -336,13 +336,13 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
       ctx.rotate(r.angle);
 
       // Wheels
-      ctx.fillStyle = '#8FA6BC';
+      ctx.fillStyle = '#C9BDAA';
       ctx.fillRect(-12, -r.radius - 4, 24, 6); // Left wheel
       ctx.fillRect(-12, r.radius - 2, 24, 6);  // Right wheel
 
       // Body circle
-      ctx.fillStyle = '#0B1220';
-      ctx.strokeStyle = isRunning ? '#55C7FF' : '#8FA6BC';
+      ctx.fillStyle = '#1E1C19';
+      ctx.strokeStyle = isRunning ? '#C8DE72' : '#C9BDAA';
       ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.arc(0, 0, r.radius, 0, 2 * Math.PI);
@@ -350,7 +350,7 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
       ctx.stroke();
 
       // Heading direction arrow
-      ctx.strokeStyle = '#55C7FF';
+      ctx.strokeStyle = '#C8DE72';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(0, 0);
@@ -369,17 +369,17 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
   return (
     <div className="space-y-6">
       {/* Simulation Controls & Parameters Bar */}
-      <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#192B40] pb-4">
+      <div className="rounded-2xl border border-[#655F55] bg-[#242522]/70 p-5 space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#655F55] pb-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider mb-1">
+            <div className="flex items-center gap-2 text-xs font-mono text-[#C8DE72] uppercase tracking-wider mb-1">
               <Bot className="w-3.5 h-3.5" />
               Autonomous Kinematics & Decision Engine
             </div>
-            <h3 className="font-heading text-xl font-bold text-[#EAF5FF]">
+            <h3 className="font-heading text-xl font-bold text-[#FAF5EB]">
               2D Obstacle-Avoiding Mobile Robot Simulation
             </h3>
-            <p className="text-xs text-[#8FA6BC] mt-0.5">
+            <p className="text-xs text-[#C9BDAA] mt-0.5">
               Observe how algorithmic decision rules translate into low-level H-bridge motor commands. Click canvas to add/remove obstacles.
             </p>
           </div>
@@ -421,12 +421,12 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
         {/* Controls Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
           {/* Policy Selector */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
-            <span className="text-[#8FA6BC]">PROGRAMMED BEHAVIOR (POLICY):</span>
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
+            <span className="text-[#C9BDAA]">PROGRAMMED BEHAVIOR (POLICY):</span>
             <select
               value={policy}
               onChange={(e) => setPolicy(e.target.value)}
-              className="w-full bg-[#111E30] border border-[#192B40] focus:border-[#55C7FF] rounded-lg p-2 text-xs text-[#EAF5FF] outline-none font-mono"
+              className="w-full bg-[#242522] border border-[#655F55] focus:border-[#C8DE72] rounded-lg p-2 text-xs text-[#FAF5EB] outline-none font-mono"
             >
               <option value="STOP">Policy 1: Basic Reactive Stop</option>
               <option value="AVOID_AND_TURN">Policy 2: Reactive Obstacle Avoidance & Turn</option>
@@ -435,10 +435,10 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
           </div>
 
           {/* Speed Slider */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">ROBOT SPEED:</span>
-              <span className="text-[#55C7FF] font-bold">{speed} px/s</span>
+              <span className="text-[#C9BDAA]">ROBOT SPEED:</span>
+              <span className="text-[#C8DE72] font-bold">{speed} px/s</span>
             </div>
             <input
               type="range"
@@ -447,16 +447,16 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
               step="5"
               value={speed}
               onChange={(e) => setSpeed(parseInt(e.target.value, 10))}
-              className="w-full h-1.5 bg-[#192B40] rounded-lg appearance-none cursor-pointer accent-[#55C7FF]"
+              className="w-full h-1.5 bg-[#655F55] rounded-lg appearance-none cursor-pointer accent-[#C8DE72]"
             />
-            <div className="text-[10px] text-[#8FA6BC]">Linear Velocity PWM Multiplier</div>
+            <div className="text-[10px] text-[#C9BDAA]">Linear Velocity PWM Multiplier</div>
           </div>
 
           {/* Detection Threshold Slider */}
-          <div className="space-y-1.5 bg-[#0B1220] p-3 rounded-xl border border-[#192B40]">
+          <div className="space-y-1.5 bg-[#1E1C19] p-3 rounded-xl border border-[#655F55]">
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">DETECTION DISTANCE:</span>
-              <span className="text-[#A5E3FF] font-bold">{detectionThreshold} px</span>
+              <span className="text-[#C9BDAA]">DETECTION DISTANCE:</span>
+              <span className="text-[#C8DE72] font-bold">{detectionThreshold} px</span>
             </div>
             <input
               type="range"
@@ -465,17 +465,17 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
               step="5"
               value={detectionThreshold}
               onChange={(e) => setDetectionThreshold(parseInt(e.target.value, 10))}
-              className="w-full h-1.5 bg-[#192B40] rounded-lg appearance-none cursor-pointer accent-[#A5E3FF]"
+              className="w-full h-1.5 bg-[#655F55] rounded-lg appearance-none cursor-pointer accent-[#C8DE72]"
             />
-            <div className="text-[10px] text-[#8FA6BC]">Sonar Trigger Radius Horizon</div>
+            <div className="text-[10px] text-[#C9BDAA]">Sonar Trigger Radius Horizon</div>
           </div>
         </div>
       </div>
 
       {/* 2D Arena Canvas Display */}
-      <div className="rounded-2xl border border-[#192B40] bg-[#0B1220] overflow-hidden shadow-2xl relative">
-        <div className="px-4 py-2.5 bg-[#111E30] border-b border-[#192B40] flex items-center justify-between text-xs font-mono">
-          <div className="flex items-center gap-2 text-[#55C7FF]">
+      <div className="rounded-2xl border border-[#655F55] bg-[#1E1C19] overflow-hidden shadow-2xl relative">
+        <div className="px-4 py-2.5 bg-[#242522] border-b border-[#655F55] flex items-center justify-between text-xs font-mono">
+          <div className="flex items-center gap-2 text-[#C8DE72]">
             <Navigation className="w-3.5 h-3.5" />
             <span>2D MECHATRONIC TEST ARENA (CLICK TO ADD / REMOVE OBSTACLES)</span>
           </div>
@@ -498,68 +498,68 @@ export function RobotLab({ onSaveConfig, initialConfig }) {
       {/* Live Telemetry & Low-Level Driver Signal Matrix */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
         {/* Telemetry 1: Sonar Rangefinders */}
-        <div className="p-4 rounded-xl border border-[#192B40] bg-[#111E30]/70 space-y-2">
-          <div className="text-[10px] text-[#8FA6BC] uppercase tracking-wider font-semibold">
+        <div className="p-4 rounded-xl border border-[#655F55] bg-[#242522]/70 space-y-2">
+          <div className="text-[10px] text-[#C9BDAA] uppercase tracking-wider font-semibold">
             SONAR RANGEFINDERS (PX)
           </div>
           <div className="space-y-1">
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">Left (-35°):</span>
-              <span className="text-[#A5E3FF] font-bold">{sensorDistances.left} px</span>
+              <span className="text-[#C9BDAA]">Left (-35°):</span>
+              <span className="text-[#C8DE72] font-bold">{sensorDistances.left} px</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">Front (0°):</span>
-              <span className={`font-bold ${sensorDistances.front < detectionThreshold ? 'text-rose-400' : 'text-[#55C7FF]'}`}>
+              <span className="text-[#C9BDAA]">Front (0°):</span>
+              <span className={`font-bold ${sensorDistances.front < detectionThreshold ? 'text-rose-400' : 'text-[#C8DE72]'}`}>
                 {sensorDistances.front} px
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#8FA6BC]">Right (+35°):</span>
-              <span className="text-[#10B981] font-bold">{sensorDistances.right} px</span>
+              <span className="text-[#C9BDAA]">Right (+35°):</span>
+              <span className="text-[#87945B] font-bold">{sensorDistances.right} px</span>
             </div>
           </div>
         </div>
 
         {/* Telemetry 2: Controller State */}
-        <div className="p-4 rounded-xl border border-[#192B40] bg-[#111E30]/70 space-y-2">
-          <div className="text-[10px] text-[#8FA6BC] uppercase tracking-wider font-semibold">
+        <div className="p-4 rounded-xl border border-[#655F55] bg-[#242522]/70 space-y-2">
+          <div className="text-[10px] text-[#C9BDAA] uppercase tracking-wider font-semibold">
             CONTROLLER DECISION STATE
           </div>
-          <div className="font-heading text-sm font-bold text-[#55C7FF] pt-1">
+          <div className="font-heading text-sm font-bold text-[#C8DE72] pt-1">
             {robotState}
           </div>
-          <div className="text-[10px] text-[#8FA6BC]">
+          <div className="text-[10px] text-[#C9BDAA]">
             Loop Rate: 60 Hz • Zero Polling Jitter
           </div>
         </div>
 
         {/* Telemetry 3: Left Motor Driver Pin Output */}
-        <div className="p-4 rounded-xl border border-[#192B40] bg-[#111E30]/70 space-y-2">
-          <div className="text-[10px] text-[#8FA6BC] uppercase tracking-wider font-semibold">
+        <div className="p-4 rounded-xl border border-[#655F55] bg-[#242522]/70 space-y-2">
+          <div className="text-[10px] text-[#C9BDAA] uppercase tracking-wider font-semibold">
             LEFT MOTOR DRIVER (CH-A)
           </div>
           <div className="flex justify-between pt-1">
-            <span className="text-[#8FA6BC]">DIR_A Pin:</span>
-            <span className="text-[#EAF5FF] font-bold">{motorCommands.dirL}</span>
+            <span className="text-[#C9BDAA]">DIR_A Pin:</span>
+            <span className="text-[#FAF5EB] font-bold">{motorCommands.dirL}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[#8FA6BC]">PWM_A (0-255):</span>
-            <span className="text-[#55C7FF] font-bold">{motorCommands.pwmL}</span>
+            <span className="text-[#C9BDAA]">PWM_A (0-255):</span>
+            <span className="text-[#C8DE72] font-bold">{motorCommands.pwmL}</span>
           </div>
         </div>
 
         {/* Telemetry 4: Right Motor Driver Pin Output */}
-        <div className="p-4 rounded-xl border border-[#192B40] bg-[#111E30]/70 space-y-2">
-          <div className="text-[10px] text-[#8FA6BC] uppercase tracking-wider font-semibold">
+        <div className="p-4 rounded-xl border border-[#655F55] bg-[#242522]/70 space-y-2">
+          <div className="text-[10px] text-[#C9BDAA] uppercase tracking-wider font-semibold">
             RIGHT MOTOR DRIVER (CH-B)
           </div>
           <div className="flex justify-between pt-1">
-            <span className="text-[#8FA6BC]">DIR_B Pin:</span>
-            <span className="text-[#EAF5FF] font-bold">{motorCommands.dirR}</span>
+            <span className="text-[#C9BDAA]">DIR_B Pin:</span>
+            <span className="text-[#FAF5EB] font-bold">{motorCommands.dirR}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[#8FA6BC]">PWM_B (0-255):</span>
-            <span className="text-[#10B981] font-bold">{motorCommands.pwmR}</span>
+            <span className="text-[#C9BDAA]">PWM_B (0-255):</span>
+            <span className="text-[#87945B] font-bold">{motorCommands.pwmR}</span>
           </div>
         </div>
       </div>

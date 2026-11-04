@@ -39,3 +39,5 @@ pnpm-debug.log*
 backend/prisma/*.db
 backend/prisma/*.db-journal
 
+# ZIP archives
+*.zip

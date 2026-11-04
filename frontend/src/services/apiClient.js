@@ -12,7 +12,7 @@ export async function apiClient(endpoint, { body, ...customConfig } = {}) {
 
   const config = {
     method: body ? 'POST' : 'GET',
-    credentials: 'include',
+    // Cross-origin authentication uses the bearer token header rather than cookies.
     ...customConfig,
     headers: {
       ...headers,
@@ -33,12 +33,14 @@ export async function apiClient(endpoint, { body, ...customConfig } = {}) {
         localStorage.removeItem('microverse_token');
         window.dispatchEvent(new Event('auth-expired'));
       }
-      throw new Error(data.error || 'Laboratory communication error');
+      throw new Error(data.error || data.message || 'Laboratory communication error');
     }
 
     return data;
   } catch (err) {
+    if (err instanceof SyntaxError) {
+      throw new Error('Server returned an invalid response. The backend may be starting up — please try again in a moment.');
+    }
     return Promise.reject(err);
   }
 }
-

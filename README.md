@@ -276,7 +276,7 @@ The repository includes a root `render.yaml`, which can be used as the starting 
 For a separately hosted frontend and backend:
 
 - Set the frontend's `VITE_API_URL` to the deployed API base URL, including `/api` if that is the API prefix expected by the frontend client.
-- Set the backend's `CORS_ORIGIN` to the deployed frontend origin.
+- Set the backend's `CORS_ORIGIN` to the deployed frontend origin (for this Vercel deployment: `https://micro-verse.vercel.app`).
 - Configure `DATABASE_URL` with the hosted PostgreSQL connection string.
 - Set `NODE_ENV=production`.
 - Set a strong, unique `JWT_SECRET` in the hosting provider's secret manager.

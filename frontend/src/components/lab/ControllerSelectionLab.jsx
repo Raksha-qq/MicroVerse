@@ -223,17 +223,17 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
   return (
     <div className="space-y-6">
       {/* Simulation Controls & Parameters Bar */}
-      <div className="rounded-2xl border border-[#192B40] bg-[#111E30]/70 p-5 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#192B40] pb-4">
+      <div className="rounded-2xl border border-[#655F55] bg-[#242522]/70 p-5 space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#655F55] pb-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider mb-1">
+            <div className="flex items-center gap-2 text-xs font-mono text-[#C8DE72] uppercase tracking-wider mb-1">
               <Cpu className="w-3.5 h-3.5" />
               Hardware Decision & Trade-Off Matrix
             </div>
-            <h3 className="font-heading text-xl font-bold text-[#EAF5FF]">
+            <h3 className="font-heading text-xl font-bold text-[#FAF5EB]">
               Controller Selection Lab for Robotics
             </h3>
-            <p className="text-xs text-[#8FA6BC] mt-0.5">
+            <p className="text-xs text-[#C9BDAA] mt-0.5">
               Select a proposed robotics project profile to evaluate candidate silicon suitability against architectural trade-offs.
             </p>
           </div>
@@ -269,20 +269,20 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
                 }}
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                   isSelected
-                    ? 'bg-[#192B40] border-[#55C7FF] shadow-[0_0_15px_rgba(85,199,255,0.25)] ring-1 ring-[#55C7FF]'
-                    : 'bg-[#0B1220] border-[#192B40] hover:border-[#8FA6BC]/50'
+                    ? 'bg-[#655F55] border-[#C8DE72] shadow-[0_0_15px_rgba(85,199,255,0.25)] ring-1 ring-[#C8DE72]'
+                    : 'bg-[#1E1C19] border-[#655F55] hover:border-[#C9BDAA]/50'
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <ProfileIcon className={`w-4 h-4 ${isSelected ? 'text-[#55C7FF]' : 'text-[#8FA6BC]'}`} />
-                    <span className="text-[9px] font-mono text-[#8FA6BC]">PROFILE</span>
+                    <ProfileIcon className={`w-4 h-4 ${isSelected ? 'text-[#C8DE72]' : 'text-[#C9BDAA]'}`} />
+                    <span className="text-[9px] font-mono text-[#C9BDAA]">PROFILE</span>
                   </div>
-                  <div className="font-heading text-xs font-bold text-[#EAF5FF] line-clamp-1">
+                  <div className="font-heading text-xs font-bold text-[#FAF5EB] line-clamp-1">
                     {prof.name}
                   </div>
                 </div>
-                <div className="text-[10px] font-mono text-[#55C7FF] mt-2 line-clamp-1">
+                <div className="text-[10px] font-mono text-[#C8DE72] mt-2 line-clamp-1">
                   {prof.tag}
                 </div>
               </button>
@@ -291,17 +291,17 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
         </div>
 
         {/* Active Profile Description & Critical Constraints */}
-        <div className="p-4 rounded-xl bg-[#0B1220] border border-[#192B40] space-y-2">
+        <div className="p-4 rounded-xl bg-[#1E1C19] border border-[#655F55] space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-[#55C7FF] uppercase tracking-wider font-semibold">
+            <span className="text-xs font-mono text-[#C8DE72] uppercase tracking-wider font-semibold">
               Mission Specifications: {currentProfile.name}
             </span>
             <Badge variant="cyan">{currentProfile.tag}</Badge>
           </div>
-          <p className="text-xs text-[#EAF5FF] leading-relaxed">
+          <p className="text-xs text-[#FAF5EB] leading-relaxed">
             {currentProfile.description}
           </p>
-          <div className="pt-2 border-t border-[#192B40]/70 text-[11px] font-mono text-[#8FA6BC]">
+          <div className="pt-2 border-t border-[#655F55]/70 text-[11px] font-mono text-[#C9BDAA]">
             <span className="text-amber-400 font-semibold">Critical Architectural Bottleneck: </span>
             {currentProfile.criticalTradeoff}
           </div>
@@ -310,14 +310,14 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
 
       {/* Scored Candidate Recommendations Grid */}
       {loading ? (
-        <div className="py-16 text-center text-xs font-mono text-[#8FA6BC]">
+        <div className="py-16 text-center text-xs font-mono text-[#C9BDAA]">
           EVALUATING 19 SILICON CANDIDATES ACROSS ARCHITECTURAL VECTORS...
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Candidates Ranked List */}
           <div className="space-y-3">
-            <div className="text-xs font-mono text-[#8FA6BC] uppercase tracking-wider">
+            <div className="text-xs font-mono text-[#C9BDAA] uppercase tracking-wider">
               Ranked Silicon Candidates ({scoredCandidates.length})
             </div>
             <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
@@ -327,7 +327,7 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
                   cand.score >= 80
                     ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
                     : cand.score >= 60
-                    ? 'text-[#55C7FF] bg-[#55C7FF]/10 border-[#55C7FF]/30'
+                    ? 'text-[#C8DE72] bg-[#C8DE72]/10 border-[#C8DE72]/30'
                     : 'text-amber-400 bg-amber-500/10 border-amber-500/30';
 
                 return (
@@ -336,17 +336,17 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
                     onClick={() => setSelectedCandidateId(cand.controller.id)}
                     className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                       isSelected
-                        ? 'bg-[#192B40] border-[#55C7FF] shadow-[0_0_12px_rgba(85,199,255,0.2)]'
-                        : 'bg-[#111E30]/70 border-[#192B40] hover:border-[#8FA6BC]/40'
+                        ? 'bg-[#655F55] border-[#C8DE72] shadow-[0_0_12px_rgba(85,199,255,0.2)]'
+                        : 'bg-[#242522]/70 border-[#655F55] hover:border-[#C9BDAA]/40'
                     }`}
                   >
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono text-[#8FA6BC]">#{idx + 1}</span>
-                        <span className="font-bold text-xs text-[#EAF5FF]">{cand.controller.name}</span>
-                        <span className="text-[10px] font-mono text-[#8FA6BC]">({cand.controller.family})</span>
+                        <span className="text-[10px] font-mono text-[#C9BDAA]">#{idx + 1}</span>
+                        <span className="font-bold text-xs text-[#FAF5EB]">{cand.controller.name}</span>
+                        <span className="text-[10px] font-mono text-[#C9BDAA]">({cand.controller.family})</span>
                       </div>
-                      <div className="text-[10px] font-mono text-[#55C7FF] mt-0.5">
+                      <div className="text-[10px] font-mono text-[#C8DE72] mt-0.5">
                         {cand.controller.core} • {cand.controller.maxClockSpeedMHz} MHz
                       </div>
                     </div>
@@ -362,24 +362,24 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
 
           {/* Active Candidate Deep Engineering Justification */}
           {activeCandidate && (
-            <div className="lg:col-span-2 rounded-2xl border border-[#192B40] bg-[#111E30]/80 p-5 sm:p-6 space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#192B40]">
+            <div className="lg:col-span-2 rounded-2xl border border-[#655F55] bg-[#242522]/80 p-5 sm:p-6 space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#655F55]">
                 <div>
-                  <div className="flex items-center gap-2 text-xs font-mono text-[#55C7FF] uppercase tracking-wider mb-1">
+                  <div className="flex items-center gap-2 text-xs font-mono text-[#C8DE72] uppercase tracking-wider mb-1">
                     Architectural Evaluation Scorecard
                   </div>
-                  <h3 className="font-heading text-xl font-bold text-[#EAF5FF]">
+                  <h3 className="font-heading text-xl font-bold text-[#FAF5EB]">
                     {activeCandidate.controller.name}
                   </h3>
-                  <div className="text-xs font-mono text-[#8FA6BC]">
+                  <div className="text-xs font-mono text-[#C9BDAA]">
                     {activeCandidate.controller.manufacturer} • {activeCandidate.controller.architecture}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <div className="text-[10px] font-mono text-[#8FA6BC]">SUITABILITY</div>
-                    <div className="font-heading text-2xl font-bold text-[#55C7FF]">
+                    <div className="text-[10px] font-mono text-[#C9BDAA]">SUITABILITY</div>
+                    <div className="font-heading text-2xl font-bold text-[#C8DE72]">
                       {activeCandidate.score}%
                     </div>
                   </div>
@@ -395,23 +395,23 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
 
               {/* Hardware Quick Stats Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-                <div className="p-2.5 rounded-lg bg-[#0B1220] border border-[#192B40]">
-                  <div className="text-[10px] text-[#8FA6BC]">CPU CLOCK</div>
-                  <div className="font-bold text-[#55C7FF] mt-0.5">{activeCandidate.controller.maxClockSpeedMHz} MHz</div>
+                <div className="p-2.5 rounded-lg bg-[#1E1C19] border border-[#655F55]">
+                  <div className="text-[10px] text-[#C9BDAA]">CPU CLOCK</div>
+                  <div className="font-bold text-[#C8DE72] mt-0.5">{activeCandidate.controller.maxClockSpeedMHz} MHz</div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-[#0B1220] border border-[#192B40]">
-                  <div className="text-[10px] text-[#8FA6BC]">SRAM / FLASH</div>
-                  <div className="font-bold text-[#10B981] mt-0.5">
+                <div className="p-2.5 rounded-lg bg-[#1E1C19] border border-[#655F55]">
+                  <div className="text-[10px] text-[#C9BDAA]">SRAM / FLASH</div>
+                  <div className="font-bold text-[#87945B] mt-0.5">
                     {activeCandidate.controller.sramKb}KB / {activeCandidate.controller.flashKb}KB
                   </div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-[#0B1220] border border-[#192B40]">
-                  <div className="text-[10px] text-[#8FA6BC]">PWM CHANNELS</div>
-                  <div className="font-bold text-[#A5E3FF] mt-0.5">{activeCandidate.controller.pwmChannels} PWMs</div>
+                <div className="p-2.5 rounded-lg bg-[#1E1C19] border border-[#655F55]">
+                  <div className="text-[10px] text-[#C9BDAA]">PWM CHANNELS</div>
+                  <div className="font-bold text-[#C8DE72] mt-0.5">{activeCandidate.controller.pwmChannels} PWMs</div>
                 </div>
-                <div className="p-2.5 rounded-lg bg-[#0B1220] border border-[#192B40]">
-                  <div className="text-[10px] text-[#8FA6BC]">CAN / FPU</div>
-                  <div className="font-bold text-[#EAF5FF] mt-0.5">
+                <div className="p-2.5 rounded-lg bg-[#1E1C19] border border-[#655F55]">
+                  <div className="text-[10px] text-[#C9BDAA]">CAN / FPU</div>
+                  <div className="font-bold text-[#FAF5EB] mt-0.5">
                     {activeCandidate.controller.canCount > 0 ? 'CAN Bus' : 'No CAN'} • {activeCandidate.controller.fpu ? 'FPU Yes' : 'No FPU'}
                   </div>
                 </div>
@@ -424,7 +424,7 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     Mission Strengths
                   </div>
-                  <ul className="space-y-1.5 text-xs text-[#EAF5FF]">
+                  <ul className="space-y-1.5 text-xs text-[#FAF5EB]">
                     {activeCandidate.pros.map((pro, idx) => (
                       <li key={idx} className="flex items-start gap-1.5">
                         <span className="text-emerald-400">•</span>
@@ -439,7 +439,7 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
                     <AlertTriangle className="w-3.5 h-3.5" />
                     Architectural Compromises
                   </div>
-                  <ul className="space-y-1.5 text-xs text-[#EAF5FF]">
+                  <ul className="space-y-1.5 text-xs text-[#FAF5EB]">
                     {activeCandidate.cons.map((con, idx) => (
                       <li key={idx} className="flex items-start gap-1.5">
                         <span className="text-amber-400">•</span>
@@ -451,10 +451,10 @@ export function ControllerSelectionLab({ onSaveConfig, initialConfig }) {
               </div>
 
               {/* Universal Best Controller Myth Disclaimer */}
-              <div className="p-3.5 rounded-xl bg-[#0B1220] border border-[#192B40] text-xs font-mono text-[#8FA6BC] flex items-start gap-2">
-                <Info className="w-4 h-4 text-[#55C7FF] shrink-0 mt-0.5" />
+              <div className="p-3.5 rounded-xl bg-[#1E1C19] border border-[#655F55] text-xs font-mono text-[#C9BDAA] flex items-start gap-2">
+                <Info className="w-4 h-4 text-[#C8DE72] shrink-0 mt-0.5" />
                 <div>
-                  <span className="text-[#55C7FF] font-semibold">Engineering Principle: </span>
+                  <span className="text-[#C8DE72] font-semibold">Engineering Principle: </span>
                   There is no universal "best" microcontroller. An expensive 480MHz dual-core STM32H7 is optimal for flight controllers but counterproductive for battery-powered solar sensors, where a 16MHz AVR or ultra-low-power Cortex-M0+ provides superior battery longevity and electrical noise immunity at one-tenth the cost.
                 </div>
               </div>

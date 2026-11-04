@@ -6,10 +6,8 @@ import {
   Award,
   ChevronRight,
   X,
-  ArrowRight,
   Check,
   CheckSquare,
-  FileText,
   AlertCircle
 } from 'lucide-react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -19,12 +17,125 @@ import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
 import { lessonService } from '../services/lessonService';
 
+// Fallback curriculum — shown when backend is unreachable or returning empty
+const FALLBACK_CHAPTERS = [
+  {
+    id: 'ch-1', chapterNumber: 1, slug: 'what-is-a-microcontroller',
+    title: 'What is a Microcontroller?', level: 'BEGINNER', estimatedMinutes: 20,
+    summary: 'An introduction to monolithic embedded silicon: discovering how a single chip integrates a CPU, volatile RAM, non-volatile Flash, and physical I/O peripherals.',
+    lessons: [
+      { id: 'l-1-1', lessonNumber: 1, slug: 'mcu-intro', title: 'Silicon on a Single Die', estimatedMinutes: 10, difficulty: 'BEGINNER' },
+      { id: 'l-1-2', lessonNumber: 2, slug: 'mcu-vs-pc', title: 'MCU vs Desktop Computer', estimatedMinutes: 10, difficulty: 'BEGINNER' },
+    ],
+  },
+  {
+    id: 'ch-2', chapterNumber: 2, slug: 'microcontroller-vs-microprocessor-vs-soc',
+    title: 'MCU vs Microprocessor vs SoC', level: 'BEGINNER', estimatedMinutes: 25,
+    summary: 'Explore the architectural trade-offs between self-contained MCUs, high-performance MPUs, and advanced Systems-on-Chip.',
+    lessons: [
+      { id: 'l-2-1', lessonNumber: 1, slug: 'mpu-basics', title: 'Microprocessors & External RAM', estimatedMinutes: 12, difficulty: 'BEGINNER' },
+      { id: 'l-2-2', lessonNumber: 2, slug: 'soc-overview', title: 'System-on-Chip Architecture', estimatedMinutes: 13, difficulty: 'BEGINNER' },
+    ],
+  },
+  {
+    id: 'ch-3', chapterNumber: 3, slug: 'how-a-microcontroller-works',
+    title: 'How a Microcontroller Works: The Instruction Cycle', level: 'BEGINNER', estimatedMinutes: 25,
+    summary: 'Trace the heartbeat of silicon execution: Fetch, Decode, and Execute instruction pipeline.',
+    lessons: [
+      { id: 'l-3-1', lessonNumber: 1, slug: 'fetch-decode-execute', title: 'Fetch → Decode → Execute', estimatedMinutes: 15, difficulty: 'BEGINNER' },
+      { id: 'l-3-2', lessonNumber: 2, slug: 'pipelining', title: 'Pipelining & Clock Cycles', estimatedMinutes: 10, difficulty: 'BEGINNER' },
+    ],
+  },
+  {
+    id: 'ch-4', chapterNumber: 4, slug: 'cpu-and-alu',
+    title: 'CPU and ALU: The Silicon Computational Core', level: 'BEGINNER', estimatedMinutes: 25,
+    summary: 'Understand the Arithmetic Logic Unit, general-purpose registers, and how the CPU performs computations.',
+    lessons: [
+      { id: 'l-4-1', lessonNumber: 1, slug: 'alu-operations', title: 'ALU Operations & Flags', estimatedMinutes: 13, difficulty: 'BEGINNER' },
+      { id: 'l-4-2', lessonNumber: 2, slug: 'registers', title: 'General-Purpose Registers', estimatedMinutes: 12, difficulty: 'BEGINNER' },
+    ],
+  },
+  {
+    id: 'ch-5', chapterNumber: 5, slug: 'memory-architecture',
+    title: 'Memory Architecture: Flash, SRAM & EEPROM', level: 'BEGINNER', estimatedMinutes: 30,
+    summary: 'Explore Flash program storage, SRAM volatile working memory, and EEPROM persistent data storage.',
+    lessons: [
+      { id: 'l-5-1', lessonNumber: 1, slug: 'flash-memory', title: 'Flash Memory & Code Storage', estimatedMinutes: 15, difficulty: 'BEGINNER' },
+      { id: 'l-5-2', lessonNumber: 2, slug: 'sram-eeprom', title: 'SRAM vs EEPROM', estimatedMinutes: 15, difficulty: 'BEGINNER' },
+    ],
+  },
+  {
+    id: 'ch-6', chapterNumber: 6, slug: 'gpio-and-digital-io',
+    title: 'GPIO & Digital I/O: Controlling the Physical World', level: 'BEGINNER', estimatedMinutes: 30,
+    summary: 'Configure GPIO pins as digital inputs and outputs, master pull-up resistors, and understand electrical levels.',
+    lessons: [
+      { id: 'l-6-1', lessonNumber: 1, slug: 'gpio-output', title: 'GPIO Output: Driving LEDs & Relays', estimatedMinutes: 15, difficulty: 'BEGINNER' },
+      { id: 'l-6-2', lessonNumber: 2, slug: 'gpio-input', title: 'GPIO Input: Buttons & Pull-Ups', estimatedMinutes: 15, difficulty: 'BEGINNER' },
+    ],
+  },
+  {
+    id: 'ch-7', chapterNumber: 7, slug: 'clocks-and-power',
+    title: 'Clocks & Power Management', level: 'INTERMEDIATE', estimatedMinutes: 30,
+    summary: 'Master oscillator selection, PLL multiplication, clock gating, and deep-sleep power modes.',
+    lessons: [
+      { id: 'l-7-1', lessonNumber: 1, slug: 'clock-sources', title: 'HSE, HSI & PLL Clock Trees', estimatedMinutes: 15, difficulty: 'INTERMEDIATE' },
+      { id: 'l-7-2', lessonNumber: 2, slug: 'power-modes', title: 'Sleep, Stop & Standby Modes', estimatedMinutes: 15, difficulty: 'INTERMEDIATE' },
+    ],
+  },
+  {
+    id: 'ch-8', chapterNumber: 8, slug: 'timers-and-counters',
+    title: 'Timers, Counters & PWM Generation', level: 'INTERMEDIATE', estimatedMinutes: 35,
+    summary: 'Generate precise PWM signals for motor control, measure time intervals, and capture external events.',
+    lessons: [
+      { id: 'l-8-1', lessonNumber: 1, slug: 'timer-basics', title: 'Timer Prescalers & Auto-Reload', estimatedMinutes: 17, difficulty: 'INTERMEDIATE' },
+      { id: 'l-8-2', lessonNumber: 2, slug: 'pwm-generation', title: 'PWM: Servo & Motor Control', estimatedMinutes: 18, difficulty: 'INTERMEDIATE' },
+    ],
+  },
+  {
+    id: 'ch-9', chapterNumber: 9, slug: 'interrupts',
+    title: 'Interrupts & The NVIC: Real-Time Event Dispatch', level: 'INTERMEDIATE', estimatedMinutes: 35,
+    summary: 'Respond to real-world stimuli within nanoseconds using the Nested Vectored Interrupt Controller.',
+    lessons: [
+      { id: 'l-9-1', lessonNumber: 1, slug: 'isr-basics', title: 'ISR Design & the volatile Keyword', estimatedMinutes: 17, difficulty: 'INTERMEDIATE' },
+      { id: 'l-9-2', lessonNumber: 2, slug: 'nvic-priority', title: 'NVIC Priority & Preemption', estimatedMinutes: 18, difficulty: 'INTERMEDIATE' },
+    ],
+  },
+  {
+    id: 'ch-10', chapterNumber: 10, slug: 'communication-protocols-uart-spi-i2c',
+    title: 'UART, SPI & I2C Communication Protocols', level: 'INTERMEDIATE', estimatedMinutes: 40,
+    summary: 'Master the fundamental embedded communication triumvirate: asynchronous UART, high-speed SPI, and multi-drop I2C.',
+    lessons: [
+      { id: 'l-10-1', lessonNumber: 1, slug: 'uart-basics', title: 'UART Framing & Baud Rate', estimatedMinutes: 13, difficulty: 'INTERMEDIATE' },
+      { id: 'l-10-2', lessonNumber: 2, slug: 'spi-protocol', title: 'SPI: Full-Duplex at 50MHz', estimatedMinutes: 13, difficulty: 'INTERMEDIATE' },
+      { id: 'l-10-3', lessonNumber: 3, slug: 'i2c-protocol', title: 'I2C: Open-Drain Multi-Drop Bus', estimatedMinutes: 14, difficulty: 'INTERMEDIATE' },
+    ],
+  },
+  {
+    id: 'ch-11', chapterNumber: 11, slug: 'dma-and-rtos',
+    title: 'DMA & RTOS: Concurrency in Embedded Systems', level: 'ADVANCED', estimatedMinutes: 45,
+    summary: 'Offload memory transfers with Direct Memory Access and manage concurrent tasks with FreeRTOS.',
+    lessons: [
+      { id: 'l-11-1', lessonNumber: 1, slug: 'dma-basics', title: 'DMA: Zero-CPU Memory Transfers', estimatedMinutes: 22, difficulty: 'ADVANCED' },
+      { id: 'l-11-2', lessonNumber: 2, slug: 'freertos-intro', title: 'FreeRTOS Tasks & Semaphores', estimatedMinutes: 23, difficulty: 'ADVANCED' },
+    ],
+  },
+  {
+    id: 'ch-12', chapterNumber: 12, slug: 'adc-and-dac',
+    title: 'ADC & DAC: Translating Continuous Realities', level: 'INTERMEDIATE', estimatedMinutes: 35,
+    summary: 'Convert analog voltages to digital words with SAR ADCs and synthesize analog signals with DACs.',
+    lessons: [
+      { id: 'l-12-1', lessonNumber: 1, slug: 'adc-basics', title: '12-bit SAR ADC & Sampling', estimatedMinutes: 17, difficulty: 'INTERMEDIATE' },
+      { id: 'l-12-2', lessonNumber: 2, slug: 'dac-output', title: 'DAC: Waveform & Audio Output', estimatedMinutes: 18, difficulty: 'INTERMEDIATE' },
+    ],
+  },
+];
+
 export function LessonsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, isAuthenticated, openAuth } = useAuth();
 
-  const [chapters, setChapters] = useState([]);
+  const [chapters, setChapters] = useState(FALLBACK_CHAPTERS);
   const [loading, setLoading] = useState(true);
   const [activeLesson, setActiveLesson] = useState(null);
   const [activeLessonLoading, setActiveLessonLoading] = useState(false);
@@ -33,12 +144,12 @@ export function LessonsPage() {
 
   // Load chapters and user progress
   useEffect(() => {
-    setLoading(true);
     lessonService
       .getChapters()
       .then((res) => {
         const list = res.data || res.chapters || [];
-        setChapters(list);
+        // Use API data if available, otherwise keep fallback
+        if (list.length > 0) setChapters(list);
 
         // Also fetch all lessons to determine completion status if authenticated
         if (user) {
@@ -55,22 +166,15 @@ export function LessonsPage() {
         }
       })
       .catch((err) => {
-        console.error('Error fetching curriculum chapters:', err);
+        console.warn('Chapters fetch failed; using fallback curriculum:', err.message);
+        // Keep FALLBACK_CHAPTERS already set as default state
       })
       .finally(() => {
         setLoading(false);
       });
   }, [user]);
 
-  // Handle URL slug parameter to automatically open a lesson
-  useEffect(() => {
-    const slug = searchParams.get('slug');
-    if (slug) {
-      loadLesson(slug);
-    }
-  }, [searchParams]);
-
-  const loadLesson = async (slugOrId) => {
+  async function loadLesson(slugOrId) {
     setActiveLessonLoading(true);
     try {
       const res = await lessonService.getLessonBySlugOrId(slugOrId);
@@ -80,15 +184,40 @@ export function LessonsPage() {
         setCompletedLessonIds((prev) => new Set([...prev, lessonData.id]));
       }
     } catch (err) {
-      console.error('Failed to load lesson details:', err);
+      const chapter = FALLBACK_CHAPTERS.find((item) =>
+        item.lessons.some((lesson) => lesson.slug === slugOrId || lesson.id === slugOrId)
+      );
+      const lesson = chapter?.lessons.find(
+        (item) => item.slug === slugOrId || item.id === slugOrId
+      );
+
+      if (chapter && lesson) {
+        setActiveLesson({
+          ...lesson,
+          chapter: { title: chapter.title },
+          difficulty: lesson.difficulty || chapter.level,
+          summary: chapter.summary,
+          content: `### ${lesson.title}\n\n${chapter.summary}\n\n### Offline study outline\n\nThe complete lesson is unavailable while the curriculum service is offline. This chapter summary is available as a starting point; reconnect to load the full lesson and sync your progress.`,
+          isOfflineFallback: true,
+        });
+      } else {
+        console.error('Failed to load lesson details:', err);
+      }
     } finally {
       setActiveLessonLoading(false);
     }
-  };
+  }
+
+  // Handle URL slug parameter to automatically open a lesson
+  useEffect(() => {
+    const slug = searchParams.get('slug');
+    if (slug) {
+      loadLesson(slug);
+    }
+  }, [searchParams]);
 
   const handleOpenLesson = (lesson) => {
     setSearchParams({ slug: lesson.slug });
-    loadLesson(lesson.slug || lesson.id);
   };
 
   const handleCloseModal = () => {
@@ -257,6 +386,14 @@ export function LessonsPage() {
       )}
 
       {/* Lesson Reader Modal */}
+      {activeLessonLoading && !activeLesson && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#22201D]/70 p-4 backdrop-blur-sm">
+          <div role="status" className="flex items-center gap-3 rounded-xl border border-[#C9BDAA] bg-[#FAF5EB] px-5 py-4 font-mono text-xs text-[#655F55]">
+            <BookOpen className="h-5 w-5 animate-pulse text-[#D87535]" />
+            LOADING LESSON BLUEPRINT...
+          </div>
+        </div>
+      )}
       {activeLesson && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#22201D]/70 backdrop-blur-sm overflow-y-auto">
           <div className="relative w-full max-w-3xl bg-[#FAF5EB] border border-[#C9BDAA] rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col bg-drafting-grid-subtle">
@@ -307,6 +444,13 @@ export function LessonsPage() {
                 <div className="text-[10px] uppercase text-[#D87535] tracking-wider font-bold">Core Lesson Objective</div>
                 <div className="font-sans text-xs text-[#655F55]">{activeLesson.summary}</div>
               </div>
+
+              {activeLesson.isOfflineFallback && (
+                <div className="flex items-start gap-2 rounded-xl border border-[#D87535]/30 bg-[#D87535]/10 p-3 text-xs font-mono text-[#655F55]">
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#D87535]" />
+                  <span>Offline preview: full lesson details and progress syncing require a connection to the curriculum service.</span>
+                </div>
+              )}
 
               {/* Lesson Detailed Content */}
               <div className="prose max-w-none space-y-4 font-sans text-xs sm:text-sm text-[#655F55]">
@@ -372,7 +516,7 @@ export function LessonsPage() {
                 <Button
                   variant={completedLessonIds.has(activeLesson.id) ? 'outline' : 'primary'}
                   size="sm"
-                  disabled={completing}
+                  disabled={completing || activeLesson.isOfflineFallback}
                   onClick={handleCompleteLesson}
                   className="flex items-center gap-1.5 font-mono text-xs font-bold"
                 >
@@ -384,7 +528,11 @@ export function LessonsPage() {
                   ) : (
                     <>
                       <Check className="w-3.5 h-3.5" />
-                      {completing ? 'Marking...' : 'Mark as Completed'}
+                      {completing
+                        ? 'Marking...'
+                        : activeLesson.isOfflineFallback
+                          ? 'Offline Preview'
+                          : 'Mark as Completed'}
                     </>
                   )}
                 </Button>
