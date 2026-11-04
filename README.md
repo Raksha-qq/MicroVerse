@@ -284,6 +284,8 @@ For a separately hosted frontend and backend:
 
 The local Vite proxy applies only to the development server; it does not proxy requests in a deployed frontend build.
 
+After the backend is connected to its production database, verify that `GET /api/chapters` returns curriculum chapters. If it returns an empty list, run `npm run prisma:seed:curriculum` once from the backend service shell. This seeds the curriculum without deleting user accounts; it does replace quiz questions for seeded chapters. Do not run `npm run prisma:seed` against production because that general development seed deletes existing user and application data.
+
 ## Security notes
 
 - Keep real environment files out of version control.

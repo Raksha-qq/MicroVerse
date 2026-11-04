@@ -10,6 +10,7 @@
     "test:e2e": "node tests/e2e-journeys.test.js",
     "test:all": "node tests/api.test.js && node tests/e2e-journeys.test.js",
     "prisma:generate": "prisma generate",
+    "prisma:seed:curriculum": "node src/prisma/seedMilestone4.js",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "node src/prisma/seed.js",
     "prisma:push": "prisma db push"

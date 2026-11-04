@@ -243,10 +243,10 @@ export function DiscoverPage() {
   const { user, openAuth } = useAuth();
 
   const [chapters, setChapters] = useState(DISCOVER_SYLLABUS);
+  const [backendChapterSlugs, setBackendChapterSlugs] = useState(null);
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
   const [currentChapterDetail, setCurrentChapterDetail] = useState(null);
   const [completedMap, setCompletedMap] = useState({});
-  const [loadingChapter, setLoadingChapter] = useState(false);
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState('');
@@ -260,11 +260,12 @@ export function DiscoverPage() {
     lessonService
       .getChapters()
       .then((res) => {
-        if (res.data && res.data.length > 0) {
-          setChapters(res.data);
-        }
+        const backendChapters = res.data || [];
+        setBackendChapterSlugs(new Set(backendChapters.map((chapter) => chapter.slug)));
+        if (backendChapters.length > 0) setChapters(backendChapters);
       })
       .catch((err) => {
+        setBackendChapterSlugs(new Set());
         console.warn('Backend chapters fetch failed; using embedded syllabus:', err.message);
       });
   }, []);
@@ -302,23 +303,29 @@ export function DiscoverPage() {
 
   // Load current chapter full details from backend
   const activeChapter = chapters[activeChapterIndex] || chapters[0];
+  const activeChapterDetail =
+    currentChapterDetail?.slug === activeChapter?.slug ? currentChapterDetail : null;
 
   useEffect(() => {
-    if (!activeChapter?.slug) return;
-    setLoadingChapter(true);
-    lessonService
-      .getChapterBySlug(activeChapter.slug)
-      .then((res) => {
-        setCurrentChapterDetail(res.data);
-      })
-      .catch((err) => {
-        console.warn('Could not load chapter detail from backend; fallback active.', err.message);
-        setCurrentChapterDetail(null);
-      })
-      .finally(() => {
-        setLoadingChapter(false);
-      });
-  }, [activeChapter?.slug]);
+    let isCurrentChapter = true;
+
+    if (activeChapter?.slug && backendChapterSlugs?.has(activeChapter.slug)) {
+      lessonService
+        .getChapterBySlug(activeChapter.slug)
+        .then((res) => {
+          if (isCurrentChapter) setCurrentChapterDetail(res.data);
+        })
+        .catch((err) => {
+          if (isCurrentChapter) {
+            console.warn('Could not load chapter detail from backend; fallback active.', err.message);
+          }
+        });
+    }
+
+    return () => {
+      isCurrentChapter = false;
+    };
+  }, [activeChapter?.slug, backendChapterSlugs]);
 
   // Handle Mark Chapter Completed
   const handleMarkCompleted = async () => {
@@ -559,10 +566,10 @@ export function DiscoverPage() {
                 </div>
 
                 {/* Markdown Body or Section Rendering */}
-                {currentChapterDetail?.content ? (
+                {activeChapterDetail?.content ? (
                   <div className="prose max-w-none text-xs leading-relaxed space-y-4">
                     <div className="whitespace-pre-wrap font-sans text-xs text-[#655F55]">
-                      {currentChapterDetail.content}
+                      {activeChapterDetail.content}
                     </div>
                   </div>
                 ) : (
@@ -652,8 +659,8 @@ export function DiscoverPage() {
             {/* TAB 5: KNOWLEDGE CHECK ASSESSMENT */}
             {activeTab === 'quiz' && (
               <ChapterQuiz
-                chapterId={activeChapter.id || currentChapterDetail?.id}
-                quizMetadata={activeChapter.quiz || currentChapterDetail?.quiz}
+                chapterId={activeChapter.id || activeChapterDetail?.id}
+                quizMetadata={activeChapter.quiz || activeChapterDetail?.quiz}
                 onQuizPassed={() => {
                   if (activeChapter.id) {
                     setCompletedMap((prev) => ({ ...prev, [activeChapter.id]: true }));
@@ -700,4 +707,3 @@ export function DiscoverPage() {
     </div>
   );
 }
-
