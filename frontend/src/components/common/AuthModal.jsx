@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { X, Zap, Mail, Lock, User, Terminal, AlertCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { Button } from './Button';
@@ -25,7 +25,7 @@ export function AuthModal() {
 
     try {
       if (isLogin) {
-        await login({ email, password });
+        await login(email, password);
       } else {
         await register({
           email,
@@ -172,7 +172,7 @@ export function AuthModal() {
               <input
                 type="password"
                 required
-                placeholder="••••••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-[#FAF5EB] border border-[#C9BDAA] focus:border-[#D87535] rounded pl-9 pr-3 py-2 text-[#22201D] placeholder-[#8C8275]/60 outline-none transition-colors"
@@ -232,3 +232,4 @@ export function AuthModal() {
     </div>
   );
 }
+
